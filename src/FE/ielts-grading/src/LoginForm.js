@@ -13,7 +13,7 @@ function LoginForm() {
 
     // Example validation logic
     if (email === "" || password === "") {
-      setErrorMessage("Please fill in both fields.");
+      setErrorMessage("Please ok fill in both fields.");
       return;
     }
 
