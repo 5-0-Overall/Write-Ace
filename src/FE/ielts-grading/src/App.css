@@ -1,9 +1,19 @@
-/* Reset CSS */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font: inherit;
+  text-align: left;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-left: 20px;
 }
 
 html,
@@ -13,7 +23,7 @@ body {
 
 li a.active {
   text-decoration: underline;
-  text-decoration-color: #2d5bff;
+  text-decoration-color: #ffffff;
   text-underline-offset: 10px;
 }
 
@@ -38,124 +48,236 @@ a {
 }
 
 /* Navigation */
-
 nav.nav {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 30px 80px;
-  background-color: #c6d2fd;
+  justify-content: space-between; /* Space between logo and links */
+  align-items: center; /* Center items vertically */
+  padding: 20px 40px; /* Adjust padding for smaller screens */
+  background-color: #c6d2fd; /* Background color */
 }
 
+/* Logo styles */
 .logo {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: center; /* Center logo vertically */
+  gap: 10px; /* Space between logo image and text */
 }
 
 .logo img {
-  width: 40px;
-  height: auto;
+  width: 40px; /* Width of the logo image */
+  height: auto; /* Maintain aspect ratio */
 }
 
 nav.nav .logo span {
-  color: #4a3aff;
-  font-weight: bold;
-  font-size: 40px;
+  color: #4a3aff; /* Color of logo text */
+  font-weight: bold; /* Bold text */
+  font-size: 40px; /* Font size */
 }
 
+/* Navigation links */
 ul.nav-link {
-  list-style: none;
-  display: flex;
-  justify-content: flex-start;
-  gap: 20px;
+  list-style: none; /* Remove bullet points */
+  display: flex; /* Use flexbox for navigation links */
+  justify-content: flex-start; /* Align links to the start */
+  gap: 20px; /* Space between links */
 }
 
 ul.nav-link li {
-  display: flex;
-  align-items: center;
+  display: flex; /* Flexbox for list items */
+  align-items: center; /* Center items vertically */
 }
 
+/* Button styles */
 ul.nav-link li button {
-  padding: 15px;
-  border-radius: 10px;
+  padding: 10px 15px; /* Adjust padding for buttons */
+  border-radius: 10px; /* Rounded corners */
+  border: none; /* Remove default border */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition for hover effects */
 }
 
+/* Login button styles */
 ul.nav-link li button.btn-login {
-  border-color: #8d8ba7;
-  border-style: solid;
+  border-color: #8d8ba7; /* Border color for login button */
+  border-style: solid; /* Solid border */
 }
 
+/* Start button styles */
 ul.nav-link li button.btn-started {
-  background-color: #4a3aff;
+  background-color: #4a3aff; /* Background color for start button */
 }
 
+/* Text color for start button link */
 ul.nav-link li button.btn-started a {
-  color: white;
-  font-weight: bold;
+  color: white; /* Text color for start button link */
+  font-weight: bold; /* Bold text */
+}
+
+/* Hover effects */
+ul.nav-link li button:hover {
+  background-color: #5c4fff; /* Darker background on hover */
+  color: white; /* Change text color on hover */
+}
+
+/* Hover effect for login button */
+ul.nav-link li button.btn-login:hover {
+  background-color: #5c4fff;
+}
+
+/* Hover effect for start button */
+ul.nav-link li button.btn-started:hover {
+  background-color: #6c6c81; /* Darker shade on hover */
 }
 
 ul.nav-link li a {
-  color: #5d5a88;
+  color: #5d5a88; /* Text color for navigation links */
+}
+
+/* Media Query for Tablets and Smaller Screens */
+@media (max-width: 768px) {
+  nav.nav {
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items to the start */
+    padding: 15px; /* Adjust padding */
+  }
+
+  ul.nav-link {
+    flex-direction: column; /* Stack links vertically */
+    width: 100%; /* Full width for links */
+    align-items: flex-start; /* Align items to the start */
+    padding: 0; /* Remove padding */
+  }
+
+  ul.nav-link li {
+    width: 100%; /* Make list items full width */
+    margin-bottom: 10px; /* Space between buttons */
+  }
+
+  ul.nav-link li button {
+    width: 100%; /* Full width for buttons */
+  }
+
+  .logo span {
+    font-size: 32px; /* Reduce font size for smaller screens */
+  }
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+  .logo span {
+    font-size: 28px; /* Further reduce font size for mobile */
+  }
+
+  nav.nav {
+    padding: 10px; /* Further reduce padding */
+  }
+
+  ul.nav-link li button {
+    padding: 8px 10px; /* Adjust button padding */
+  }
 }
 
 /* Body 1 */
 .body1 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 80px 80px;
+  display: flex; /* Use flexbox for the layout */
+  flex-direction: row; /* Set to row for a two-column layout */
+  justify-content: space-between; /* Space between the two columns */
+  align-items: center; /* Center items vertically */
+  padding: 40px 20px; /* Add padding */
 }
 
+/* Headings and paragraph styles */
 .body1 h1 {
-  font-size: 70px;
+  font-size: 70px; /* Default font size for larger screens */
   color: #2d5bff;
-  max-width: 550px;
+  max-width: 550px; /* Limit max width for text */
   font-weight: bold;
-  padding-bottom: 40px;
+  padding-bottom: 20px; /* Space below the heading */
 }
 
 .body1 p {
-  font-size: 40px;
-  color: #2d5bff;
-  max-width: 600px;
+  font-size: 30px; /* Default font size for larger screens */
+  color: #2e2e32;
+  max-width: 600px; /* Limit max width for paragraph */
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Image styles */
+.body1 img {
+  width: 400px; /* Responsive width */
+  height: auto; /* Maintain aspect ratio */
+  max-width: 100%; /* Limit max width for the image */
+}
+
+/* Media Query for Tablets and Smaller Screens */
+@media (max-width: 768px) {
+  .body1 {
+    flex-direction: column; /* Stack items vertically on smaller screens */
+    padding: 30px 15px; /* Adjust padding */
+    align-items: center; /* Center items for vertical stacking */
+  }
+
+  .body1 h1 {
+    font-size: 50px; /* Reduce font size for smaller screens */
+    padding-bottom: 15px; /* Adjusted padding */
+    text-align: center; /* Center text */
+  }
+
+  .body1 p {
+    font-size: 24px; /* Reduce font size for smaller screens */
+    text-align: center; /* Center text */
+  }
+
+  .body1 img {
+    max-width: 100%; /* Ensure image fits within container */
+  }
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+  .body1 h1 {
+    font-size: 36px; /* Further reduce font size for mobile */
+  }
+
+  .body1 p {
+    font-size: 18px; /* Further reduce font size for mobile */
+  }
 }
 
 /* Body 2 */
 .body2 {
   display: flex;
-  flex-direction: column;
-  padding: 60px 80px;
+  flex-direction: row; /* Use row layout to align buttons horizontally */
+  flex-wrap: wrap; /* Allow buttons to wrap */
+  padding: 60px 5%; /* Responsive padding */
   background-color: #0ff;
+  justify-content: center; /* Space buttons evenly */
 }
 
 .step {
   text-align: center;
-  margin-bottom: 40px;
-  padding: 10px;
-  width: 900px;
-  font-size: 50px;
+  margin: 10px; /* Use uniform margin */
+  padding: 20px; /* More padding for better touch targets */
+  flex: 1 1 calc(30% - 20px); /* Responsive width for buttons */
+  min-width: 200px; /* Ensure buttons are not too small */
+  max-width: 300px; /* Limit maximum width */
+  font-size: 1.5rem; /* Responsive font size */
   border-radius: 12px;
   font-weight: bold;
 }
 
+/* Different background colors for steps */
 .step:nth-child(1) {
-  margin-left: 0;
   background-color: #f2b064;
 }
 
 .step:nth-child(2) {
-  margin-left: 300px;
   background-color: #fedeb9;
 }
 
 .step:nth-child(3) {
-  margin-left: 600px;
   background-color: #fef1e2;
-}
-
-.step:last-child {
-  margin-bottom: 0;
 }
 
 /* Body 3 */
@@ -163,107 +285,181 @@ ul.nav-link li a {
   padding: 80px 80px;
 }
 
-.body3 h2 {
-  font-size: 70px;
-  color: #1d4645;
-  max-width: 550px;
-  font-weight: bold;
-  padding-bottom: 40px;
-}
-
+.body3 h2,
 .heading {
-  font-size: 70px;
-  color: #1d4645;
-  max-width: 550px;
-  font-weight: bold;
-  padding-bottom: 40px;
+  font-size: 70px; /* Heading font size */
+  color: #1d4645; /* Heading color */
+  max-width: 550px; /* Maximum width */
+  font-weight: bold; /* Bold text */
+  padding-bottom: 40px; /* Bottom padding */
 }
 
 .task-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 40px;
-  padding: 20px;
+  display: flex; /* Use flexbox for layout */
+  justify-content: space-between; /* Space between tasks */
+  gap: 40px; /* Gap between tasks */
+  padding: 20px; /* Padding around task container */
 }
 
 .task-container .task1 {
-  background-color: #e6fbff;
+  background-color: #e6fbff; /* Background color for task 1 */
 }
 
 .task-container .task2 {
-  background-color: #fff2e6;
+  background-color: #fff2e6; /* Background color for task 2 */
 }
 
 .task {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 30px;
-  border-radius: 20px;
+  flex: 1; /* Grow to fill space */
+  display: flex; /* Flexbox for task layout */
+  flex-direction: column; /* Stack elements vertically */
+  padding: 30px; /* Padding inside task boxes */
+  border-radius: 20px; /* Rounded corners */
 }
 
 .task h3 {
-  margin: 0 0 20px 0;
-  padding: 0;
-  color: #1d4645;
-  font-size: 25px;
-  font-weight: bold;
+  margin: 0 0 20px 0; /* Margin for task heading */
+  padding: 0; /* No padding */
+  color: #1d4645; /* Heading color */
+  font-size: 25px; /* Font size for task heading */
+  font-weight: bold; /* Bold text */
 }
 
 .all-types {
-  display: grid;
-  /* grid-template-columns: 1fr 1fr; */
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-top: 10px;
+  display: grid; /* Use grid for layout */
+  grid-template-columns: repeat(2, 1fr); /* 2 columns by default */
+  gap: 10px; /* Space between grid items */
+  margin-top: 10px; /* Top margin */
 }
 
 .all-types div {
-  background-color: #d9d9d9;
-  padding: 8px 12px;
-  border-radius: 20px;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
-  font-weight: bold;
+  background-color: #d9d9d9; /* Background color for type divs */
+  padding: 8px 12px; /* Padding inside type divs */
+  border-radius: 20px; /* Rounded corners */
+  text-align: center; /* Center text */
+  cursor: pointer; /* Pointer on hover */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  transition: background-color 0.3s ease; /* Transition for hover effect */
+  font-weight: bold; /* Bold text */
 }
 
 .all-types div:hover {
-  background-color: #007bff;
-  color: white;
+  background-color: #007bff; /* Hover background color */
+  color: white; /* Text color on hover */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .body3 {
+    padding: 40px 20px; /* Reduce padding on smaller screens */
+  }
+
+  .body3 h2,
+  .heading {
+    font-size: 50px; /* Smaller heading font size */
+  }
+
+  .task-container {
+    flex-direction: column; /* Stack tasks vertically on smaller screens */
+    align-items: center; /* Center tasks */
+    gap: 20px; /* Smaller gap */
+  }
+
+  .all-types {
+    grid-template-columns: 1fr; /* 1 column on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .body3 h2,
+  .heading {
+    font-size: 36px; /* Further reduce heading font size */
+  }
+
+  .task {
+    padding: 20px; /* Reduce padding inside task boxes */
+  }
+
+  .task h3 {
+    font-size: 20px; /* Smaller font size for task heading */
+  }
+
+  .all-types div {
+    padding: 6px 10px; /* Adjust padding for type divs */
+  }
 }
 
 /* Body 4 */
 .body4 {
-  padding: 80px 80px;
+  padding: 80px 80px; /* Padding for the main container */
 }
 
 .body4 .intro {
-  display: flex;
-  justify-content: space-between;
-  gap: 40px;
+  display: flex; /* Flexbox layout for intro section */
+  justify-content: space-between; /* Space between image and text */
+  gap: 40px; /* Gap between elements */
 }
 
 .body4 h3 {
-  font-size: 50px;
-  color: #1d4645;
-  max-width: 550px;
-  font-weight: bold;
-  padding-bottom: 40px;
+  font-size: 50px; /* Font size for headings */
+  color: #1d4645; /* Heading color */
+  max-width: 550px; /* Maximum width for headings */
+  font-weight: bold; /* Bold text */
+  padding-bottom: 40px; /* Bottom padding */
 }
 
 .body4 p {
-  font-size: 25px;
+  font-size: 25px; /* Font size for paragraphs */
 }
 
 .body4 .intro img {
-  width: 500px;
-  height: auto;
+  width: 500px; /* Image width */
+  height: auto; /* Auto height to maintain aspect ratio */
 }
 
 .vision h3 {
-  padding: 10px 0;
+  padding: 10px 0; /* Padding for vision section headings */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .body4 {
+    padding: 40px 20px; /* Reduce padding on smaller screens */
+  }
+
+  .body4 .intro {
+    flex-direction: column; /* Stack elements vertically on smaller screens */
+    align-items: center; /* Center align items */
+  }
+
+  .body4 h3 {
+    font-size: 40px; /* Smaller heading font size */
+    text-align: center; /* Center align heading */
+  }
+
+  .body4 p {
+    font-size: 20px; /* Smaller paragraph font size */
+    text-align: center; /* Center align paragraph text */
+  }
+
+  .body4 .intro img {
+    width: 100%; /* Make image responsive to container width */
+    max-width: 400px; /* Maximum width for image */
+  }
+}
+
+@media (max-width: 480px) {
+  .body4 h3 {
+    font-size: 30px; /* Further reduce heading font size */
+  }
+
+  .body4 p {
+    font-size: 18px; /* Further reduce paragraph font size */
+  }
+
+  .body4 .intro img {
+    max-width: 300px; /* Further reduce maximum width for image */
+  }
 }
 
 /* Footer */
@@ -273,7 +469,8 @@ ul.nav-link li a {
   text-align: center;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #4a3aff;
+  border-bottom: 1px solid #000000;
+  text-align: left;
 }
 
 .footer h3 {
@@ -290,6 +487,8 @@ ul.nav-link li a {
 
 .footer ul li {
   margin-bottom: 5px;
+  text-align: left;
+  margin-left: 20px;
 }
 
 .footer button {
@@ -300,6 +499,7 @@ ul.nav-link li a {
   border: 2px solid #2d5bff;
   background-color: white;
   width: 120px;
+  text-align: center;
 }
 
 .footer button:first-child {
@@ -335,4 +535,114 @@ ul.nav-link li a {
 
 .social-logo img:hover {
   transform: scale(1.1);
+}
+
+/* General styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.nav {
+  background-color: #fff;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo img {
+  height: 40px;
+}
+
+.nav-link {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link li a {
+  text-decoration: none;
+  color: #000;
+  font-weight: bold;
+}
+
+.btn-login,
+.btn-started {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.body1,
+.body2,
+.body3,
+.body4 {
+  padding: 20px;
+  text-align: center;
+}
+
+.body1 img {
+  max-width: 100%;
+  height: auto;
+}
+
+.footer h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-left: 20px;
+}
+
+.social {
+  text-align: center;
+  padding: 20px;
+  background-color: #c8c6fd;
+}
+
+.social-logo img {
+  width: 24px;
+  margin-right: 10px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .nav-link {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .body1,
+  .body2,
+  .body3,
+  .body4 {
+    padding: 15px;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .social-logo {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+}
+
+@media (min-width: 769px) {
+  .nav-link {
+    display: flex;
+    gap: 20px;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+  }
 }

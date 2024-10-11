@@ -1,95 +1,109 @@
 import React, { useState } from "react";
+import fb from "./Images/facebook_logo.svg";
+import apple from "./Images/google_logo.svg";
+import  gg from "./Images/apple_logo.svg";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 
-export default function Registration() {
+function Registration() {
   const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [reEnterPassword, setReEnterPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Example validation logic
-    if (email === "") {
-      setErrorMessage("Please fill in the email field.");
+    if (email === "" || password === "") {
+      setErrorMessage("Please fill in both fields.");
       return;
     }
 
-    // Perform reset password logic here
-    console.log("Resetting password for:", email);
+    // Perform login logic here
+    console.log("Logging in with:", email, password);
     setErrorMessage(""); // Clear error message
   };
 
   return (
-    <div className="reset-password-container" style={styles.container}>
+    <div className="login-container" style={styles.container}>
       <form onSubmit={handleSubmit} style={styles.form}>
-        <div style={styles.headingContainer}>
-          <h2 style={styles.heading}>Lets Register Account</h2>
-          <p style={{ marginBottom: "20px", fontSize: "20px" }}>
-            Hello user, you have a grateful journey
-          </p>
-        </div>
+        <h2 style={styles.title}>Let's sign you up</h2>
 
-        <div className="input-container" style={styles.inputContainer}>
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            placeholder="First Name"
-            style={styles.input}
-            required
-          />
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            placeholder="Last Name"
-            style={styles.input}
-            required
-          />
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="Phone number"
-            style={styles.input}
-            required
-          />
+        <div style={styles.inputContainer}>
+          <label style={styles.label}>Email</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
             style={styles.input}
-            required
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            style={styles.input}
+            placeholder="Email, phone & username"
             required
           />
         </div>
 
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <div style={styles.inputContainer}>
+          <label style={styles.label}>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={styles.input}
+            placeholder="Password"
+            required
+          />
+        </div>
+
+        <div style={styles.inputContainer}>
+          <label style={styles.label}>Re-enter Password</label>
+          <input
+            type="password"
+            value={reEnterPassword}
+            onChange={(e) => setReEnterPassword(e.target.value)}
+            style={styles.input}
+            placeholder="Re-enter Password"
+            required
+          />
+        </div>
+
+        {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
 
         <button type="submit" style={styles.button}>
-          Sign Up
+          Sign in
         </button>
 
-        <a href="#" style={{ textAlign: "center" }}>
-          Already have an account? <strong style={styles.strong}>Login</strong>
-        </a>
+        <p style={{ textAlign: "center", padding: "10px" }}>Or</p>
+
+        <div style={styles.logoContainer}>
+          <a href="#">
+            <img style={styles.img} src={gg} alt="gg" />
+          </a>
+          <a href="#">
+            <img style={styles.img} src={fb} alt="fb" />
+          </a>
+          <a href="#">
+            <img style={styles.img} src={apple} alt="apple" />
+          </a>
+        </div>
+
+        <Link to="/register" style={{ textAlign: "center" }}>
+          Already have an account?{" "}
+          <strong style={styles.strong}>Sign in</strong>
+        </Link>
+
+        <div style={{ marginTop: "20px", textAlign: "center" }}>
+          <Link to="/">
+            <button style={styles.backButton}>Back to Home</button>
+          </Link>
+        </div>
       </form>
     </div>
   );
 }
 
 const styles = {
+  strong: {
+    fontWeight: "bold",
+  },
   container: {
     display: "flex",
     justifyContent: "center",
@@ -97,39 +111,16 @@ const styles = {
     height: "100vh",
     backgroundColor: "#f0f4f8",
   },
-  link: {
-    color: "#2b78e4",
-    fontStyle: "italic",
-    fontSize: "20px",
-    marginBottom: "50px",
+  img: {
+    width: "30px",
   },
-  inputContainer: {
-    marginBottom: "15px",
-  },
-  input: {
-    padding: "10px",
-    fontSize: "16px",
-    borderRadius: "4px",
-    border: "1px solid #ccc",
-    width: "100%",
-    marginBottom: "10px",
-  },
-  headingContainer: {
+  logoContainer: {
     display: "flex",
-    flexDirection: "column",
+    justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: "70px",
-  },
-  heading: {
-    textAlign: "center",
-    color: "black",
-    fontWeight: "bold",
-    fontSize: "50px",
+    paddingLeft: "100px",
+    paddingRight: "100px",
     marginBottom: "20px",
-  },
-  p: {
-    textAlign: "center",
-    color: "black",
   },
   form: {
     display: "flex",
@@ -140,18 +131,51 @@ const styles = {
     boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
     width: "500px",
   },
+  title: {
+    textAlign: "center",
+    marginBottom: "20px",
+    fontSize: "24px",
+    color: "#333",
+  },
+  inputContainer: {
+    marginBottom: "15px",
+  },
+  label: {
+    marginBottom: "5px",
+    fontSize: "14px",
+    color: "#333",
+  },
+  input: {
+    padding: "10px",
+    fontSize: "16px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+    width: "100%",
+  },
   button: {
-    padding: "20px",
-    backgroundColor: "#2d5bff",
+    padding: "10px",
+    backgroundColor: "#007bff",
     color: "#fff",
     border: "none",
-    borderRadius: "4px",
-    fontSize: "20px",
-    fontWeight: "bold",
+    borderRadius: "10px",
+    fontSize: "16px",
     cursor: "pointer",
-    marginBottom: "20px",
+    textAlign: "center",
   },
-  strong: {
-    fontWeight: "bold",
+  backButton: {
+    padding: "10px",
+    backgroundColor: "#007bff",
+    color: "#fff",
+    border: "none",
+    borderRadius: "10px",
+    fontSize: "16px",
+    cursor: "pointer",
+    textAlign: "center",
+  },
+  errorMessage: {
+    color: "red",
+    marginBottom: "10px",
   },
 };
+
+export default Registration;

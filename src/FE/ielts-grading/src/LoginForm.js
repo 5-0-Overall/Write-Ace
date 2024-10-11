@@ -1,31 +1,39 @@
 import React, { useState } from "react";
-import gg from "./Images/gg.jpg";
-import fb from "./Images/fb.jpg";
-import apple from "./Images/apple.jpg";
+import fb from "./Images/facebook_logo.svg";
+import gg from "./Images/google_logo.svg";
+import apple from "./Images/apple_logo.svg";
+import eyeIcon from "./Images/eye_icon.svg";
+import eyeOffIcon from "./Images/eye_off_icon.svg";
+import { Link } from "react-router-dom";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Example validation logic
     if (email === "" || password === "") {
-      setErrorMessage("Please ok fill in both fields.");
+      setErrorMessage("Please fill in both fields.");
       return;
     }
 
     // Perform login logic here
-    console.log("Logging in with:", email, password);
+    console.log("Logging in with:", email);
     setErrorMessage(""); // Clear error message
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
     <div className="login-container" style={styles.container}>
       <form onSubmit={handleSubmit} style={styles.form}>
-        <h2 style={styles.title}>Lets sign you in</h2>
+        <h2 style={styles.title}>Let's Sign You In</h2>
 
         <div style={styles.inputContainer}>
           <label style={styles.label}>Email</label>
@@ -41,27 +49,40 @@ function LoginForm() {
 
         <div style={styles.inputContainer}>
           <label style={styles.label}>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={styles.input}
-            placeholder="Password"
-            required
-          />
+          <div style={styles.passwordContainer}>
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={styles.input}
+              placeholder="Password"
+              required
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              style={styles.eyeButton}
+            >
+              <img
+                src={showPassword ? eyeIcon : eyeOffIcon}
+                alt="Toggle Password Visibility"
+                style={styles.eyeIcon}
+              />
+            </button>
+          </div>
         </div>
 
         {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
 
-        <a href="#" style={{ textAlign: "right", marginBottom: "20px" }}>
+        <a href="#" style={styles.forgotPassword}>
           Forgot Password?
         </a>
 
         <button type="submit" style={styles.button}>
-          Sign in
+          Sign In
         </button>
 
-        <p style={{ textAlign: "center", padding: "10px" }}>Or</p>
+        <p style={styles.orText}>Or</p>
 
         <div style={styles.logoContainer}>
           <a href="#">
@@ -75,10 +96,15 @@ function LoginForm() {
           </a>
         </div>
 
-        <a href="#" style={{ textAlign: "center" }}>
-          Don't have an account?{" "}
-          <strong style={styles.strong}>Register now</strong>
+        <a href="/register" style={styles.registerLink}>
+          Don't have an account? <strong style={styles.strong}>Register now</strong>
         </a>
+
+        <div style={{ marginTop: "20px", textAlign: "center" }}>
+          <Link to="/">
+            <button style={styles.backButton}>Back to Home</button>
+          </Link>
+        </div>
       </form>
     </div>
   );
@@ -136,18 +162,57 @@ const styles = {
     border: "1px solid #ccc",
     width: "100%",
   },
+  passwordContainer: {
+    position: "relative",
+  },
+  eyeButton: {
+    position: "absolute",
+    right: "10px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+  },
+  eyeIcon: {
+    width: "20px",
+  },
   button: {
     padding: "10px",
     backgroundColor: "#007bff",
     color: "#fff",
     border: "none",
-    borderRadius: "4px",
+    borderRadius: "10px",
     fontSize: "16px",
     cursor: "pointer",
+    textAlign: "center",
+  },
+  backButton: {
+    padding: "10px",
+    backgroundColor: "#007bff",
+    color: "#fff",
+    border: "none",
+    borderRadius: "10px",
+    fontSize: "16px",
+    cursor: "pointer",
+    textAlign: "center",
   },
   errorMessage: {
     color: "red",
     marginBottom: "10px",
+  },
+  forgotPassword: {
+    marginBottom: "10px",
+    color: "#007bff",
+    textDecoration: "none",
+    textAlign: "right",
+  },
+  orText: {
+    textAlign: "center",
+    margin: "10px 0",
+  },
+  registerLink: {
+    textAlign: "center",
   },
 };
 
