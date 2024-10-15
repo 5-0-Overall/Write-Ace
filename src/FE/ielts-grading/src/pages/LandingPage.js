@@ -1,11 +1,11 @@
 import React from "react";
-import wlogo from "./Images/wlogo.png";
-import elearning_logo from "./Images/elearning_logo.jpg";
-import intro from "./Images/intro.jpg";
-import facebookLogo from "./Images/facebook-brands-solid.svg";
-import instagramLogo from "./Images/instagram-brands-solid.svg";
-import twitterLogo from "./Images/twitter-brands-solid.svg";
-import "./App.css";
+import wlogo from "../assets/images/wlogo.png";
+import elearning_logo from "../assets/images/elearning_logo.jpg";
+import intro from "../assets/images/intro.jpg";
+import facebookLogo from "../assets/images/facebook-brands-solid.svg";
+import instagramLogo from "../assets/images/instagram-brands-solid.svg";
+import twitterLogo from "../assets/images/twitter-brands-solid.svg";
+import "../App.css";
 
 // Component LandingPage
 function LandingPage() {
