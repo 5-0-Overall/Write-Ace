@@ -11,7 +11,7 @@ import Recommended from "./pages/Recommended";
 import History from "./pages/History";
 import Sidebar from "./components/Sidebar/Sidebar";
 // import Reports from "./Reports";
-// import Account from "./Account";
+import Account from "./pages/Account";
 // import Settings from "./Settings";
 // import SignOut from "./SignOut";
 
@@ -34,7 +34,7 @@ function App() {
         <Route path="/recommend" element={<Recommended />} /> {/*Recommended*/}
         <Route path="/history" element={<History />} /> {/*History*/}
         {/* <Route path="/reports" element={<Reports />} /> Reports */}
-        {/* <Route path="/account" element={<Account />} /> Account */}
+        <Route path="/account" element={<Account />} /> {/*Account*/}
         {/* <Route path="/settings" element={<Settings />} /> Settings */}
         {/* <Route path="/signout" element={<SignOut />} /> SignOut */}
       </Routes>
