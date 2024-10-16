@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import contactImg from "./Images/contact_us.png";
+import contactImg from "../assets/images/contact_us.png";
 
 export default function Contact() {
   const [email, setEmail] = useState("");
