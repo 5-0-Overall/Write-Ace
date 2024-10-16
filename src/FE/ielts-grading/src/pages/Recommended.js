@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
-import { Search, SlidersHorizontal, Eye } from "lucide-react";
+import DataManipulator from "../components/common/DataManipulator";
 import "../assets/styles/Dashboard.css";
+import { Eye } from "lucide-react";
 
 function Recommended() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
@@ -14,6 +15,89 @@ function Recommended() {
     }
   };
 
+  const [recommendedData, setRecommendedData] = useState([
+    {
+      exam: "Writing 1",
+      topic: "Environment",
+      task: "1",
+      author: "John Doe",
+      overallBand: 7.5,
+      action: "Review"
+    },
+    {
+      exam: "Writing 2",
+      topic: "Technology",
+      task: "2",
+      author: "Jane Smith",
+      overallBand: 8.0,
+      action: "Read"
+    },
+    {
+      exam: "Writing 3",
+      topic: "Education",
+      task: "1",
+      author: "Alice Johnson",
+      overallBand: 7.0,
+      action: "Practice"
+    },
+    {
+      exam: "Writing 4",
+      topic: "Health",
+      task: "2",
+      author: "Bob Brown",
+      overallBand: 7.5,
+      action: "Review"
+    },
+    {
+      exam: "Writing 5",
+      topic: "Globalization",
+      task: "1",
+      author: "Charlie Davis",
+      overallBand: 8.0,
+      action: "Read"
+    },
+    {
+      exam: "Writing 6",
+      topic: "Travel",
+      task: "2",
+      author: "Diana Evans",
+      overallBand: 7.0,
+      action: "Practice"
+    },
+    {
+      exam: "Writing 7",
+      topic: "Work",
+      task: "1",
+      author: "Ethan Harris",
+      overallBand: 7.5,
+      action: "Review"
+    },
+    {
+      exam: "Writing 8",
+      topic: "Culture",
+      task: "2",
+      author: "Fiona Lewis",
+      overallBand: 8.0,
+      action: "Read"
+    },
+    {
+      exam: "Writing 9",
+      topic: "Science",
+      task: "1",
+      author: "George Martin",
+      overallBand: 7.5,
+      action: "Practice"
+    },
+    {
+      exam: "Writing 10",
+      topic: "Sports",
+      task: "2",
+      author: "Hannah Walker",
+      overallBand: 7.0,
+      action: "Review"
+    }
+  ]);  
+
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     handleResize();
@@ -22,36 +106,9 @@ function Recommended() {
 
   const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
 
-  const recommendedData = [
-    {
-      exam: "#1 Writing 1",
-      topic: "Graph",
-      task: "1",
-      author: "John Doe",
-      overallBand: "8.0",
-    },
-    {
-      exam: "#1 Writing 1",
-      topic: "Graph",
-      task: "1",
-      author: "Jack",
-      overallBand: "8.0",
-    },
-    {
-      exam: "#1 Writing 1",
-      topic: "Graph",
-      task: "1",
-      author: "Jane Doe",
-      overallBand: "8.0",
-    },
-    {
-      exam: "#1 Writing 1",
-      topic: "Graph",
-      task: "1",
-      author: "Sam",
-      overallBand: "8.0",
-    },
-  ];
+  const handleDataChange = (newData) => {
+    setRecommendedData(newData);
+  };
 
   return (
     <div className="dashboard-container">
@@ -63,16 +120,10 @@ function Recommended() {
       <main className="main-content">
         <div className="main-header">
           <h2 className="main-title">Recommended Writing</h2>
-          <div className="header-controls">
-            <button className="button-secondary">
-              <Search size={16} />
-              <span>Sort</span>
-            </button>
-            <button className="button-secondary">
-              <SlidersHorizontal size={16} />
-              <span>Filter</span>
-            </button>
-          </div>
+          <DataManipulator
+            initialData={recommendedData}
+            onDataChange={handleDataChange}
+          />
         </div>
 
         <div className="table-container">
