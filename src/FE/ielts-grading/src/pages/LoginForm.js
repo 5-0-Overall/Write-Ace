@@ -77,7 +77,7 @@ function LoginForm() {
 
           {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-          <a href="#" className="forgot-password">
+          <a href="*" className="forgot-password">
             Forgot Password?
           </a>
 
@@ -88,9 +88,9 @@ function LoginForm() {
           <p className="or-text">Or Sign in with</p>
 
           <div className="logo-container">
-            <a href="#"><img src={gg} alt="Google" /></a>
-            <a href="#"><img src={fb} alt="Facebook" /></a>
-            <a href="#"><img src={apple} alt="Apple" /></a>
+            <a href="*"><img src={gg} alt="Google" /></a>
+            <a href="*"><img src={fb} alt="Facebook" /></a>
+            <a href="*"><img src={apple} alt="Apple" /></a>
           </div>
 
           <a href="/register" className="register-link">

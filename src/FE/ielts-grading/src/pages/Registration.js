@@ -94,9 +94,9 @@ function RegistrationForm() {
           </button>
           <p className="or-text">Or Register With</p>
           <div className="logo-container">
-            <a href="#"><img src={gg} alt="Google" /></a>
-            <a href="#"><img src={fb} alt="Facebook" /></a>
-            <a href="#"><img src={apple} alt="Apple" /></a>
+            <a href="*"><img src={gg} alt="Google" /></a>
+            <a href="*"><img src={fb} alt="Facebook" /></a>
+            <a href="*"><img src={apple} alt="Apple" /></a>
           </div>
           <a href="/login" className="register-link">
             Already have an account? <strong>Sign in now</strong>

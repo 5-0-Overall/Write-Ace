@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
-import { Search, SlidersHorizontal, Eye } from "lucide-react";
+import { Eye } from "lucide-react";
 import "../assets/styles/Dashboard.css";
+import DataManipulator from "../components/common/DataManipulator";
 
 function History() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
@@ -22,16 +23,96 @@ function History() {
 
   const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
 
-  const historyData = [
-    { id: 1, exam: "Writing 1", topic: "Graph", task: "1", date: "2023-10-15", score: "7.5" },
-    { id: 2, exam: "Writing 2", topic: "Essay", task: "2", date: "2023-10-18", score: "7.0" },
-    { id: 3, exam: "Writing 1", topic: "Map", task: "1", date: "2023-10-20", score: "8.0" },
-    { id: 4, exam: "Writing 2", topic: "Opinion", task: "2", date: "2023-10-22", score: "7.5" },
-    { id: 5, exam: "Writing 1", topic: "Graph", task: "1", date: "2023-10-25", score: "6.5" },
-    { id: 6, exam: "Writing 2", topic: "Essay", task: "2", date: "2023-10-28", score: "7.0" },
-    { id: 7, exam: "Writing 1", topic: "Map", task: "1", date: "2023-10-30", score: "8.0" },
-    { id: 8, exam: "Writing 2", topic: "Opinion", task: "2", date: "2023-11-01", score: "7.5" },
-  ];
+  const [historyData, setHistoryData] = useState([
+    {
+      exam: "Writing 1",
+      topic: "Environment",
+      task: "1",
+      date: "2024-04-10",
+      score: 7.5
+    },
+    {
+      exam: "Writing 2",
+      topic: "Technology",
+      task: "2",
+      date: "2024-05-15",
+      score: 8.0
+    },
+    {
+      exam: "Writing 3",
+      topic: "Education",
+      task: "1",
+      date: "2024-06-20",
+      score: 7.0
+    },
+    {
+      exam: "Writing 4",
+      topic: "Health",
+      task: "2",
+      date: "2024-07-25",
+      score: 7.5
+    },
+    {
+      exam: "Writing 5",
+      topic: "Globalization",
+      task: "1",
+      date: "2024-08-05",
+      score: 8.0
+    },
+    {
+      exam: "Writing 6",
+      topic: "Travel",
+      task: "2",
+      date: "2024-09-10",
+      score: 7.0
+    },
+    {
+      exam: "Writing 7",
+      topic: "Work",
+      task: "1",
+      date: "2024-10-15",
+      score: 7.5
+    },
+    {
+      exam: "Writing 8",
+      topic: "Culture",
+      task: "2",
+      date: "2024-11-20",
+      score: 8.0
+    },
+    {
+      exam: "Writing 9",
+      topic: "Science",
+      task: "1",
+      date: "2024-12-25",
+      score: 7.5
+    },
+    {
+      exam: "Writing 10",
+      topic: "Sports",
+      task: "2",
+      date: "2025-01-30",
+      score: 7.0
+    },
+    {
+      exam: "Writing 11",
+      topic: "Media",
+      task: "1",
+      date: "2025-02-20",
+      score: 7.5
+    },
+    {
+      exam: "Writing 12",
+      topic: "Economy",
+      task: "2",
+      date: "2025-03-25",
+      score: 8.0
+    }
+  ]);  
+
+  const handleDataChange = (newData) => {
+    setHistoryData(newData);
+  };
 
   return (
     <div className="dashboard-container">
@@ -43,16 +124,10 @@ function History() {
       <main className="main-content">
         <div className="main-header">
           <h2 className="main-title">Writing History</h2>
-          <div className="header-controls">
-            <button className="button-secondary">
-              <Search size={16} />
-              <span>Sort</span>
-            </button>
-            <button className="button-secondary">
-              <SlidersHorizontal size={16} />
-              <span>Filter</span>
-            </button>
-          </div>
+          <DataManipulator
+            data={historyData}
+            handleDataChange={handleDataChange}
+          />
         </div>
 
         <div className="table-container">

@@ -41,7 +41,7 @@ export default function ResetPassword() {
 
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-        <a href="#" style={styles.link}>
+        <a href="*" style={styles.link}>
           Forgot Email?
         </a>
 
@@ -57,7 +57,7 @@ export default function ResetPassword() {
           }}
         >
           <a
-            href="#"
+            href="*"
             style={{ color: "#2b78e4", fontSize: "20px", fontWeight: "bold" }}
           >
             Back to Sign In
