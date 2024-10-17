@@ -71,8 +71,8 @@ function Sidebar({ isSidebarExpanded, toggleSidebar }) {
           {isSidebarExpanded && <span>Recommended</span>}
         </Link>
         <Link
-          to="/account"
-          className={`nav-button ${isActive("/account") ? "active" : ""}`}
+          to="/profile"
+          className={`nav-button ${isActive("/profile") ? "active" : ""}`}
         >
           <User size={20} className="nav-icon" />
           {isSidebarExpanded && <span>Account</span>}
