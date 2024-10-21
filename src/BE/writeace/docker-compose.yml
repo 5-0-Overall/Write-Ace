@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432 # Thay đổi từ 5433 thành 5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=300604
+      - DATABASE_NAME=write_ace
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    ports:
+      - '5432:5432' # Map 5433 của host tới 5432 của container
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=300604
+      - POSTGRES_DB=write_ace
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
