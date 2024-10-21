@@ -1,29 +1,30 @@
 import { BaseEntity } from 'src/modules/base/entity/base.entity';
-import {Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { MinLength } from 'class-validator';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({nullable: false})
   password: string;
 
-  @Column()
+  @Column({ default: 0 })
   role_id: number;
 
-  @Column()
+  @Column({ default: 0 })
   point: number;
 
-  @Column()
+  @Column({ default: 0 })
   total_submission: number;
 
-  @Column()
+  @Column({ default: 1})
   is_enabled: boolean;
 }
