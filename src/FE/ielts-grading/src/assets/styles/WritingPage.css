@@ -1,0 +1,229 @@
+html,
+body {
+height: 100%;
+margin: 0;
+padding: 0;
+font-family: Arial, sans-serif;
+}
+
+.recommended-container {
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+height: 100vh;
+padding: 20px;
+box-sizing: border-box;
+font-family: Arial, sans-serif;
+border-radius: 10px;
+}
+
+.recommended-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding-bottom: 10px;
+border-bottom: 2px solid #e5e7eb;
+}
+
+.recommended-header h1 {
+color: #6366f1;
+font-weight: bold;
+font-size: 1.5rem;
+}
+
+.dashboard-btn {
+background-color: #6366f1;
+color: white;
+border: none;
+padding: 8px 16px;
+border-radius: 4px;
+cursor: pointer;
+}
+
+.section-title {
+font-weight: bold;
+font-size: normal;
+color: #374151;
+margin-top: 30px;
+margin-bottom: 10px;
+}
+
+.writing-card,
+.detail-band,
+.writing-section {
+background-color: #ffffff;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+padding: 20px;
+margin-bottom: 30px;
+flex-grow: 1;
+}
+
+.task-content {
+display: flex;
+gap: 20px;
+flex-grow: 1;
+}
+
+.task-description {
+flex: 1;
+}
+
+.task-description h3 {
+font-weight: bold;
+font-size: 1.25rem;
+}
+
+.task-image {
+flex: 1;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.task-image img {
+max-width: 100%;
+height: auto;
+}
+
+.task-footer {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-top: 20px;
+}
+
+.task-buttons {
+display: flex;
+gap: 10px;
+}
+
+.task-btn {
+background-color: #e0ffff;
+color: #008b8b;
+border-radius: 20px;
+padding: 8px 16px;
+}
+
+.chart-btn {
+background-color: #f0fff0;
+color: #2e8b57;
+border-radius: 20px;
+padding: 8px 16px;
+}
+
+.writing-now-btn {
+background-color: #6366f1;
+color: white;
+border: none;
+padding: 10px 20px;
+border-radius: 4px;
+cursor: pointer;
+font-weight: bold;
+}
+
+/* Band Scores (Details Band) */
+.band-scores {
+display: flex;
+justify-content: space-between;
+flex-wrap: nowrap;
+gap: 10px;
+}
+
+.score-item {
+text-align: center;
+flex: 1;
+min-width: 0; /* Allow items to shrink below their content size */
+}
+
+.score-item span {
+font-size: 14px;
+color: #4b5563;
+display: block;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.score-bubble {
+width: 80px;
+height: 40px;
+border-radius: 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+font-weight: bolder;
+margin: 10px auto;
+font-size: 14px;
+}
+
+.task-achievement {
+background-color: #e0ffff;
+color: #008b8b;
+}
+
+.coherence {
+background-color: #fffacd;
+color: #daa520;
+}
+
+.lexical {
+background-color: #98fb98;
+color: #2e8b57;
+}
+
+.grammatical {
+background-color: #e6e6fa;
+color: #6a5acd;
+}
+
+.overall {
+background-color: #f5f5f5;
+color: #ff0000;
+}
+
+.user-info {
+display: flex;
+align-items: center;
+margin-bottom: 20px;
+}
+
+.user-avatar {
+width: 30px;
+height: 30px;
+border-radius: 50%;
+margin-right: 10px;
+}
+
+.writing-content {
+line-height: 1.6;
+color: #4b5563;
+margin-bottom: 10px;
+}
+
+/* Media queries for mobile devices */
+@media (max-width: 768px) {
+.task-content {
+flex-direction: column-reverse;
+}
+
+.band-scores {
+flex-direction: column;
+align-items: center;
+}
+
+.score-item {
+width: 100%;
+margin-bottom: 15px;
+}
+
+.score-bubble {
+width: 100px;
+height: 50px;
+font-size: 16px;
+}
+
+.score-item span {
+font-size: 16px;
+}
+}

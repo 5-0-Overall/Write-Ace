@@ -11,6 +11,7 @@ import Recommended from "./pages/Recommended";
 import History from "./pages/History";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Profile from "./pages/Profile";
+import RecommendedWriting from "./pages/RecommendedWriting"
 // import Settings from "./Settings";
 // import SignOut from "./SignOut";
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/recommend" element={<Recommended />} /> {/*Recommended*/}
         <Route path="/history" element={<History />} /> {/*History*/}
         <Route path="/profile" element={<Profile />} /> {/*Profile*/}
+        <Route path="/recommended-writing" element={<RecommendedWriting />} />
         {/* <Route path="/settings" element={<Settings />} /> Settings */}
         {/* <Route path="/signout" element={<SignOut />} /> SignOut */}
       </Routes>
