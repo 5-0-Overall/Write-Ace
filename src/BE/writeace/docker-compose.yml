@@ -7,18 +7,41 @@ services:
       - '3000:3000'
     environment:
       - DATABASE_HOST=db
-      - DATABASE_PORT=5432 # Thay đổi từ 5433 thành 5432
+      - DATABASE_PORT=5432 
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=300604
       - DATABASE_NAME=write_ace
+      - DATABASE_RETRY_ATTEMPTS=10  # Thêm số lần retry
+      - DATABASE_RETRY_DELAY=3000   # Thêm delay giữa các lần retry
     depends_on:
       db:
         condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    entrypoint: ["./wait-for-it.sh", "db", "--", "npm", "run", "start:prod"]
 
+    networks:
+      - app-network
+  flyway:
+    image: flyway/flyway
+    command: -url=jdbc:postgresql://db:5432/write_ace -user=postgres -password=300604 -connectRetries=60 -baselineOnMigrate=true -baselineVersion=0 migrate
+    volumes:
+      - ./migrations:/flyway/sql
+    depends_on:
+      db:
+        condition: service_healthy    
+           
+    networks:
+      - app-network
   db:
     image: postgres
     ports:
-      - '5432:5432' # Map 5433 của host tới 5432 của container
+      - '5432:5432'
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=300604
@@ -30,6 +53,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   postgres_data:

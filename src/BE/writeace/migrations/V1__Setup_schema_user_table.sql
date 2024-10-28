@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS "user" (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role_id INT DEFAULT 0,
+    point INT DEFAULT 0,
+    total_submission INT DEFAULT 0,
+    is_enabled BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
