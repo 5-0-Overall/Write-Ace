@@ -1,32 +1,89 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import fb from "../assets/images/facebook_logo.svg";
 import gg from "../assets/images/google_logo.svg";
 import apple from "../assets/images/apple_logo.svg";
 import eyeIcon from "../assets/images/eye_icon.svg";
 import eyeOffIcon from "../assets/images/eye_off_icon.svg";
-import '../assets/styles/LoginForm.css';
+import "../assets/styles/LoginForm.css";
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const validateInputs = () => {
+    // Username: characters, numbers, underscores, 3-20 characters long
+    const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+
+    // Password: at least 6 characters long
+    const passwordRegex = /^.{6,}$/;
+
+    if (!username) {
+      setErrorMessage("Username is required.");
+      return false;
+    }
+
+    if (!usernameRegex.test(username)) {
+      setErrorMessage(
+        "Username must be 3-20 characters long and can only contain letters, numbers, and underscores."
+      );
+      return false;
+    }
+
+    if (!password) {
+      setErrorMessage("Password is required.");
+      return false;
+    }
+
+    if (!passwordRegex.test(password)) {
+      setErrorMessage("Password must be at least 6 characters long.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (email === "" || password === "") {
-      setErrorMessage("Please fill in both fields.");
+    if (!validateInputs()) {
       return;
     }
 
-    if (email === "admin@gmail.com" && password === "123") {
-      navigate("/dashboard");
-    } else {
-      setErrorMessage("Invalid email or password.");
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/users/login",
+        { username, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data && response.data.access_token) {
+        localStorage.setItem("access_token", response.data.access_token);
+        navigate("/dashboard");
+      } else {
+        setErrorMessage("Invalid response from server.");
+      }
+    } catch (error) {
+      if (error.response) {
+        setErrorMessage(
+          error.response.data.message ||
+            "Login failed. Please check your credentials."
+        );
+      } else if (error.request) {
+        setErrorMessage("No response from server. Please try again later.");
+      } else {
+        setErrorMessage("An error occurred. Please try again.");
+      }
+      console.error("Login error:", error);
     }
   };
 
@@ -41,12 +98,12 @@ function LoginForm() {
           <h2>Let's Sign You In</h2>
 
           <div className="input-container">
-            <label>Email</label>
+            <label>Username</label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email, phone & username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
               required
             />
           </div>
@@ -88,19 +145,23 @@ function LoginForm() {
           <p className="or-text">Or Sign in with</p>
 
           <div className="logo-container">
-            <a href="*"><img src={gg} alt="Google" /></a>
-            <a href="*"><img src={fb} alt="Facebook" /></a>
-            <a href="*"><img src={apple} alt="Apple" /></a>
+            <a href="*">
+              <img src={gg} alt="Google" />
+            </a>
+            <a href="*">
+              <img src={fb} alt="Facebook" />
+            </a>
+            <a href="*">
+              <img src={apple} alt="Apple" />
+            </a>
           </div>
 
-          <a href="/register" className="register-link">
+          <Link to="/register" className="register-link">
             Don't have an account? <strong>Register now</strong>
-          </a>
-          <br/>
+          </Link>
+          <br />
           <div className="button">
-            <Link to="/">
-              Back to Home
-            </Link>
+            <Link to="/">Back to Home</Link>
           </div>
         </form>
       </div>
