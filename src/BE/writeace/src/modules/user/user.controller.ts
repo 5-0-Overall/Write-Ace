@@ -11,11 +11,12 @@ import {
 import { UserEntity } from './entity/user.entity';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/request/create-user.dto';
-import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UniqueUserPipe } from '../pipes/unique-user.pipe';
 import { SignInUserDto } from './dto/request/signin-user.dto';
 import { AuthGuard } from '../guard/auth.guard';
 
+@ApiTags('user')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}

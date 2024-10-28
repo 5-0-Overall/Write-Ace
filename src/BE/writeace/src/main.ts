@@ -22,10 +22,13 @@ async function bootstrap() {
       whitelist: true, // Strips properties that are not part of the DTO
       forbidNonWhitelisted: true, // Throws an error if non-whitelisted properties are found
       transform: true, // Automatically transforms payloads to be objects typed according to their DTOs
+      transformOptions: {
+        enableImplicitConversion: true, // Cho phép chuyển đổi implicit
+      },
     }),
   );
   SwaggerModule.setup('docs', app, document);
-
+  await app.init();
   await app.listen(3000);
 }
 bootstrap();
