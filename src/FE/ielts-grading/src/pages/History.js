@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { Eye } from "lucide-react";
-import "../assets/styles/Dashboard.css";
+import "../styles/Dashboard.css";
 import DataManipulator from "../components/common/DataManipulator";
 
 function History() {

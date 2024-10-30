@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar.js";
 import { Bell, Upload } from "lucide-react";
-import "../assets/styles/Dashboard.css";
+import "../styles/Dashboard.css";
 
 function Profile() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);

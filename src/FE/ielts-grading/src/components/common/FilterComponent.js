@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Filter, ChevronDown } from 'lucide-react';
+import axios from 'axios';
 
 const FilterComponent = ({ onFilter }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [taskCriteria, setTaskCriteria] = useState('');
   const [topicCriteria, setTopicCriteria] = useState('');
+  const [topics, setTopics] = useState([]); // State để lưu trữ các topic từ API
   const buttonRef = useRef(null);
   const dropdownRef = useRef(null);
   const containerRef = useRef(null);
@@ -23,6 +25,21 @@ const FilterComponent = ({ onFilter }) => {
     setIsOpen(!isOpen);
   };
 
+  // Fetch topics from API on component mount
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/tag');
+        if (response.data) {
+          setTopics(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching topics:", error);
+      }
+    };
+    fetchTopics();
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
@@ -35,7 +52,7 @@ const FilterComponent = ({ onFilter }) => {
         const buttonRect = buttonRef.current.getBoundingClientRect();
         const dropdownRect = dropdownRef.current.getBoundingClientRect();
         const viewportWidth = window.innerWidth;
-  
+
         if (buttonRect.left + dropdownRect.width > viewportWidth) {
           dropdownRef.current.style.left = 'auto';
           dropdownRef.current.style.right = '0';
@@ -90,16 +107,11 @@ const FilterComponent = ({ onFilter }) => {
               className="filter-select"
             >
               <option value="">All</option>
-              <option value="education">Education</option>
-              <option value="technology">Technology</option>
-              <option value="environment">Environment</option>
-              <option value="health">Health</option>
-              <option value="society">Society</option>
-              <option value="work">Work</option>
-              <option value="culture">Culture</option>
-              <option value="government">Government</option>
-              <option value="crime">Crime</option>
-              <option value="family">Family</option>
+              {topics.map((topic, index) => (
+                <option key={index} value={topic}>
+                  {topic}
+                </option>
+              ))}
             </select>
           </div>
         </div>

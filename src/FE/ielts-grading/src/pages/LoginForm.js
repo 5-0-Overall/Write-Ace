@@ -6,7 +6,7 @@ import gg from "../assets/images/google_logo.svg";
 import apple from "../assets/images/apple_logo.svg";
 import eyeIcon from "../assets/images/eye_icon.svg";
 import eyeOffIcon from "../assets/images/eye_off_icon.svg";
-import "../assets/styles/LoginForm.css";
+import "../styles/LoginForm.css";
 
 function LoginForm() {
   const [username, setUsername] = useState("");

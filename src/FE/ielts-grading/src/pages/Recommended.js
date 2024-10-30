@@ -120,9 +120,9 @@ function Recommended() {
       <main className="main-content">
         <div className="main-header">
           <h2 className="main-title">Recommended Writing</h2>
-          <DataManipulator
-            initialData={recommendedData}
-            onDataChange={handleDataChange}
+          <DataManipulator 
+            onDataChange={handleDataManipulation}
+            onFilterChange={handleFilterChange} 
           />
         </div>
 

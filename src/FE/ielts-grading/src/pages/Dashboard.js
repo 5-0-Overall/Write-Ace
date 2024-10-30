@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Link } from "react-router-dom";
-import "../assets/styles/Dashboard.css";
+import "../styles/Dashboard.css";
 
 function Dashboard() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
