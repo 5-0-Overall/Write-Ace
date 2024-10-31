@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
-import "../styles/Dashboard.css";
+import "../styles/Common.css";
+import "../styles/Problems.css";
 import DataManipulator from "../components/common/DataManipulator";
 import { Pen } from "lucide-react";
 import axios from "axios";
@@ -116,7 +117,7 @@ function Problems() {
 
       <main className="main-content">
         <div className="main-header">
-          <h2 className="main-title">Recommended Writing</h2>
+          <h2 className="main-title">Writing Problems</h2>
           <DataManipulator 
             onDataChange={handleDataManipulation}
             onFilterChange={handleFilterChange} 
@@ -143,7 +144,9 @@ function Problems() {
                   <td>{problem.id}</td>
                   <td>{problem.title}</td>
                   <td>{getTaskName(problem.task_id)}</td>
-                  <td>{problem.description}</td>
+                  <td className="description-cell" title={problem.description}>
+                    {problem.description}
+                  </td>
                   <td>
                     <button 
                       className="view-button"

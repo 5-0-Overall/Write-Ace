@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import {
   Home,
@@ -13,8 +13,9 @@ import {
 } from "lucide-react";
 import "./Sidebar.css";
 
-function Sidebar({ isSidebarExpanded, toggleSidebar }) {
+function Sidebar() {
   const location = useLocation();
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const isActive = (path) => location.pathname === path;
 
@@ -27,14 +28,30 @@ function Sidebar({ isSidebarExpanded, toggleSidebar }) {
     }
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1024) {
+        setIsExpanded(false);
+      } else {
+        setIsExpanded(true);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <aside
-      className={`sidebar ${isSidebarExpanded ? "expanded" : "collapsed"}`}
+      className={`sidebar ${isExpanded ? "expanded" : "collapsed"}`}
     >
       <div className="sidebar-header">
-        {isSidebarExpanded && <h1 className="sidebar-title">WriteAce</h1>}
-        <button className="toggle-button" onClick={toggleSidebar}>
-          {isSidebarExpanded ? (
+        {isExpanded && <h1 className="sidebar-title">WriteAce</h1>}
+        <button className="toggle-button" onClick={() => setIsExpanded(!isExpanded)}>
+          {isExpanded ? (
             <ChevronLeft size={24} />
           ) : (
             <ChevronRight size={24} />
@@ -47,35 +64,35 @@ function Sidebar({ isSidebarExpanded, toggleSidebar }) {
           className={`nav-button ${isActive("/dashboard") ? "active" : ""}`}
         >
           <Home size={20} className="nav-icon" />
-          {isSidebarExpanded && <span>Dashboard</span>}
+          {isExpanded && <span>Dashboard</span>}
         </Link>
         <Link
           to="/problems"
           className={`nav-button ${isActive("/problems") ? "active" : ""}`}
         >
           <BookOpen size={20} className="nav-icon" />
-          {isSidebarExpanded && <span>Problems</span>}
+          {isExpanded && <span>Problems</span>}
         </Link>
         <Link
           to="/history"
           className={`nav-button ${isActive("/history") ? "active" : ""}`}
         >
           <History size={20} className="nav-icon" />
-          {isSidebarExpanded && <span>History</span>}
+          {isExpanded && <span>History</span>}
         </Link>
         <Link
           to="/recommend"
           className={`nav-button ${isActive("/recommend") ? "active" : ""}`}
         >
           <BarChart2 size={20} className="nav-icon" />
-          {isSidebarExpanded && <span>Recommended</span>}
+          {isExpanded && <span>Recommended</span>}
         </Link>
         <Link
           to="/profile"
           className={`nav-button ${isActive("/profile") ? "active" : ""}`}
         >
           <User size={20} className="nav-icon" />
-          {isSidebarExpanded && <span>Account</span>}
+          {isExpanded && <span>Account</span>}
         </Link>
       </nav>
       <div className="sidebar-footer">
@@ -84,7 +101,7 @@ function Sidebar({ isSidebarExpanded, toggleSidebar }) {
           className={`nav-button ${isActive("/settings") ? "active" : ""}`}
         >
           <Settings size={20} className="nav-icon" />
-          {isSidebarExpanded && <span>Settings</span>}
+          {isExpanded && <span>Settings</span>}
         </Link>
         <Link
           to="/"
@@ -92,7 +109,7 @@ function Sidebar({ isSidebarExpanded, toggleSidebar }) {
           onClick={handleSignOut}
         >
           <LogOut size={20} className="nav-icon" />
-          {isSidebarExpanded && <span>Sign out</span>}
+          {isExpanded && <span>Sign out</span>}
         </Link>
       </div>
     </aside>

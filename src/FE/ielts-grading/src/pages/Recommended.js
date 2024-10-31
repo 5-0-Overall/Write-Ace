@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
 import DataManipulator from "../components/common/DataManipulator";
-import "../assets/styles/Dashboard.css";
+import "../styles/Common.css";
+import "../styles/Recommended.css";
 import { Eye } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Recommended() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
@@ -14,6 +16,8 @@ function Recommended() {
       setIsSidebarExpanded(true);
     }
   };
+
+  const navigate = useNavigate();
 
   const [recommendedData, setRecommendedData] = useState([
     {
@@ -120,10 +124,10 @@ function Recommended() {
       <main className="main-content">
         <div className="main-header">
           <h2 className="main-title">Recommended Writing</h2>
-          <DataManipulator 
+          {/* <DataManipulator 
             onDataChange={handleDataManipulation}
             onFilterChange={handleFilterChange} 
-          />
+          /> */}
         </div>
 
         <div className="table-container">
@@ -152,7 +156,7 @@ function Recommended() {
                   <td>
                     <button
                       className="view-button"
-                      onClick={() => console.log(`View details of essay`)}
+                      onClick={() => navigate(`/sample-article`)}
                     >
                       <Eye size={16} />
                       <span>View</span>

@@ -36,8 +36,8 @@ const DataManipulator = ({ onDataChange, onFilterChange }) => {
   return (
     <div className="data-manipulator">
       <SearchComponent onSearch={handleSearch} />
-      <SortComponent onSort={handleSort} sortOrder={sortOrder} />
       <FilterComponent onFilter={handleFilter} />
+      <SortComponent onSort={handleSort} sortOrder={sortOrder} />
     </div>
   );
 };

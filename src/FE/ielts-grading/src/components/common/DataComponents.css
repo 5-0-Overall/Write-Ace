@@ -1,0 +1,269 @@
+:root {
+  --primary-color: #2563eb;
+  --hover-color: #1d4ed8;
+  --bg-light: #f3f4f6;
+  --bg-hover: #e5e7eb;
+  --border-color: #d1d5db;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-light: #9ca3af;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.2s ease;
+}
+
+/* Common Button Styles */
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+  background-color: white;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.action-button:hover {
+  background-color: var(--bg-light);
+}
+
+.action-button:active {
+  transform: scale(0.98);
+}
+
+/* Search Component Styles */
+.search-form {
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 80px 8px 40px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.clear-button,
+.search-button {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  transition: var(--transition);
+  border-radius: 6px;
+}
+
+.clear-button {
+  right: 40px;
+  color: var(--text-light);
+}
+
+.search-button {
+  right: 4px;
+  color: var(--text-primary);
+}
+
+.clear-button:hover,
+.search-button:hover {
+  background-color: var(--bg-light);
+}
+
+/* Filter Component Styles */
+.filter-container {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+  background-color: white;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filter-dropdown {
+  position: absolute;
+  right: 0;
+  z-index: 1000;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  padding: 16px;
+  min-width: 240px;
+  max-width: calc(100vw - 32px);
+  
+  top: calc(100% + 8px);
+  animation: slideIn 0.2s ease;
+}
+
+.filter-group {
+  margin-bottom: 16px;
+}
+
+.filter-group:last-child {
+  margin-bottom: 0;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.filter-select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Sort Component Styles */
+.sort-button-container {
+  display: flex;
+  align-items: center;
+}
+
+.sort-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+  background-color: white;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sort-button-asc {
+  color: var(--primary-color);
+  background-color: #dbeafe;
+  border-color: #bfdbfe;
+}
+
+.sort-button-desc {
+  color: #dc2626;
+  background-color: #fee2e2;
+  border-color: #fecaca;
+}
+
+/* Animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter-dropdown {
+  animation: slideIn 0.2s ease;
+}
+
+.dropdown-top {
+  animation: slideInTop 0.2s ease;
+}
+
+@keyframes slideInTop {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .search-form {
+    max-width: 100%;
+  }
+  
+  .filter-dropdown,
+  .filter-dropdown.dropdown-top {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    top: auto;
+    width: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideInMobile 0.2s ease;
+  }
+
+  @keyframes slideInMobile {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+} 

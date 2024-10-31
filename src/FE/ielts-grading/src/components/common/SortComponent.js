@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
+import './DataComponents.css';
 
 const SortComponent = ({ onSort, sortOrder }) => {
   const handleSort = () => {
@@ -15,11 +16,11 @@ const SortComponent = ({ onSort, sortOrder }) => {
   const getSortIcon = () => {
     switch (sortOrder) {
       case 'asc':
-        return <ArrowUp size={20} />;
+        return <ArrowUp size={18} />;
       case 'desc':
-        return <ArrowDown size={20} />;
+        return <ArrowDown size={18} />;
       default:
-        return <ArrowUpDown size={20} />;
+        return <ArrowUpDown size={18} />;
     }
   };
 
@@ -28,6 +29,7 @@ const SortComponent = ({ onSort, sortOrder }) => {
       <button 
         onClick={handleSort} 
         className={`sort-button ${sortOrder ? `sort-button-${sortOrder}` : ''}`}
+        title={`Sort ${sortOrder || 'none'}`}
       >
         {getSortIcon()}
       </button>

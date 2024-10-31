@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Search, X } from 'lucide-react';
+import debounce from 'lodash/debounce';
+import './DataComponents.css';
 
-const SearchComponent = ({ onSearch }) => {
+const SearchComponent = ({ onSearch, placeholder = "Search..." }) => {
   const [query, setQuery] = useState('');
+  const searchRef = useRef(
+    debounce((value) => {
+      onSearch(value);
+    }, 300)
+  ).current;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSearch(query);
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+    searchRef(value);
   };
 
   const handleClear = () => {
     setQuery('');
     onSearch('');
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch(query);
   };
 
   return (
@@ -20,8 +33,8 @@ const SearchComponent = ({ onSearch }) => {
         <input
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search..."
+          onChange={handleChange}
+          placeholder={placeholder}
           className="search-input"
         />
         {query && (
@@ -30,7 +43,7 @@ const SearchComponent = ({ onSearch }) => {
           </button>
         )}
         <button type="submit" className="search-button">
-          <Search size={20} />
+          <Search size={18} />
         </button>
       </div>
     </form>

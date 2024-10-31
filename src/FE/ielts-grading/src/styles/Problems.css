@@ -1,0 +1,47 @@
+/* Problems specific styles */
+.problems-table td {
+  vertical-align: middle;
+}
+
+.problems-table {
+  min-width: 800px;
+}
+
+.loading-container,
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 2rem;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.error-container {
+  color: #ef4444;
+}
+
+@media screen and (max-width: 768px) {
+  .loading-container,
+  .error-container {
+    min-height: 150px;
+    font-size: 1rem;
+    padding: 1rem;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Add styles for description cell */
+.description-cell {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
