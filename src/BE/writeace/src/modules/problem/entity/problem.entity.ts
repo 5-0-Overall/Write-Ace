@@ -1,11 +1,13 @@
 import { BaseEntity } from 'src/modules/base/entity/base.entity';
 import { Task } from 'src/modules/const/enum/task.enum';
+import { SubmissionEntity } from 'src/modules/submission/entity/submission.entity';
 import { TagEntity } from 'src/modules/tag/entity/tag.entity';
 import {
   Column,
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -39,4 +41,7 @@ export class ProblemEntity extends BaseEntity {
 
   @Column()
   image?: string;
+
+  @OneToMany(()=>SubmissionEntity, (submision)=>submision.problem)
+  submissions: SubmissionEntity[];
 }

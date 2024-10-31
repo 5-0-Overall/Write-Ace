@@ -34,7 +34,8 @@ RUN wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/8.5
 EXPOSE 3000
 
 # Use wait-for-it.sh to wait for the database
-ENTRYPOINT ["/usr/src/app/wait-for-it.sh", "db", "--"]
+ENTRYPOINT ["/bin/sh", "/usr/src/app/wait-for-it.sh", "db", "--"]
 
 # Start the application
 CMD ["npm", "run", "start:prod"]
+

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   Post,
   Req,
   UnauthorizedException,
@@ -19,6 +20,7 @@ import { AuthGuard } from '../guard/auth.guard';
 @ApiTags('user')
 @Controller('users')
 export class UserController {
+  private readonly logger = new Logger(UserController.name);
   constructor(private readonly userService: UserService) {}
 
   @Post()
@@ -26,7 +28,7 @@ export class UserController {
   @ApiBody({ type: CreateUserDto }) // Describe the request body
   @UsePipes(UniqueUserPipe)
   async create(@Body() createuser: CreateUserDto): Promise<UserEntity> {
-    console.log('Received user data:', createuser); // Log the received data
+    this.logger.log('Received user data:', createuser);
     return await this.userService.create(createuser);
   }
 
@@ -36,6 +38,7 @@ export class UserController {
   async login(
     @Body() loginuser: SignInUserDto,
   ): Promise<{ access_token: string }> {
+    this.logger.log('Received user login data:', loginuser);
     return await this.userService.login(loginuser);
   }
 
@@ -47,6 +50,7 @@ export class UserController {
     if (!req.user) {
       throw new UnauthorizedException('User not authenticated');
     }
+    this.logger.log('Current user data:', req.user);
     return  req.user as UserEntity;
   }
 }

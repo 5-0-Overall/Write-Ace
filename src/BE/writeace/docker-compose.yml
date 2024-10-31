@@ -13,6 +13,7 @@ services:
       - DATABASE_NAME=write_ace
       - DATABASE_RETRY_ATTEMPTS=10  # Thêm số lần retry
       - DATABASE_RETRY_DELAY=3000   # Thêm delay giữa các lần retry
+      - OPEN_API_KEY=API_KEY_HERE
     depends_on:
       db:
         condition: service_healthy
