@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-image: url("../images/login-bg.gif");
+  background-image: url("../assets/images/login-bg.gif");
   background-size: cover;
   background-position: center;
 }

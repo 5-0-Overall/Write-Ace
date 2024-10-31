@@ -1,30 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchComponent from "./SearchComponent";
 import SortComponent from "./SortComponent";
 import FilterComponent from "./FilterComponent";
 import "./DataManipulator.css";
 
-const DataManipulator = () => {
+const DataManipulator = ({ onDataChange, onFilterChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState(null);
-  const [filterCriteria, setFilterCriteria] = useState("");
+  const [filterCriteria, setFilterCriteria] = useState({
+    task: "",
+    topic: ""
+  });
+
+  useEffect(() => {
+    onDataChange({
+      searchQuery,
+      sortOrder,
+      filterCriteria
+    });
+  }, [searchQuery, sortOrder, filterCriteria, onDataChange]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    console.log("Searching for:", query);
-    // Implement your search logic here
   };
 
   const handleSort = (direction) => {
     setSortOrder(direction);
-    console.log("Sorting order:", direction);
-    // Implement your sorting logic here
   };
 
   const handleFilter = (criteria) => {
     setFilterCriteria(criteria);
-    console.log("Filtering by:", criteria);
-    // Implement your filtering logic here
+    onFilterChange?.(criteria);
   };
 
   return (

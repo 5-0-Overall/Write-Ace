@@ -1,10 +1,9 @@
-import React from "react";
-import wlogo from "../assets/images/wlogo.png";
+import React, { useState, useEffect } from "react";
+import wlogo from "../assets/images/logo.svg";
 import elearning_logo from "../assets/images/elearning_logo.jpg";
 import intro from "../assets/images/intro.jpg";
-import facebookLogo from "../assets/images/facebook-brands-solid.svg";
-import instagramLogo from "../assets/images/instagram-brands-solid.svg";
-import twitterLogo from "../assets/images/twitter-brands-solid.svg";
+import { Facebook, Twitter, Instagram, ArrowUp } from "lucide-react";
+import "../styles/Landing.css";
 import "../App.css";
 
 // Component LandingPage
@@ -13,7 +12,7 @@ function LandingPage() {
     <>
       <Navigation />
       <Body />
-      <Social />
+      <BackToTop />
     </>
   );
 }
@@ -31,44 +30,92 @@ function Body() {
   );
 }
 
-// Component Social
-function Social() {
-  return (
-    <div className="social">
-      <span>&copy; WriteAce 2024</span>
-      <div className="social-logo">
-        <span>Follow us:</span>
-        <img src={facebookLogo} alt="facebook" />
-        <img src={twitterLogo} alt="twitter" />
-        <img src={instagramLogo} alt="instagram" />
-      </div>
-    </div>
-  );
-}
-
 // Component Footer
 function Footer() {
   return (
     <footer className="footer">
-      <div className="link">
-        <h3>Quick Links</h3>
-        <ul>
-          <li>Features</li>
-          <li>Live Share</li>
-          <li>Video Record</li>
-        </ul>
+      <div className="footer-content">
+        <div className="footer-section">
+          <h3>WriteAce</h3>
+          <p className="footer-description">
+            Empowering students worldwide with AI-powered IELTS writing
+            preparation
+          </p>
+          <div className="footer-social">
+            <a href="#" className="social-icon">
+              <Facebook size={20} />
+            </a>
+            <a href="#" className="social-icon">
+              <Twitter size={20} />
+            </a>
+            <a href="#" className="social-icon">
+              <Instagram size={20} />
+            </a>
+          </div>
+        </div>
+
+        <div className="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li>
+              <a href="#home">Home</a>
+            </li>
+            <li>
+              <a href="#about">About Us</a>
+            </li>
+            <li>
+              <a href="#resources">Resources</a>
+            </li>
+            <li>
+              <a href="/blog">Blog</a>
+            </li>
+          </ul>
+        </div>
+
+        <div className="footer-section">
+          <h4>Resources</h4>
+          <ul>
+            <li>
+              <a href="/practice">Practice Tests</a>
+            </li>
+            <li>
+              <a href="/tutorials">Video Tutorials</a>
+            </li>
+            <li>
+              <a href="/tips">Writing Tips</a>
+            </li>
+            <li>
+              <a href="/samples">Sample Essays</a>
+            </li>
+          </ul>
+        </div>
+
+        <div className="footer-section">
+          <h4>Follow Us</h4>
+          <ul>
+            <li>
+              <a href="#">Facebook</a>
+            </li>
+            <li>
+              <a href="#">Twitter</a>
+            </li>
+            <li>
+              <a href="#">Instagram</a>
+            </li>
+            <li>
+              <a href="#">LinkedIn</a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div className="contact">
-        <h3>Contact Us</h3>
-        <ul>
-          <li>Email: writeace@gmail.com</li>
-          <li>Phone: 0123456789</li>
-        </ul>
-      </div>
-      <div className="buttons">
-        <button>Register</button>
-        <button>Log in</button>
-        <button>ADMIN</button>
+
+      <div className="footer-bottom">
+        <p>&copy; 2024 WriteAce. All rights reserved.</p>
+        <div className="footer-links">
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+          <a href="/faq">FAQ</a>
+        </div>
       </div>
     </footer>
   );
@@ -76,31 +123,105 @@ function Footer() {
 
 function Body4() {
   return (
-    <div className="body4" id="about">
-      {" "}
-      {/* Add id for scrolling */}
-      <h2 className="heading">About Us</h2>
-      <hr />
-      <br />
-      <div className="intro">
-        <div className="intro-text">
-          <h3>The 5.0 Overall Team</h3>
-          <p>
-            Our team includes 4 members: Quang Thang, Tam Thanh, Tuan Thanh, and
-            Huu Bang, all majoring in Software Engineering at University of
-            Science.
-          </p>
-        </div>
-        <img src={intro} alt="intro" />
-      </div>
-      <div className="vision">
-        <h3>Our Vision</h3>
-        <p>
-          Our vision is to help IELTS learners access quality resources at an
-          affordable price. This website offers students detailed feedback on
-          their essays with band scores based on the four criteria in IELTS
-          Writing, as well as suggestions on how to improve their scores.
+    <div className="section" id="about">
+      <div className="section-container">
+        <h2 className="section-title">About Us</h2>
+        <p className="section-subtitle">
+          Meet the team behind WriteAce and learn about our mission
         </p>
+        <div className="about-container">
+          <div className="card">
+            <div className="intro">
+              <div className="intro-text">
+                <span className="highlight">The 5.0 Overall Team</span>
+                <hr />
+                <br />
+                <p className="italic-text">
+                  Our team consists of passionate Software Engineering students
+                  from the University of Science who understand the challenges
+                  of IELTS preparation.
+                </p>
+
+                <br />
+                <ul className="team-list">
+                  <li>
+                    <strong>Quang Thang</strong>
+                    <span>Backend Developer</span>
+                  </li>
+                  <li>
+                    <strong>Tam Thanh</strong>
+                    <span>Frontend Developer</span>
+                  </li>
+                  <li>
+                    <strong>Tuan Thanh</strong>
+                    <span>Frontend Developer</span>
+                  </li>
+                  <li>
+                    <strong>Huu Bang</strong>
+                    <span>Tester</span>
+                  </li>
+                  <li>
+                    <strong>Van Quan</strong>
+                    <span>Frontend Developer</span>
+                  </li>
+                </ul>
+                <div className="team-stats">
+                  <div className="stat-item">
+                    <h4>1000+</h4>
+                    <p>Essays Graded</p>
+                  </div>
+                  <div className="stat-item">
+                    <h4>98%</h4>
+                    <p>Accuracy Rate</p>
+                  </div>
+                  <div className="stat-item">
+                    <h4>24/7</h4>
+                    <p>Support</p>
+                  </div>
+                </div>
+              </div>
+              <div className="image-wrapper">
+                <img src={intro} alt="Our Team" className="team-image" />
+                <div className="image-overlay"></div>
+              </div>
+            </div>
+          </div>
+          <div className="card">
+            <span className="highlight">Our Mission</span>
+            <hr />
+            <br />
+            <div className="vision-content">
+              <p className="italic-text">
+                We believe that quality IELTS preparation should be accessible
+                to everyone. Our platform combines cutting-edge AI technology
+                with proven educational methods to help you achieve your target
+                score.
+              </p>
+              <ul className="vision-list">
+                <li>
+                  <strong>Affordable Learning</strong>
+                  <p>High-quality resources at student-friendly prices</p>
+                </li>
+                <li>
+                  <strong>AI-Powered Feedback</strong>
+                  <p>Instant, detailed essay evaluation</p>
+                </li>
+                <li>
+                  <strong>Accurate Scoring</strong>
+                  <p>Band score predictions aligned with IELTS criteria</p>
+                </li>
+                <li>
+                  <strong>Personalized Growth</strong>
+                  <p>Tailored improvement suggestions for each student</p>
+                </li>
+              </ul>
+              <div className="cta-container">
+                <button className="cta-button">Start Free Trial</button>
+                <button className="secondary-button">Learn More</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -108,33 +229,69 @@ function Body4() {
 
 function Body3() {
   return (
-    <div className="body3" id="resources">
-      {" "}
-      {/* Add id for scrolling */}
-      <h2 className="heading">Our Topics</h2>
-      <hr />
-      <br />
-      <div className="task-container">
-        <div className="task task1">
-          <h3>IELTS Writing Task 1</h3>
-          <div className="all-types">
-            <div>Bar Chart</div>
-            <div>Line Graph</div>
-            <div>Table</div>
-            <div>Pie Chart</div>
-            <div>Process Diagram</div>
-            <div>Map</div>
-            <div>Multiple Graphs</div>
+    <div className="section" id="resources">
+      <div className="section-container">
+        <h2 className="section-title">Practice Resources</h2>
+        <p className="section-subtitle">
+          Comprehensive practice materials covering all IELTS Writing topics
+        </p>
+        <div className="task-container">
+          <div className="card">
+            <h3 className="highlight">IELTS Writing Task 1</h3>
+            <p className="task-description italic-text">
+              Master the art of describing visual information in academic
+              settings
+            </p>
+            <div className="all-types">
+              <div className="topic-item">
+                <h4 className="highlight">Bar Charts</h4>
+                <p>Compare data across categories</p>
+              </div>
+              <div className="topic-item">
+                <h4 className="highlight">Line Graphs</h4>
+                <p>Analyze trends over time</p>
+              </div>
+              <div className="topic-item">
+                <h4 className="highlight">Pie Charts</h4>
+                <p>Understand proportions and percentages</p>
+              </div>
+              <div className="topic-item">
+                <h4 className="highlight">Maps</h4>
+                <p>Describe geographical changes</p>
+              </div>
+              <div className="topic-item">
+                <h4 className="highlight">Process Diagrams</h4>
+                <p>Explain steps and cycles</p>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="task task2">
-          <h3>IELTS Writing Task 2</h3>
-          <div className="all-types">
-            <div>Opinion</div>
-            <div>Advantages and Disadvantages</div>
-            <div>Problem and Solution</div>
-            <div>Discussion</div>
-            <div>Two-part Questions</div>
+          <div className="card">
+            <h3 className="highlight">IELTS Writing Task 2</h3>
+            <p className="task-description italic-text">
+              Develop your essay writing skills with various question types
+            </p>
+            <div className="all-types">
+              <div className="topic-item">
+                <h4 className="highlight">Opinion Essays</h4>
+                <p>Express and support your views</p>
+              </div>
+              <div className="topic-item">
+                <h4 className="highlight">Discussion Essays</h4>
+                <p>Analyze different perspectives</p>
+              </div>
+              <div className="topic-item">
+                <h4 className="highlight">Problem Solution</h4>
+                <p>Address issues and propose solutions</p>
+              </div>
+              <div className="topic-item">
+                <h4 className="highlight">Advantages Disadvantages</h4>
+                <p>Evaluate pros and cons</p>
+              </div>
+              <div className="topic-item">
+                <h4 className="highlight">Double Question</h4>
+                <p>Handle multiple question types</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -144,12 +301,52 @@ function Body3() {
 
 function Body2() {
   return (
-    <div className="body2" id="steps">
-      {" "}
-      {/* Add id for scrolling */}
-      <div className="step">Correct Grammar Mistakes</div>
-      <div className="step">Vocabulary Enhancement</div>
-      <div className="step">Evaluate on 4 Criteria</div>
+    <div className="section" id="steps">
+      <div className="section-container">
+        <h2 className="section-title">How It Works</h2>
+        <p className="section-subtitle">
+          Our AI-powered platform makes IELTS writing practice efficient and
+          effective
+        </p>
+        <div className="steps-timeline">
+          <div className="card step-card">
+            <div className="step-number">1</div>
+            <div className="step-content">
+              <h3>Grammar Check</h3>
+              <p>Advanced AI detects and corrects grammar mistakes instantly</p>
+              <ul className="feature-list">
+                <li>Real-time error detection</li>
+                <li>Contextual corrections</li>
+                <li>Explanation of mistakes</li>
+              </ul>
+            </div>
+          </div>
+          <div className="card step-card">
+            <div className="step-number">2</div>
+            <div className="step-content">
+              <h3>Vocabulary Enhancement</h3>
+              <p>Get suggestions for better word choices and collocations</p>
+              <ul className="feature-list">
+                <li>Academic word suggestions</li>
+                <li>Collocation improvements</li>
+                <li>Vocabulary level analysis</li>
+              </ul>
+            </div>
+          </div>
+          <div className="card step-card">
+            <div className="step-number">3</div>
+            <div className="step-content">
+              <h3>IELTS Evaluation</h3>
+              <p>Receive detailed feedback on all 4 IELTS criteria</p>
+              <ul className="feature-list">
+                <li>Band score prediction</li>
+                <li>Detailed feedback</li>
+                <li>Improvement suggestions</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -157,13 +354,15 @@ function Body2() {
 function Body1() {
   return (
     <div className="body1" id="home">
-      {" "}
-      {/* Add id for scrolling */}
-      <div>
-        <h1>Elevate Your IELTS Writing with AI Precision</h1>
-        <p>Improve your writing skills with GPT</p>
+      <div className="hero-content">
+        <h1>Elevate Your IELTS Writing</h1>
+        <h2 className="subtitle">with AI Precision</h2>
+        <p className="italic-text">Improve your writing skills with GPT-powered feedback</p>
+        <button className="cta-button">Start Writing Now</button>
       </div>
-      <img src={elearning_logo} alt="e-learning logo" />
+      <div className="hero-image">
+        <img src={elearning_logo} alt="e-learning logo" />
+      </div>
     </div>
   );
 }
@@ -230,6 +429,39 @@ function Navigation() {
         </li>
       </ul>
     </nav>
+  );
+}
+
+function BackToTop() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <button
+      className={`back-to-top ${isVisible ? "visible" : ""}`}
+      onClick={scrollToTop}
+    >
+      <ArrowUp size={24} />
+    </button>
   );
 }
 
