@@ -1,6 +1,7 @@
 import { BaseEntity } from 'src/modules/base/entity/base.entity';
-import {Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { MinLength } from 'class-validator';
+import { SubmissionEntity } from 'src/modules/submission/entity/submission.entity';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -18,6 +19,9 @@ export class UserEntity extends BaseEntity {
 
   @Column({ default: 0 })
   role_id: number;
+
+  @OneToMany(()=>SubmissionEntity, (submission)=>submission.user)
+  submissions:SubmissionEntity[];
 
   @Column({ default: 0 })
   point: number;

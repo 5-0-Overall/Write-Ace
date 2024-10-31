@@ -16,5 +16,11 @@ export class TagService {
     async findTagByListName(listName: string[]): Promise<TagEntity[]> {
         return this.tagRepository.find({ where: { name: In(listName) } });
     }   
+    async findAllTags(): Promise<TagEntity[]> {
+        return this.tagRepository.find();
+    }
+    async findTagByListId(idList: number[]): Promise<TagEntity[]> {
+        return this.tagRepository.find({ where: { id: In(idList) } });
+    }
 }
 

@@ -11,6 +11,7 @@ import { BaseModule } from './modules/base/base.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AdminInitializerService } from './modules/user/admin/admin-initializer.service';
 import { LoggerMiddleware } from './modules/middleware/logger.middleware';
+import { OpenAIModule } from './modules/openai/openai.module';
 
 @Module({
   imports: [
@@ -32,12 +33,13 @@ import { LoggerMiddleware } from './modules/middleware/logger.middleware';
         entities: [__dirname + '/**/*.entity.{ts,js}'],
         autoLoadEntities: true,
         logging: true,
-        synchronize: false, // Chỉ nên dùng trong môi trường development
+        synchronize: false, // Only use in development environment
         retryAttempts: +configService.get('DATABASE_RETRY_ATTEMPTS', 10),
         retryDelay: +configService.get('DATABASE_RETRY_DELAY', 3000),
       }),
       inject: [ConfigService],
     }),
+    OpenAIModule,
     BaseModule,
   ],
   controllers: [AppController],

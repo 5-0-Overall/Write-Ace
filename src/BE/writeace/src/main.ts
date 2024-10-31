@@ -1,10 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
   app.enableCors({
     origin: 'http://localhost:3001', // Replace with your frontend's origin
     credentials: true, // Enable if you're using cookies or authentication
@@ -30,5 +31,6 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
   await app.init();
   await app.listen(3000);
+  Logger.log('Application is running on: http://localhost:3000', 'Bootstrap');
 }
 bootstrap();
