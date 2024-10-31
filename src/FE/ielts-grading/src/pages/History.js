@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { Eye } from "lucide-react";
-import "../styles/Dashboard.css";
+import "../styles/Common.css";
+import "../styles/History.css";
 import DataManipulator from "../components/common/DataManipulator";
 
 function History() {
@@ -124,10 +125,10 @@ function History() {
       <main className="main-content">
         <div className="main-header">
           <h2 className="main-title">Writing History</h2>
-          <DataManipulator
+          {/* <DataManipulator
             data={historyData}
             handleDataChange={handleDataChange}
-          />
+          /> */}
         </div>
 
         <div className="table-container">

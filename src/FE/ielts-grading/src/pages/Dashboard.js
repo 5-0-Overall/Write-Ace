@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Link } from "react-router-dom";
+import "../styles/Common.css";
 import "../styles/Dashboard.css";
 
 function Dashboard() {

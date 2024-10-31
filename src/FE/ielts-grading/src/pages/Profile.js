@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar.js";
 import { Bell, Upload } from "lucide-react";
-import "../styles/Dashboard.css";
+import "../styles/Profile.css";
 
 function Profile() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
@@ -56,7 +56,9 @@ function Profile() {
 
       <main className="main-content">
         <div className="main-header">
-          <h2 className="main-title">Profile</h2>
+          <div className="header-title">
+            <h2 className="main-title">Profile Settings</h2>
+          </div>
           <div className="header-controls">
             <button className="icon-button">
               <Bell size={20} />
@@ -67,11 +69,13 @@ function Profile() {
         <div className="profile-container">
           <div className="profile-content">
             <div className="profile-avatar-section">
-              <img
-                src={avatar}
-                alt="Profile"
-                className="profile-avatar"
-              />
+              <div className="avatar-wrapper">
+                <img
+                  src={avatar}
+                  alt="Profile"
+                  className="profile-avatar"
+                />
+              </div>
               <input
                 type="file"
                 id="avatar-upload"
