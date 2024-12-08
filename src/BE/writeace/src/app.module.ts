@@ -12,6 +12,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AdminInitializerService } from './modules/user/admin/admin-initializer.service';
 import { LoggerMiddleware } from './modules/middleware/logger.middleware';
 import { OpenAIModule } from './modules/openai/openai.module';
+import { ContributionModule } from './modules/contribution/contribution.module';
+import { AnalysticModule } from './modules/analystic/analystic.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { OpenAIModule } from './modules/openai/openai.module';
     }),
     OpenAIModule,
     BaseModule,
+    ContributionModule,
+    AnalysticModule,    
   ],
   controllers: [AppController],
   providers: [AppService,AdminInitializerService],

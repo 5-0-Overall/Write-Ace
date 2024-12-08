@@ -1,15 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from "@nestjs/common";
 import { SubmissionService } from "./submission.service";
 import { SubmissionEntity } from "./entity/submission.entity";
 import { SubmissionCreateDTO } from "./dto/submission.dto.request";
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
+import { ContributionService } from "../contribution/contribution.service";
 
 
 
 @ApiTags('submission')
 @Controller('submissions')
+@UseInterceptors(ClassSerializerInterceptor)  
 export class SubmissionController {
-  constructor(private submissionService: SubmissionService) {}
+  constructor(private submissionService: SubmissionService,private contributionService: ContributionService) {}
 
   @Get()
   async getAllSubmissions(): Promise<SubmissionEntity[]> {
@@ -23,6 +25,7 @@ export class SubmissionController {
 
   @Post()
   async createSubmission(@Body() submission: SubmissionCreateDTO): Promise<SubmissionEntity> {
+    this.contributionService.incrementContribution(submission.user);
     return this.submissionService.createSubmission(submission);
   }
 

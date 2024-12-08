@@ -7,12 +7,14 @@ import apple from "../assets/images/apple_logo.svg";
 import eyeIcon from "../assets/images/eye_icon.svg";
 import eyeOffIcon from "../assets/images/eye_off_icon.svg";
 import "../styles/LoginForm.css";
+import AuthService from '../services/auth.service';
 
 function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -50,40 +52,31 @@ function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     if (!validateInputs()) {
       return;
     }
 
+    setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:3000/users/login",
-        { username, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.data && response.data.access_token) {
-        localStorage.setItem("access_token", response.data.access_token);
-        navigate("/dashboard");
-      } else {
-        setErrorMessage("Invalid response from server.");
+      const response = await AuthService.login(username, password);
+      if (response.access_token) {
+        navigate('/dashboard');
       }
     } catch (error) {
+      let errorMsg = 'Đăng nhập thất bại';
       if (error.response) {
-        setErrorMessage(
-          error.response.data.message ||
-            "Login failed. Please check your credentials."
-        );
-      } else if (error.request) {
-        setErrorMessage("No response from server. Please try again later.");
-      } else {
-        setErrorMessage("An error occurred. Please try again.");
+        switch (error.response.status) {
+          case 401:
+            errorMsg = 'Sai tên đăng nhập hoặc mật khẩu';
+            break;
+          default:
+            errorMsg = error.response.data?.message || errorMsg;
+        }
       }
-      console.error("Login error:", error);
+      setErrorMessage(errorMsg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -138,8 +131,12 @@ function LoginForm() {
             Forgot Password?
           </a>
 
-          <button type="submit" className="button">
-            Sign In
+          <button 
+            type="submit" 
+            disabled={loading}
+            className={`submit-button ${loading ? 'loading' : ''}`}
+          >
+            {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
           </button>
 
           <p className="or-text">Or Sign in with</p>

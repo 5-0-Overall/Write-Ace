@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { SubmissionCreateDTO } from './dto/submission.dto.request';
 import { ProblemEntity } from '../problem/entity/problem.entity';
 import { UserEntity } from '../user/entity/user.entity';
+import { AnalysticUserDTO } from '../analystic/dto/analystic-user.dto';
 
 @Injectable()
 export class SubmissionService {
@@ -40,7 +41,7 @@ export class SubmissionService {
     const newSubmission = this.submissionRepository.create({
       problem,
       user,
-      essay
+      essay,
     });
 
     await this.submissionRepository.save(newSubmission);
@@ -57,5 +58,36 @@ export class SubmissionService {
 
   async deleteSubmission(id: number): Promise<void> {
     await this.submissionRepository.delete(id);
+  }
+
+  async analysticUserSubmission(userId: number): Promise<AnalysticUserDTO> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const submissions = await this.submissionRepository.find({
+      where: { user },
+    });
+    const totalSubmission = submissions.length;
+    const problem = submissions.map((submission) => submission.problem);
+    const totalEssay = problem.length;
+    const totalWord = submissions.reduce(
+      (acc, curr) => acc + curr.essay.length,
+      0,
+    );
+    const averageScore =
+      submissions.reduce((acc, curr) => acc + curr.scoreOVR, 0) / totalEssay;
+    const highestScore = Math.max(
+      ...submissions.map((submission) => submission.scoreOVR),
+    );
+    return {
+      user_id: user.id,
+      total_submission: totalSubmission,
+      total_essay: totalEssay,
+      total_word: totalWord,
+      average_score: averageScore,
+      highest_score: highestScore,
+    };
   }
 }

@@ -12,9 +12,14 @@ import {
 import { Link } from "react-router-dom";
 import "../styles/Common.css";
 import "../styles/Dashboard.css";
+import ContributionChart from '../components/ContributionChart';
+import api from '../services/api';
+import AuthService from '../services/auth.service';
 
 function Dashboard() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const [contributionData, setContributionData] = useState({ total: 0, contributions: {} });
+  const [user, setUser] = useState(null);
 
   const handleResize = () => {
     setIsSidebarExpanded(window.innerWidth > 768);
@@ -24,6 +29,24 @@ function Dashboard() {
     window.addEventListener("resize", handleResize);
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const fetchContributions = async () => {
+      try {
+        const { data } = await api.get('/contributions/me');
+        setContributionData(data);
+      } catch (error) {
+        console.error('Error fetching contributions:', error);
+      }
+    };
+    
+    fetchContributions();
+  }, []);
+
+  useEffect(() => {
+    const currentUser = AuthService.getCurrentUser();
+    setUser(currentUser);
   }, []);
 
   const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
@@ -62,7 +85,9 @@ function Dashboard() {
         <div className="main-header">
           <div>
             <h2 className="main-title">Dashboard</h2>
-            <p className="welcome-text">Welcome back, Jack</p>
+            <p className="welcome-text">
+              Welcome back, {user?.username || 'User'}
+            </p>
           </div>
           <div className="header-controls">
             <select className="time-selector">
@@ -130,15 +155,8 @@ function Dashboard() {
         </div>
 
         <div className="chart-container">
-          <h3 className="chart-title">Top topics</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart key={JSON.stringify(topTopicsData)} data={topTopicsData}>
-              <XAxis dataKey="topic" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="count" fill="#3b82f6" />
-            </BarChart>
-          </ResponsiveContainer>
+          <h3 className="chart-title">Your Contributions</h3>
+          <ContributionChart data={contributionData} />
         </div>
       </main>
     </div>

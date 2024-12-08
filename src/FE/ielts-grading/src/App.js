@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import SampleArticle from "./pages/SampleArticle";
 import './App.css';
 import './styles/Landing.css';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
@@ -26,11 +27,31 @@ function App() {
         <Route path="/contact" element={<Contact />} /> {/*Contact */}
         <Route path="*" element={<h1>404 Not Found</h1>} /> {/* 404 page */}
         <Route path="/sidebar" element={<Sidebar />} />
-        <Route path="/dashboard" element={<Dashboard />} /> {/*Dashboard*/}
-        <Route path="/problems" element={<Problems />} /> {/*Problems*/}
-        <Route path="/recommend" element={<Recommended />} /> Recommended
-        <Route path="/history" element={<History />} /> {/*History*/}
-        <Route path="/profile" element={<Profile />} /> {/*Profile*/} 
+        <Route path="/dashboard" element={
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        } />
+        <Route path="/problems" element={
+          <PrivateRoute>
+            <Problems />
+          </PrivateRoute>
+        } />
+        <Route path="/recommend" element={
+          <PrivateRoute>
+            <Recommended />
+          </PrivateRoute>
+        } />
+        <Route path="/history" element={
+          <PrivateRoute>
+            <History />
+          </PrivateRoute>
+        } />
+        <Route path="/profile" element={
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        } />
         <Route path="/sample-article" element={<SampleArticle />} />
         {/* Sample
         {/* <Route path="/settings" element={<Settings />} /> Settings */}

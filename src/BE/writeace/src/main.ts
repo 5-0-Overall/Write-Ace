@@ -15,7 +15,7 @@ async function bootstrap() {
     .setTitle('WriteAce API')
     .setDescription('The WriteAce API description')
     .setVersion('1.0')
-    .addBearerAuth()
+      .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   app.useGlobalPipes(

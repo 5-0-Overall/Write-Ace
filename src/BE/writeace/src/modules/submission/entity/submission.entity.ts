@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'src/modules/base/entity/base.entity';
 import { STATUS } from 'src/modules/const/enum/status.enum';
 import { ProblemEntity } from 'src/modules/problem/entity/problem.entity';
@@ -22,6 +23,8 @@ export class SubmissionEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.submissions)
   @JoinColumn({ name: 'user_id' })
+  //ignore
+  @Exclude()
   user: UserEntity;
 
   @Column({ name: 'ai_review', type: 'text', nullable: true }) // Thêm type và nullable
