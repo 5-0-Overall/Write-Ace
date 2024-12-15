@@ -1,51 +1,99 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar/Sidebar.js";
+import { useSidebar } from "../context/SidebarContext";
 import { Bell, Upload } from "lucide-react";
+import axios from "axios";
+import Sidebar from "../components/Sidebar/Sidebar";
+import "../styles/Common.css";
 import "../styles/Profile.css";
 
 function Profile() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const { isSidebarExpanded, toggleSidebar } = useSidebar();
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [profileData, setProfileData] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    password: "********",
-    dateJoined: "2023-01-15",
-    about: "Stay hungry, stay foolish!",
+    name: "",
+    email: "",
+    password: "",
+    dateJoined: "",
+    about: "",
   });
-  const [avatar, setAvatar] = useState("https://avatar.iran.liara.run/public/4");
+  const [avatar, setAvatar] = useState(null);
 
-  const handleResize = () => {
-    setIsSidebarExpanded(window.innerWidth > 768);
+  // Fetch profile data
+  const fetchProfileData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('http://localhost:3000/profile');
+      if (response.data) {
+        setProfileData(response.data);
+        setAvatar(response.data.avatar || "https://avatar.iran.liara.run/public/4");
+      }
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+      setError(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
+    fetchProfileData();
   }, []);
-
-  const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
-
-  const handleEdit = () => {
-    setIsEditing(!isEditing);
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProfileData({ ...profileData, [name]: value });
+    setProfileData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatar(reader.result);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        const response = await axios.post('http://localhost:3000/profile/avatar', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+
+        if (response.data.avatarUrl) {
+          setAvatar(response.data.avatarUrl);
+        }
+      } catch (err) {
+        console.error("Error uploading avatar:", err);
+        setError(err.response?.data?.message || err.message);
+      }
     }
   };
+
+  const handleEdit = async () => {
+    if (isEditing) {
+      try {
+        setLoading(true);
+        const response = await axios.put('http://localhost:3000/profile', profileData);
+        if (response.data) {
+          setProfileData(response.data);
+        }
+        setIsEditing(false);
+      } catch (err) {
+        console.error("Error updating profile:", err);
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setIsEditing(true);
+    }
+  };
+
+  if (loading) return <div className="loading-container">Loading...</div>;
+  if (error) return <div className="error-container">Error: {error}</div>;
 
   return (
     <div className="dashboard-container">
@@ -89,7 +137,7 @@ function Profile() {
               </label>
             </div>
 
-            <form className="profile-form">
+            <form className="profile-form" onSubmit={(e) => e.preventDefault()}>
               <div className="form-group">
                 <label htmlFor="name">Name</label>
                 <input
@@ -99,6 +147,7 @@ function Profile() {
                   value={profileData.name}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
+                  className={!isEditing ? 'readonly' : ''}
                 />
               </div>
               <div className="form-group">
@@ -110,6 +159,7 @@ function Profile() {
                   value={profileData.email}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
+                  className={!isEditing ? 'readonly' : ''}
                 />
               </div>
               <div className="form-group">
@@ -121,6 +171,7 @@ function Profile() {
                   value={profileData.password}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
+                  className={!isEditing ? 'readonly' : ''}
                 />
               </div>
               <div className="form-group">
@@ -129,8 +180,9 @@ function Profile() {
                   type="text"
                   id="dateJoined"
                   name="dateJoined"
-                  value={profileData.dateJoined}
+                  value={new Date(profileData.dateJoined).toLocaleDateString()}
                   readOnly
+                  className="readonly"
                 />
               </div>
               <div className="form-group">
@@ -142,9 +194,15 @@ function Profile() {
                   value={profileData.about}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
+                  className={!isEditing ? 'readonly' : ''}
                 ></textarea>
               </div>
-              <button type="button" className="edit-profile-button" onClick={handleEdit}>
+              <button 
+                type="button" 
+                className="edit-profile-button"
+                onClick={handleEdit}
+                disabled={loading}
+              >
                 {isEditing ? "Save Profile" : "Edit Profile"}
               </button>
             </form>

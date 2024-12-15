@@ -5,18 +5,10 @@ import "../styles/Common.css";
 import "../styles/Recommended.css";
 import { Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useSidebar } from "../context/SidebarContext";
 
 function Recommended() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
-
-  const handleResize = () => {
-    if (window.innerWidth <= 768) {
-      setIsSidebarExpanded(false);
-    } else {
-      setIsSidebarExpanded(true);
-    }
-  };
-
+  const { isSidebarExpanded, toggleSidebar } = useSidebar();
   const navigate = useNavigate();
 
   const [recommendedData, setRecommendedData] = useState([
@@ -101,14 +93,6 @@ function Recommended() {
       action: "Review"
     }
   ]);  
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
 
   const handleDataChange = (newData) => {
     setRecommendedData(newData);

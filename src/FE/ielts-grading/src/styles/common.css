@@ -13,6 +13,7 @@
   overflow-y: auto;
   transition: margin-left 0.3s ease-in-out;
   min-width: 0;
+  animation: fadeIn 0.3s ease-in;
 }
 
 .sidebar.expanded + .main-content {
@@ -80,6 +81,9 @@
   overflow: hidden;
   width: 100%;
   border: 1px solid #f1f5f9;
+  opacity: 0;
+  animation: slideUp 0.3s ease-in forwards;
+  animation-delay: 0.2s;
 }
 
 .table-container table {
@@ -198,5 +202,25 @@
   .header-controls {
     width: 100%;
     justify-content: flex-end;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 } 

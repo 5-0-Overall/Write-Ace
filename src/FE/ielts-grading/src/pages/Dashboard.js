@@ -12,44 +12,44 @@ import {
 import { Link } from "react-router-dom";
 import "../styles/Common.css";
 import "../styles/Dashboard.css";
+import Loading from "../components/common/Loading.js";
+import { useSidebar } from '../context/SidebarContext';
 
 function Dashboard() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const { isSidebarExpanded, toggleSidebar } = useSidebar();
 
-  const handleResize = () => {
-    setIsSidebarExpanded(window.innerWidth > 768);
-  };
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
+    setLoading(false);
   }, []);
 
-  const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
-
   const topTopicsData = [
-    { topic: 'Education', count: 10 },
-    { topic: 'Technology', count: 9 },
-    { topic: 'Environment', count: 8 },
-    { topic: 'Health', count: 8 },
-    { topic: 'Society', count: 7 },
-    { topic: 'Economy', count: 6 },
-    { topic: 'Culture', count: 6 },
-    { topic: 'Politics', count: 5 },
-    { topic: 'Sports', count: 5 },
-    { topic: 'Science', count: 4 },
-    { topic: 'Transportation', count: 4 },
-    { topic: 'Tourism', count: 3 },
-    { topic: 'Agriculture', count: 3 },
-    { topic: 'Energy', count: 2 },
-    { topic: 'Art', count: 2 },
-    { topic: 'Business', count: 2 },
-    { topic: 'Communications', count: 1 },
-    { topic: 'Food', count: 1 },
-    { topic: 'History', count: 1 },
-    { topic: 'Law', count: 1 }
-  ];  
+    { topic: "Education", count: 10 },
+    { topic: "Technology", count: 9 },
+    { topic: "Environment", count: 8 },
+    { topic: "Health", count: 8 },
+    { topic: "Society", count: 7 },
+    { topic: "Economy", count: 6 },
+    { topic: "Culture", count: 6 },
+    { topic: "Politics", count: 5 },
+    { topic: "Sports", count: 5 },
+    { topic: "Science", count: 4 },
+    { topic: "Transportation", count: 4 },
+    { topic: "Tourism", count: 3 },
+    { topic: "Agriculture", count: 3 },
+    { topic: "Energy", count: 2 },
+    { topic: "Art", count: 2 },
+    { topic: "Business", count: 2 },
+    { topic: "Communications", count: 1 },
+    { topic: "Food", count: 1 },
+    { topic: "History", count: 1 },
+    { topic: "Law", count: 1 },
+  ];
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="dashboard-container">

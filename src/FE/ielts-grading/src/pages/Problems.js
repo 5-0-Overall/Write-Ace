@@ -5,9 +5,10 @@ import "../styles/Problems.css";
 import DataManipulator from "../components/common/DataManipulator";
 import { Pen } from "lucide-react";
 import axios from "axios";
+import { useSidebar } from "../context/SidebarContext";
 
 function Problems() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const { isSidebarExpanded, toggleSidebar } = useSidebar();
   const [problemData, setProblemData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -112,7 +113,7 @@ function Problems() {
     <div className="dashboard-container">
       <Sidebar
         isSidebarExpanded={isSidebarExpanded}
-        toggleSidebar={() => setIsSidebarExpanded(!isSidebarExpanded)}
+        toggleSidebar={toggleSidebar}
       />
 
       <main className="main-content">

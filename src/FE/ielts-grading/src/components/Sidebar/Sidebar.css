@@ -5,7 +5,9 @@
   padding: 1.5rem 1rem;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left;
+  will-change: width, transform;
   border-top-right-radius: 1.5rem;
   border-bottom-right-radius: 1.5rem;
   height: 100vh;
@@ -13,6 +15,18 @@
   left: 0;
   top: 0;
   box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
 }
 
 .sidebar.expanded {
@@ -47,12 +61,17 @@
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
 }
 
 .toggle-button:hover {
   background-color: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
+  transform: scale(1.1);
+}
+
+.toggle-button:active {
+  transform: scale(0.95);
 }
 
 .sidebar-nav {
@@ -70,7 +89,7 @@
   border-radius: 0.75rem;
   border: none;
   margin-bottom: 0.5rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
@@ -93,7 +112,7 @@
 
 .nav-button.active {
   background: rgba(255, 255, 255, 0.2);
-  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .nav-button.active::after {
@@ -106,6 +125,16 @@
   height: 70%;
   background-color: white;
   border-radius: 0 4px 4px 0;
+  animation: slideRight 0.3s ease forwards;
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateY(-50%) scaleY(0);
+  }
+  to {
+    transform: translateY(-50%) scaleY(1);
+  }
 }
 
 .nav-icon {
@@ -114,11 +143,14 @@
   margin-right: 1rem;
   position: relative;
   z-index: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-button span {
   position: relative;
   z-index: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
 }
 
 .sidebar.collapsed .nav-button {
@@ -128,6 +160,8 @@
 
 .sidebar.collapsed .nav-icon {
   margin-right: 0;
+  min-width: 24px;
+  min-height: 24px;
 }
 
 .sidebar.collapsed .nav-button span,
@@ -151,29 +185,95 @@
 
 /* Responsive styles */
 @media screen and (max-width: 1024px) {
-  .sidebar {
-    z-index: 1000;
+  .sidebar-backdrop {
+    display: block;
   }
 
-  .sidebar.expanded::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: -1;
-    backdrop-filter: blur(2px);
+  .sidebar {
+    transform: translateX(-100%); /* Default position for mobile */
+  }
+
+  .sidebar.expanded {
+    transform: translateX(0);
+    width: 16rem;
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(0);
+    width: 5rem;
   }
 }
 
 @media screen and (max-width: 768px) {
   .sidebar.expanded {
-    width: 100%;
+    width: 16rem;
   }
 
   .sidebar.collapsed {
     width: 5rem;
   }
+}
+
+.nav-button:hover {
+  transform: translateX(5px);
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-content {
+  width: 100%;
+  opacity: 0;
+  animation: slideIn 0.4s ease forwards;
+  animation-delay: 0.1s;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 998;
+}
+
+.sidebar-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar.collapsed .nav-button {
+  position: relative;
+}
+
+.sidebar.collapsed .nav-button:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  margin-left: 0.75rem;
+  z-index: 1000;
 }

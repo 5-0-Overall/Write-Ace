@@ -1,119 +1,102 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar/Sidebar";
+import { useSidebar } from "../context/SidebarContext";
 import { Eye } from "lucide-react";
+import axios from "axios";
 import "../styles/Common.css";
 import "../styles/History.css";
+import Sidebar from "../components/Sidebar/Sidebar";
 import DataManipulator from "../components/common/DataManipulator";
 
 function History() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const { isSidebarExpanded, toggleSidebar } = useSidebar();
+  const [historyData, setHistoryData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleResize = () => {
-    if (window.innerWidth <= 768) {
-      setIsSidebarExpanded(false);
-    } else {
-      setIsSidebarExpanded(true);
+  const fetchHistory = async (params = {}) => {
+    try {
+      setLoading(true);
+      const queryParams = new URLSearchParams();
+      
+      // Add params if they have values
+      if (params.task) {
+        queryParams.append("task", params.task);
+      }
+      if (params.topic) {
+        queryParams.append("topic", params.topic);
+      }
+      if (params.limit) {
+        queryParams.append("limit", params.limit);
+      }
+      if (params.offset) {
+        queryParams.append("offset", params.offset);
+      }
+
+      const response = await axios.get(`http://localhost:3000/history?${queryParams.toString()}`);
+      
+      if (response.data) {
+        setHistoryData(response.data);
+        setFilteredData(response.data);
+      }
+    } catch (err) {
+      console.error("Error fetching history:", err);
+      setError(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
+    fetchHistory();
   }, []);
 
-  const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
+  const handleDataManipulation = ({ searchQuery, sortOrder, filterCriteria }) => {
+    let newData = [...historyData];
 
-  const [historyData, setHistoryData] = useState([
-    {
-      exam: "Writing 1",
-      topic: "Environment",
-      task: "1",
-      date: "2024-04-10",
-      score: 7.5
-    },
-    {
-      exam: "Writing 2",
-      topic: "Technology",
-      task: "2",
-      date: "2024-05-15",
-      score: 8.0
-    },
-    {
-      exam: "Writing 3",
-      topic: "Education",
-      task: "1",
-      date: "2024-06-20",
-      score: 7.0
-    },
-    {
-      exam: "Writing 4",
-      topic: "Health",
-      task: "2",
-      date: "2024-07-25",
-      score: 7.5
-    },
-    {
-      exam: "Writing 5",
-      topic: "Globalization",
-      task: "1",
-      date: "2024-08-05",
-      score: 8.0
-    },
-    {
-      exam: "Writing 6",
-      topic: "Travel",
-      task: "2",
-      date: "2024-09-10",
-      score: 7.0
-    },
-    {
-      exam: "Writing 7",
-      topic: "Work",
-      task: "1",
-      date: "2024-10-15",
-      score: 7.5
-    },
-    {
-      exam: "Writing 8",
-      topic: "Culture",
-      task: "2",
-      date: "2024-11-20",
-      score: 8.0
-    },
-    {
-      exam: "Writing 9",
-      topic: "Science",
-      task: "1",
-      date: "2024-12-25",
-      score: 7.5
-    },
-    {
-      exam: "Writing 10",
-      topic: "Sports",
-      task: "2",
-      date: "2025-01-30",
-      score: 7.0
-    },
-    {
-      exam: "Writing 11",
-      topic: "Media",
-      task: "1",
-      date: "2025-02-20",
-      score: 7.5
-    },
-    {
-      exam: "Writing 12",
-      topic: "Economy",
-      task: "2",
-      date: "2025-03-25",
-      score: 8.0
+    // Apply search
+    if (searchQuery) {
+      newData = newData.filter(item => 
+        item.topic?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.exam?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }
-  ]);  
 
-  const handleDataChange = (newData) => {
-    setHistoryData(newData);
+    // Apply filters
+    if (filterCriteria.task) {
+      newData = newData.filter(item => 
+        item.task === filterCriteria.task
+      );
+    }
+
+    // Apply sorting
+    if (sortOrder) {
+      newData.sort((a, b) => {
+        if (sortOrder === 'asc') {
+          return new Date(a.date) - new Date(b.date);
+        } else {
+          return new Date(b.date) - new Date(a.date);
+        }
+      });
+    }
+
+    setFilteredData(newData);
   };
+
+  // Refresh data when filter/search applied
+  const handleFilterChange = async (criteria) => {
+    try {
+      await fetchHistory({
+        task: criteria.task || undefined,
+        topic: criteria.topic || undefined,
+      });
+    } catch (error) {
+      console.error("Error applying filters:", error);
+    }
+  };
+
+  if (loading) return <div className="loading-container">Loading...</div>;
+  if (error) return <div className="error-container">Error: {error}</div>;
 
   return (
     <div className="dashboard-container">
@@ -125,10 +108,10 @@ function History() {
       <main className="main-content">
         <div className="main-header">
           <h2 className="main-title">Writing History</h2>
-          {/* <DataManipulator
-            data={historyData}
-            handleDataChange={handleDataChange}
-          /> */}
+          <DataManipulator 
+            onDataChange={handleDataManipulation}
+            onFilterChange={handleFilterChange}
+          />
         </div>
 
         <div className="table-container">
@@ -144,15 +127,18 @@ function History() {
               </tr>
             </thead>
             <tbody>
-              {historyData.map((item, index) => (
+              {filteredData.map((item, index) => (
                 <tr key={item.id} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
                   <td>{item.exam}</td>
                   <td>{item.topic}</td>
                   <td>{item.task}</td>
-                  <td>{item.date}</td>
+                  <td>{new Date(item.date).toLocaleDateString()}</td>
                   <td>{item.score}</td>
                   <td>
-                    <button className="view-button" onClick={() => console.log(`View details of essay ${item.id}`)}>
+                    <button 
+                      className="view-button"
+                      onClick={() => console.log(`View details of essay ${item.id}`)}
+                    >
                       <Eye size={16} />
                       <span>View</span>
                     </button>
