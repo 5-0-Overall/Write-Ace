@@ -1,0 +1,171 @@
+{
+    "feedback": {
+      "upgrade_vocabulary_and_grammar": [
+        {
+          "comment_id": 1,
+          "your_words": "preservation is a pressing demand",
+          "recommend_upgrade_words": "preservation has become an urgent necessity",
+          "explanation": "The phrase 'preservation has become an urgent necessity' is more formal and precise than 'preservation is a pressing demand,' enhancing the academic tone."
+        },
+        {
+          "comment_id": 2,
+          "your_words": "which leads to a contentious debate revolving around whether human beings are causing harm to the Earth or making it a more livable place",
+          "recommend_upgrade_words": "which has sparked a contentious debate regarding whether human activities are damaging the Earth or enhancing its livability",
+          "explanation": "The revised phrase 'has sparked a contentious debate regarding whether human activities are damaging the Earth or enhancing its livability' is clearer and more concise."
+        },
+        {
+          "comment_id": 3,
+          "your_words": "the Earth is being polluted by human activities",
+          "recommend_upgrade_words": "the Earth is suffering from pollution caused by human activities",
+          "explanation": "'The Earth is suffering from pollution caused by human activities' is a more impactful and formal expression than 'the Earth is being polluted by human activities.'"
+        },
+        {
+          "comment_id": 4,
+          "your_words": "many forms of pollutants are being emitted into the environment in both directed and undirected ways",
+          "recommend_upgrade_words": "various pollutants are released into the environment through both intentional and unintentional means",
+          "explanation": "'Various pollutants are released into the environment through both intentional and unintentional means' is clearer and more formal than 'many forms of pollutants are being emitted into the environment in both directed and undirected ways.'"
+        },
+        {
+          "comment_id": 5,
+          "your_words": "resulting in a decline in quality of life",
+          "recommend_upgrade_words": "leading to a deterioration in the quality of life",
+          "explanation": "'Leading to a deterioration in the quality of life' is a more formal and precise expression than 'resulting in a decline in quality of life.'"
+        },
+        {
+          "comment_id": 6,
+          "your_words": "the greenhouse effect caused by emissions from factories and transportation has become noticeable over the years",
+          "recommend_upgrade_words": "the greenhouse effect resulting from emissions produced by factories and transportation has become increasingly evident over the years",
+          "explanation": "'The greenhouse effect resulting from emissions produced by factories and transportation has become increasingly evident over the years' is more formal and precise."
+        },
+        {
+          "comment_id": 7,
+          "your_words": "concerted efforts to make the world a better living place are adopted on a large scale",
+          "recommend_upgrade_words": "concerted efforts to enhance the livability of the planet are being implemented on a large scale",
+          "explanation": "'Concerted efforts to enhance the livability of the planet are being implemented on a large scale' is clearer and more formal than 'concerted efforts to make the world a better living place are adopted on a large scale.'"
+        },
+        {
+          "comment_id": 8,
+          "your_words": "while improving the Earth’s conditions through educational campaigns and sustainable practices",
+          "recommend_upgrade_words": "while simultaneously improving the Earth’s conditions through educational campaigns and sustainable practices",
+          "explanation": "Adding 'simultaneously' clarifies that these actions are occurring at the same time, enhancing the flow of the sentence."
+        },
+        {
+          "comment_id": 9,
+          "your_words": "the advancements in technology also significantly contribute to this trend",
+          "recommend_upgrade_words": "advancements in technology significantly contribute to this trend as well",
+          "explanation": "'Advancements in technology significantly contribute to this trend as well' is more concise and avoids unnecessary words."
+        },
+        {
+          "comment_id": 10,
+          "your_words": "creating novel cleaner energy sources such as solar electricity and wind energy",
+          "recommend_upgrade_words": "developing innovative clean energy sources, such as solar and wind energy",
+          "explanation": "'Developing innovative clean energy sources, such as solar and wind energy' is more concise and formal than 'creating novel cleaner energy sources such as solar electricity and wind energy.'"
+        }
+      ],
+      "introduction": {
+        "clear_position": "The introduction clearly states the writer's position, indicating that while human activities harm the Earth, efforts are being made to improve it.",
+        "relevance": "The introduction is relevant to the essay question, as it directly addresses the debate about human impact on the Earth.",
+        "brief_overview": "The introduction could benefit from a brief overview of the main points that will be discussed in the essay, such as specific examples of harm and improvement.",
+        "improved_introduction": "In this contemporary age, preservation has become an urgent necessity, sparking a contentious debate regarding whether human activities are damaging the Earth or enhancing its livability. From my perspective, while the Earth is suffering from pollution caused by human activities, many individuals and organizations are making concerted efforts to improve its state."
+      },
+      "main_points": [
+        {
+          "paragraph": 1,
+          "feedback": {
+            "argumentative_logic": "The argument logically presents the negative impacts of human activities on the Earth, particularly since industrialization.",
+            "overgeneralizations": "The statement 'the Earth’s condition has become worse since the era of industrialization' could be seen as an overgeneralization. While industrialization has caused significant harm, it may also have led to advancements in technology that can mitigate some of these effects.",
+            "relevance_effectiveness": "The supporting ideas are relevant and effectively illustrate the negative impacts of human activities. However, the argument could be strengthened by discussing specific examples of pollution and its effects on ecosystems.",
+            "suggestions_for_improvement": {
+              "specific_examples": "Include specific examples of pollutants and their direct effects on the environment and human health.",
+              "acknowledge_positive_impacts": "Acknowledge that industrialization has also led to technological advancements that can help address environmental issues."
+            }
+          }
+        },
+        {
+          "paragraph": 2,
+          "feedback": {
+            "argumentative_logic": "The argument effectively highlights the positive efforts being made to improve the Earth's conditions, but it could benefit from more specific examples.",
+            "suggestions_for_improvement": {
+              "specific_examples": "Provide specific examples of successful conservation efforts or technological advancements that have positively impacted the environment.",
+              "deeper_analysis": "Explore how these efforts are making a tangible difference in improving the Earth's livability."
+            }
+          }
+        }
+      ],
+      "conclusion": {
+        "feedback": {
+          "summary_strength": "The conclusion effectively summarizes the main points but could be strengthened by reinforcing the importance of both acknowledging harm and recognizing efforts to improve the environment.",
+          "suggestions": "Consider emphasizing the need for continued efforts to balance human activities with environmental preservation."
+        }
+      },
+      "task_response": {
+        "band_score": 7,
+        "feedback": {
+          "answer_all_parts_of_question": {
+            "detailed_explanation": "The essay addresses the prompt by discussing both the harmful effects of human activities and the efforts to improve the Earth's conditions. However, it could benefit from a more nuanced exploration of the implications of these activities.",
+            "how_to_improve": "To comprehensively address all elements of the question, the writer should consider discussing both sides of the argument in more detail, including specific examples of harm and improvement."
+          },
+          "present_clear_position_throughout": {
+            "detailed_explanation": "The essay maintains a clear position that acknowledges both harm and improvement. However, the connection between the position and the arguments could be more explicit.",
+            "how_to_improve": "To enhance clarity, ensure each paragraph explicitly ties back to the main argument. Additionally, reiterating the main argument in different ways throughout the essay can reinforce the stance taken."
+          },
+          "present_extend_support_ideas": {
+            "detailed_explanation": "The essay presents several ideas, but some points lack sufficient development.",
+            "how_to_improve": "To effectively present and support ideas, provide more detailed explanations and examples. Each paragraph should ideally focus on one main idea, which is then elaborated upon."
+          },
+          "stay_on_topic": {
+            "detailed_explanation": "The essay generally stays on topic, discussing the impact of human activities on the Earth. However, there are moments where the focus shifts slightly.",
+            "how_to_improve": "To maintain focus and relevance, ensure every point directly supports the thesis. Outline main ideas before writing to ensure each paragraph remains aligned with the central argument."
+          }
+        }
+      },
+      "coherence_cohesion": {
+        "band_score": 7,
+        "feedback": {
+          "organize_information_logically": {
+            "detailed_explanation": "The essay presents a clear argument but could benefit from clearer topic sentences. For instance, the organization within paragraphs could be improved.",
+            "how_to_improve": "To enhance logical organization, use clear topic sentences that relate back to the thesis."
+          },
+          "use_paragraphs": {
+            "detailed_explanation": "The essay uses paragraphs to separate ideas, which is a strength. However, the paragraphing could be more effective.",
+            "how_to_improve": "Ensure one main idea per paragraph, supported by relevant examples."
+          },
+          "use_cohesive_devices": {
+            "detailed_explanation": "The essay employs cohesive devices like 'On the one hand' and 'On the other hand,' but the range is somewhat limited.",
+            "how_to_improve": "To diversify cohesive devices, incorporate a wider variety of linking words and phrases."
+          }
+        }
+      },
+      "lexical_resource": {
+        "band_score": 6,
+        "feedback": {
+          "wide_range_vocabulary": {
+            "detailed_explanation": "The essay demonstrates a reasonable range of vocabulary, but it could be expanded.",
+            "how_to_improve": "Incorporate more synonyms and varied expressions, and explore academic vocabulary related to environmental science."
+          },
+          "use_precise_vocabulary": {
+            "detailed_explanation": "Some vocabulary is used correctly, but there are instances of imprecise usage.",
+            "how_to_improve": "To improve precision, ensure word choices accurately convey the intended meaning."
+          },
+          "correct_spelling": {
+            "detailed_explanation": "The essay contains several spelling errors.",
+            "how_to_improve": "Proofread carefully or use spell-check tools to enhance spelling accuracy."
+          }
+        }
+      },
+      "grammatical_range_accuracy": {
+        "band_score": 6,
+        "feedback": {
+          "wide_range_structures": {
+            "detailed_explanation": "The essay demonstrates a moderate range of sentence structures.",
+            "how_to_improve": "Practice using more complex sentences that clearly convey relationships between ideas."
+          },
+          "grammar_punctuation_accuracy": {
+            "detailed_explanation": "The essay contains several grammatical errors and punctuation issues.",
+            "how_to_improve": "Focus on subject-verb agreement, conjunctions, and review rules of sentence construction."
+          }
+        }
+      }
+    }
+  }
+  

@@ -4,8 +4,8 @@ import "../styles/Common.css"
 import "../styles/Problems.css";
 import DataManipulator from "../components/common/DataManipulator";
 import { Pen } from "lucide-react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from '../services/ApiService';
 
 function Problems() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
@@ -35,7 +35,7 @@ function Problems() {
         queryParams.append("offset", params.offset);
       }
 
-      const response = await axios.get(`http://localhost:3000/problems?${queryParams.toString()}`);
+      const response = await api.get(`/problems?${queryParams.toString()}`);
       
       if (response.data) {
         setProblemData(response.data);

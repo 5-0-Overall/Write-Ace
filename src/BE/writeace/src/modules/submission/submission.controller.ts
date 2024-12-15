@@ -4,6 +4,7 @@ import { SubmissionEntity } from "./entity/submission.entity";
 import { SubmissionCreateDTO } from "./dto/submission.dto.request";
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
 import { ContributionService } from "../contribution/contribution.service";
+import { OpenAIUpdateSubmissionDTO } from "./dto/openai.update.submission.dto";
 
 
 
@@ -31,10 +32,9 @@ export class SubmissionController {
 
   @Put(':id')
   async updateSubmission(
-    @Param('id') id: number,
-    @Body() submission: SubmissionEntity
+    @Body() submission: OpenAIUpdateSubmissionDTO
   ): Promise<SubmissionEntity> {
-    return this.submissionService.updateSubmission(id, submission);
+    return this.submissionService.updateSubmission(submission);
   }
 
   @Delete(':id')

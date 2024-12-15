@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/request/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { SignInUserDto } from './dto/request/signin-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { roleMap } from '../const/enum/roles.enum';
 
 @Injectable()
 export class UserService {
@@ -33,8 +34,8 @@ export class UserService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid username or password');
     }
-    
-    const payload = { username: user.username, sub: user.id };
+    const role=roleMap.get(user.role_id)
+    const payload = { username: user.username, sub: user.id,  role: role };
     return {
       access_token: this.jwtService.sign(payload),
     };
