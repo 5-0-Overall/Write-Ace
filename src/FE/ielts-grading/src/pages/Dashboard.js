@@ -13,8 +13,8 @@ import { Link } from "react-router-dom";
 import "../styles/Common.css";
 import "../styles/Dashboard.css";
 import ContributionChart from '../components/ContributionChart';
-import api from '../services/api';
-import AuthService from '../services/auth.service';
+import api from '../services/ApiService.js';
+import AuthService from '../services/AuthService.js';
 
 function Dashboard() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);

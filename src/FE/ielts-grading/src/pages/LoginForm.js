@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import fb from "../assets/images/facebook_logo.svg";
 import gg from "../assets/images/google_logo.svg";
 import apple from "../assets/images/apple_logo.svg";
 import eyeIcon from "../assets/images/eye_icon.svg";
 import eyeOffIcon from "../assets/images/eye_off_icon.svg";
 import "../styles/LoginForm.css";
-import AuthService from '../services/auth.service';
+import AuthService from '../services/AuthService';
 
 function LoginForm() {
   const [username, setUsername] = useState("");
@@ -64,11 +63,11 @@ function LoginForm() {
         navigate('/dashboard');
       }
     } catch (error) {
-      let errorMsg = 'Đăng nhập thất bại';
+      let errorMsg = 'Login failed';
       if (error.response) {
         switch (error.response.status) {
           case 401:
-            errorMsg = 'Sai tên đăng nhập hoặc mật khẩu';
+            errorMsg = 'Invalid username or password';
             break;
           default:
             errorMsg = error.response.data?.message || errorMsg;
@@ -136,7 +135,7 @@ function LoginForm() {
             disabled={loading}
             className={`submit-button ${loading ? 'loading' : ''}`}
           >
-            {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+            {loading ? 'Logging in...' : 'Login'}
           </button>
 
           <p className="or-text">Or Sign in with</p>

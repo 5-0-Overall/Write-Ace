@@ -12,6 +12,8 @@ import History from "./pages/History";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Profile from "./pages/Profile";
 import SampleArticle from "./pages/SampleArticle";
+import WritingPage from "./pages/WritingPage";
+import Result from "./pages/Result";
 import './App.css';
 import './styles/Landing.css';
 import PrivateRoute from './components/PrivateRoute';
@@ -52,10 +54,21 @@ function App() {
             <Profile />
           </PrivateRoute>
         } />
-        <Route path="/sample-article" element={<SampleArticle />} />
-        {/* Sample
-        {/* <Route path="/settings" element={<Settings />} /> Settings */}
-        {/* <Route path="/signout" element={<SignOut />} /> SignOut */}
+        <Route path="/writing" element={
+          <PrivateRoute>
+            <WritingPage />
+          </PrivateRoute>
+        } />
+        <Route path="/sample-article" element={
+          <PrivateRoute>
+            <SampleArticle />
+          </PrivateRoute>
+        } />
+        <Route path="/result" element={
+          <PrivateRoute>
+            <Result />
+          </PrivateRoute>
+        } />
       </Routes>
     </Router>
   );
