@@ -6,6 +6,9 @@ import { SubmissionCreateDTO } from './dto/submission.dto.request';
 import { ProblemEntity } from '../problem/entity/problem.entity';
 import { UserEntity } from '../user/entity/user.entity';
 import { AnalysticUserDTO } from '../analystic/dto/analystic-user.dto';
+import { OpenAIUpdateSubmissionDTO } from './dto/openai.update.submission.dto';
+import { OpenAIService } from '../openai/openai.service';
+import { STATUS } from '../const/enum/status.enum';
 
 @Injectable()
 export class SubmissionService {
@@ -16,6 +19,7 @@ export class SubmissionService {
     private problemRepository: Repository<ProblemEntity>,
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private openaiService: OpenAIService,
   ) {}
 
   async getAllSubmissions(): Promise<SubmissionEntity[]> {
@@ -26,6 +30,16 @@ export class SubmissionService {
     return this.submissionRepository.findOneBy({ id });
   }
 
+  async updateSubmission(
+    openaiUpdateSubmissionDTO: OpenAIUpdateSubmissionDTO,
+  ): Promise<SubmissionEntity> {
+    const submission = await this.submissionRepository.findOneBy({ id: openaiUpdateSubmissionDTO.submissionId });
+    if (!submission) {
+      throw new NotFoundException('Submission not found');
+    }
+    
+    return this.submissionRepository.save({ ...submission, ...openaiUpdateSubmissionDTO });
+  }
   async createSubmission(
     submission: SubmissionCreateDTO,
   ): Promise<SubmissionEntity> {
@@ -45,16 +59,34 @@ export class SubmissionService {
     });
 
     await this.submissionRepository.save(newSubmission);
-    return newSubmission;
-  }
+    const aiReview = await this.openaiService.generateText(problem.description, essay);
+    const scoreTA = this.openaiService.getScoreTA(aiReview);
+    const scoreCC = this.openaiService.getScoreCC(aiReview);
+    const scoreLR = this.openaiService.getScoreLR(aiReview);
+    const scoreGRA = this.openaiService.getScoreGRA(aiReview);
+    const scoreOVR = this.openaiService.getScoreOVR(aiReview);
 
-  async updateSubmission(
-    id: number,
-    submission: SubmissionEntity,
-  ): Promise<SubmissionEntity> {
-    await this.submissionRepository.update(id, submission);
-    return this.submissionRepository.findOneBy({ id });
-  }
+    const updatedSubmission = await this.updateSubmission({
+      submissionId: newSubmission.id,
+      aiReview,
+      scoreTA,
+      scoreCC,
+      scoreLR,
+      scoreGRA,
+      scoreOVR,
+    });
+
+    const status = updatedSubmission.status;
+    updatedSubmission.status = status === STATUS.PENDING 
+      ? STATUS.REVIEWED_BY_AI 
+      : status === STATUS.REVIEWED_BY_TEACHER 
+        ? STATUS.REVIEWED_BY_TEACHER_AND_AI 
+        : status;
+
+    return await this.submissionRepository.save(updatedSubmission);
+   }
+
+
 
   async deleteSubmission(id: number): Promise<void> {
     await this.submissionRepository.delete(id);

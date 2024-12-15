@@ -16,6 +16,7 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UniqueUserPipe } from '../pipes/unique-user.pipe';
 import { SignInUserDto } from './dto/request/signin-user.dto';
 import { AuthGuard } from '../guard/auth.guard';
+import { Public } from '../decorator/roles.decorator';
 
 @ApiTags('user')
 @Controller('users')
@@ -35,6 +36,7 @@ export class UserController {
   @Post('/login')
   @ApiOperation({ summary: 'Login a user' }) // Description for Swagger
   @ApiBody({ type: SignInUserDto }) // Describe the request body
+  @Public()
   async login(
     @Body() loginuser: SignInUserDto,
   ): Promise<{ access_token: string }> {

@@ -6,32 +6,52 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { JWT_SECRET } from '../const/const';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Reflector } from '@nestjs/core';
+import { IS_PUBLIC_KEY } from '../decorator/roles.decorator';
+import { env } from 'process';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    private userRepository: Repository<UserEntity>,
+    private reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (isPublic) {
+      return true;
+    }
+
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
+    
     if (!token) {
       throw new UnauthorizedException();
     }
+
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: JWT_SECRET,
+        secret: env.JWT_SECRET,
       });
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
-      const user = await this.userRepository.findOneBy({ id: payload.sub });
+      
+      // Lấy thông tin user từ database
+      const user = await this.userRepository.findOne({
+        where: { id: payload.sub }
+      });
+
+      if (!user) {
+        throw new UnauthorizedException();
+      }
 
       request['user'] = user;
     } catch {

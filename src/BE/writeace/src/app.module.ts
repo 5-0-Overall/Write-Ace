@@ -14,6 +14,11 @@ import { LoggerMiddleware } from './modules/middleware/logger.middleware';
 import { OpenAIModule } from './modules/openai/openai.module';
 import { ContributionModule } from './modules/contribution/contribution.module';
 import { AnalysticModule } from './modules/analystic/analystic.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './modules/guard/auth.guard';
+import { RolesGuard } from './modules/guard/role.guard';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -44,15 +49,27 @@ import { AnalysticModule } from './modules/analystic/analystic.module';
     OpenAIModule,
     BaseModule,
     ContributionModule,
-    AnalysticModule,    
+    AnalysticModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService,AdminInitializerService],
+  providers: [
+    AppService,
+    AdminInitializerService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule implements OnModuleInit {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
-  } 
+  }
   async onModuleInit() {
     try {
       console.log('AppModule initializing...');

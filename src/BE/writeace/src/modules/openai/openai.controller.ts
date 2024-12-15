@@ -27,7 +27,7 @@ export class OpenAIController {
     if (!question || !essay) {
       throw new Error("Both 'question' and 'essay' fields are required.");
     }
-    const text = await this.openAIService.generateTextWithStreaming(question, essay);
+    const text = await this.openAIService.generateText(question, essay);
     return text;
   }
 }
