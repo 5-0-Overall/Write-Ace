@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar.js";
 import { Bell, Upload } from "lucide-react";
+import "../styles/Common.css";
 import "../styles/Profile.css";
 
 function Profile() {

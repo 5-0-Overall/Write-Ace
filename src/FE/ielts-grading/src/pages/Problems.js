@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
-import "../styles/Common.css";
+import "../styles/Common.css"
 import "../styles/Problems.css";
 import DataManipulator from "../components/common/DataManipulator";
 import { Pen } from "lucide-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Problems() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
@@ -12,6 +13,7 @@ function Problems() {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   // Fetch problems with updated params structure
   const fetchProblems = async (params = {}) => {
@@ -150,7 +152,7 @@ function Problems() {
                   <td>
                     <button 
                       className="view-button"
-                      onClick={() => console.log(`View details of essay ${problem.id}`)}
+                      onClick={() => navigate(`/writing`)}
                     >
                       <Pen size={16} />
                       <span>Writing</span>

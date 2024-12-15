@@ -12,6 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import "./Sidebar.css";
+import AuthService from '../../services/AuthService';
 
 function Sidebar() {
   const location = useLocation();
@@ -22,9 +23,8 @@ function Sidebar() {
   const handleSignOut = () => {
     const confirmSignOut = window.confirm("Are you sure you want to sign out?");
     if (confirmSignOut) {
-      console.log("Signing out...");
-    } else {
-      console.log("Sign out canceled.");
+      AuthService.logout();
+      window.location.href = '/login';
     }
   };
 
@@ -104,8 +104,7 @@ function Sidebar() {
           {isExpanded && <span>Settings</span>}
         </Link>
         <Link
-          to="/"
-          className={`nav-button ${isActive("/signout") ? "active" : ""}`}
+          className="nav-button"
           onClick={handleSignOut}
         >
           <LogOut size={20} className="nav-icon" />
