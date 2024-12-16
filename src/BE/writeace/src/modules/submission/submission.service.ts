@@ -122,4 +122,8 @@ export class SubmissionService {
       highest_score: highestScore,
     };
   }
+
+  async getSubmissionByUserId(userId: number): Promise<SubmissionEntity[]> {
+    return this.submissionRepository.find({ where: { user: { id: userId } } });
+  }
 }
