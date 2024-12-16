@@ -11,9 +11,11 @@ services:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=300604
       - DATABASE_NAME=write_ace
-      - DATABASE_RETRY_ATTEMPTS=10  # Thêm số lần retry
-      - DATABASE_RETRY_DELAY=3000   # Thêm delay giữa các lần retry
+      - DATABASE_RETRY_ATTEMPTS=10
+      - DATABASE_RETRY_DELAY=3000
       - OPEN_API_KEY=OPENAI_API_KEY
+      - JWT_SECRET=WR1T3_@C3
+      - JWT_EXPIRES_IN=1d
     depends_on:
       db:
         condition: service_healthy
