@@ -73,7 +73,6 @@ export class AppModule implements OnModuleInit {
   async onModuleInit() {
     try {
       console.log('AppModule initializing...');
-      // await this.adminInitializer.onModuleInit();  // Có thể gọi trực tiếp nếu cần
       console.log('AppModule initialized');
     } catch (error) {
       console.error('Error initializing AppModule:', error);

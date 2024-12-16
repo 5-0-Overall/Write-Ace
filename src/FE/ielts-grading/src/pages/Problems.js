@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
-import "../styles/Common.css"
+import "../styles/Common.css";
 import "../styles/Problems.css";
 import DataManipulator from "../components/common/DataManipulator";
 import { Pen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import api from '../services/ApiService';
+import api from "../services/ApiService";
 
 function Problems() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
@@ -20,7 +20,7 @@ function Problems() {
     try {
       setLoading(true);
       const queryParams = new URLSearchParams();
-      
+
       // Only add params if they have values
       if (params.task) {
         queryParams.append("task", params.task);
@@ -36,7 +36,7 @@ function Problems() {
       }
 
       const response = await api.get(`/problems?${queryParams.toString()}`);
-      
+
       if (response.data) {
         setProblemData(response.data);
         setFilteredData(response.data);
@@ -53,30 +53,35 @@ function Problems() {
     fetchProblems();
   }, []);
 
-  const handleDataManipulation = ({ searchQuery, sortOrder, filterCriteria }) => {
+  const handleDataManipulation = ({
+    searchQuery,
+    sortOrder,
+    filterCriteria,
+  }) => {
     let newData = [...problemData];
 
     // Apply search
     if (searchQuery) {
-      newData = newData.filter(item => 
-        item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.description?.toLowerCase().includes(searchQuery.toLowerCase())
+      newData = newData.filter(
+        (item) =>
+          item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.description?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     // Apply filters
     if (filterCriteria.task) {
-      newData = newData.filter(item => 
-        item.task_id?.toString() === filterCriteria.task
+      newData = newData.filter(
+        (item) => item.task_id?.toString() === filterCriteria.task
       );
     }
 
     // Apply sorting
     if (sortOrder) {
       newData.sort((a, b) => {
-        const titleA = a.title || '';
-        const titleB = b.title || '';
-        if (sortOrder === 'asc') {
+        const titleA = a.title || "";
+        const titleB = b.title || "";
+        if (sortOrder === "asc") {
           return titleA.localeCompare(titleB);
         } else {
           return titleB.localeCompare(titleA);
@@ -102,7 +107,7 @@ function Problems() {
   const getTaskName = (taskId) => {
     const taskTypes = {
       1: "Writing Task 1",
-      2: "Writing Task 2"
+      2: "Writing Task 2",
     };
     return taskTypes[taskId] || "Unknown Task";
   };
@@ -120,9 +125,9 @@ function Problems() {
       <main className="main-content">
         <div className="main-header">
           <h2 className="main-title">Writing Problems</h2>
-          <DataManipulator 
+          <DataManipulator
             onDataChange={handleDataManipulation}
-            onFilterChange={handleFilterChange} 
+            onFilterChange={handleFilterChange}
           />
         </div>
 
@@ -150,9 +155,11 @@ function Problems() {
                     {problem.description}
                   </td>
                   <td>
-                    <button 
+                    <button
                       className="view-button"
-                      onClick={() => navigate(`/writing`)}
+                      onClick={() =>
+                        navigate(`/writing/problems/${problem.id}`)
+                      }
                     >
                       <Pen size={16} />
                       <span>Writing</span>

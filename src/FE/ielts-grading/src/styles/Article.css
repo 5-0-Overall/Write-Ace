@@ -410,6 +410,59 @@
   color: #9ca3af;
 }
 
+.textarea-container {
+  position: relative;
+  width: 100%;
+}
+
+.text-editor.error {
+  border-color: #ff4d4f;
+}
+
+.error-message {
+  color: #ff4d4f;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.word-count {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+.submit-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #40a9ff;
+}
+
+.submit-button:disabled {
+  background-color: #d9d9d9;
+  cursor: not-allowed;
+}
+
+.submit-button.loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 @media (max-width: 768px) {
   .feedback-header {
     flex-direction: column;
