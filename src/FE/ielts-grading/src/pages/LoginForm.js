@@ -6,7 +6,7 @@ import apple from "../assets/images/apple_logo.svg";
 import eyeIcon from "../assets/images/eye_icon.svg";
 import eyeOffIcon from "../assets/images/eye_off_icon.svg";
 import "../styles/LoginForm.css";
-import AuthService from '../services/AuthService';
+import AuthService from "../services/AuthService";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
@@ -51,7 +51,7 @@ function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateInputs()) {
       return;
     }
@@ -60,14 +60,15 @@ function LoginForm() {
     try {
       const response = await AuthService.login(username, password);
       if (response.access_token) {
-        navigate('/dashboard');
+        // navigate("/dashboard");
+        navigate("/admin_dashboard");
       }
     } catch (error) {
-      let errorMsg = 'Login failed';
+      let errorMsg = "Login failed";
       if (error.response) {
         switch (error.response.status) {
           case 401:
-            errorMsg = 'Invalid username or password';
+            errorMsg = "Invalid username or password";
             break;
           default:
             errorMsg = error.response.data?.message || errorMsg;
@@ -130,12 +131,12 @@ function LoginForm() {
             Forgot Password?
           </a>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={loading}
-            className={`submit-button ${loading ? 'loading' : ''}`}
+            className={`submit-button ${loading ? "loading" : ""}`}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? "Logging in..." : "Login"}
           </button>
 
           <p className="or-text">Or Sign in with</p>
