@@ -25,7 +25,7 @@ const AuthService = {
 
   getToken() {
     return localStorage.getItem('token');
-  }
+  },
 };
 
-export default AuthService; 
+export default AuthService;

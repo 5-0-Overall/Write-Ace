@@ -7,14 +7,64 @@ import {
   Twitter,
   Instagram,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../styles/Article.css";
+import api from '../services/ApiService';
+import Swal from 'sweetalert2';
+import AuthService from "../services/AuthService";
 
 const WritingPage = () => {
   const [timeLeft, setTimeLeft] = useState(1800);
   const [text, setText] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [problem, setProblem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [textError, setTextError] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
+  
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  // Fetch current user
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await AuthService.getCurrentUser();
+        if (!user) {
+          navigate('/login');
+          return;
+        }
+        setCurrentUser(user);
+      } catch (err) {
+        console.error("Error fetching user:", err);
+        navigate('/login');
+      }
+    };
+
+    fetchUser();
+  }, [navigate]);
+
+  // Fetch problem data
+  useEffect(() => {
+    const fetchProblem = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get(`/problems/${id}`);
+        setProblem(response.data);
+      } catch (err) {
+        console.error("Error fetching problem:", err);
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchProblem();
+    }
+  }, [id]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -30,15 +80,114 @@ const WritingPage = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  const validateSubmission = () => {
+    if (!text.trim()) {
+      setTextError("Please write your essay before submitting");
+      return false;
+    }
+    if (text.trim().split(/\s+/).length < 50) {
+      setTextError("Your essay is too short. Please write more.");
+      return false;
+    }
+    setTextError("");
+    return true;
   };
 
-  const handleSubmit = () => {
-    navigate("/result");
+  const handleSubmit = async () => {
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+
+    if (!validateSubmission()) {
+      return;
+    }
+
+    const result = await Swal.fire({
+      title: 'Submit Essay',
+      text: "Are you sure you want to submit your essay?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, submit it!',
+      cancelButtonText: 'Cancel'
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    try {
+      setSubmitLoading(true);
+      const response = await api.post('/submissions', {
+        problem: id,
+        user: currentUser.id,
+        essay: text
+      });
+
+      if (response.data) {
+        console.log(response.data);
+        // TODO: Integrate with grading API
+        // navigate(`/result/${response.data.id}`);
+      }
+    } catch (err) {
+      console.error("Error submitting essay:", err);
+      await Swal.fire({
+        title: 'Error!',
+        text: err.response?.data?.message || "Failed to submit essay. Please try again.",
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    } finally {
+      setSubmitLoading(false);
+    }
   };
+
+  const renderTaskContent = () => {
+    if (!problem) return null;
+
+    return (
+      <div className="content-section">
+        <div className="task-section">
+          <div className="task-content">
+            <h4 className="task-title">Task {problem.task_id}</h4>
+            <p className="task-description">
+              {problem.description}
+            </p>
+            <p className="task-instruction">
+              {problem.task_id === 1 
+                ? "Summarise the information by selecting and reporting the main features, and make comparisons where relevant."
+                : "Write at least 250 words about the given topic."}
+            </p>
+            <p className="time-note">
+              You should spend about {problem.task_id === 1 ? "20" : "40"} minutes on this task.
+            </p>
+          </div>
+          {problem.task_id === 1 && (
+            <div className="chart-section">
+              <img
+                src={problem.image}
+                alt={problem.title}
+                className="task-chart"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="action-section">
+          <div className="button-group">
+            <button className="btn task-btn">Task {problem.task_id}</button>
+            <button className="btn topic-btn">{problem.title}</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!problem) return <div>No problem found</div>;
 
   return (
     <div>
@@ -57,54 +206,39 @@ const WritingPage = () => {
 
         <div className="writing-card">
           <div className="card-header">
-            <h3>Writing 1</h3>
+            <h3>{problem.title}</h3>
           </div>
 
-          <div className="content-section">
-            <div className="task-section">
-              <div className="task-content">
-                <h4 className="task-title">Task 1</h4>
-                <p className="task-description">
-                  The chart shows the percentage of women and men in one Asian
-                  country who passed when they took their driving test between
-                  1980 and 2010.
-                </p>
-                <p className="task-instruction">
-                  Summarise the information by selecting and reporting the main
-                  features, and make comparisons where relevant.
-                </p>
-                <p className="time-note">
-                  You should spend about 20 minutes on this task.
-                </p>
-              </div>
-              <div className="chart-section">
-                <img
-                  src="/api/placeholder/400/300"
-                  alt="Chart showing driving test pass rates"
-                  className="task-chart"
-                />
-              </div>
-            </div>
-
-            <div className="action-section">
-              <div className="button-group">
-                <button className="btn task-btn">Task 1</button>
-                <button className="btn topic-btn">Chart</button>
-              </div>
-              <button className="btn writing-btn" onClick={handleSubmit}>
-                Submit
-              </button>
-            </div>
-          </div>
+          {renderTaskContent()}
         </div>
+
         <div className="feedback-section">
           <h4 className="feedback-title">Your Writing</h4>
-          <textarea
-            className="text-editor"
-            placeholder="Write your text here"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
+          <div className="textarea-container">
+            <textarea
+              className={`text-editor ${textError ? 'error' : ''}`}
+              placeholder="Write your essay here"
+              value={text}
+              onChange={(e) => {
+                setText(e.target.value);
+                if (textError) setTextError("");
+              }}
+            />
+            {textError && <div className="error-message">{textError}</div>}
+            <div className="word-count">
+              Words: {text.trim().split(/\s+/).filter(word => word.length > 0).length}
+            </div>
+          </div>
+          
+          <div className="submit-section">
+            <button 
+              className={`btn writing-btn ${submitLoading ? 'loading' : ''}`}
+              onClick={handleSubmit}
+              disabled={submitLoading}
+            >
+              {submitLoading ? 'Submitting...' : 'Submit Essay'}
+            </button>
+          </div>
         </div>
       </div>
       <footer className="site-footer">

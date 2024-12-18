@@ -1,9 +1,12 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { GetProblemsQuery } from './dto/problem.query';
 import { ProblemService } from './problem.service';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '../guard/auth.guard';
 @ApiTags('problem')
 @Controller('problems')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class ProblemController {
   constructor(private readonly problemService: ProblemService) {}
 
@@ -15,5 +18,12 @@ export class ProblemController {
     return this.problemService.getProblems(query);
   }
 
+  @Get('/:id')
+  @ApiOperation({ summary: 'Get problem by id' })
+  async getProblemById(@Param('id') id: number) {
+    return this.problemService.getProblemById(id);
+  }
+
  
 }
+

@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards } from '@nestjs/common';
 import { OpenAIService } from './openai.service';
-import { ApiTags, ApiOperation, ApiBody, ApiParam, ApiResponse, ApiProperty } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBody, ApiParam, ApiResponse, ApiProperty, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '../guard/auth.guard';
 
 export class OpenAIResponse {
   text: string;
@@ -8,6 +9,8 @@ export class OpenAIResponse {
 
 @ApiTags('OpenAI')
 @Controller('openai')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class OpenAIController {
   constructor(private readonly openAIService: OpenAIService) {}
 

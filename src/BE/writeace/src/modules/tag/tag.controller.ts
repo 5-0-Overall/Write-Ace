@@ -1,10 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { TagEntity } from './entity/tag.entity';
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '../guard/auth.guard';
 
 @Controller('tags')
 @ApiTags('tag')
+@ApiBearerAuth()
+@UseGuards(AuthGuard) 
 export class TagController {
   constructor(private readonly tagService: TagService) {}
 
