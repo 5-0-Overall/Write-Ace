@@ -133,7 +133,7 @@ function LoginForm() {
           <button 
             type="submit" 
             disabled={loading}
-            className={`submit-button ${loading ? 'loading' : ''}`}
+            className={`button ${loading ? 'loading' : ''}`}
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
