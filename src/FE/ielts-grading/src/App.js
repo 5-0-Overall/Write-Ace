@@ -27,6 +27,10 @@ const WritingPage = React.lazy(() => import("./pages/WritingPage"));
 const Result = React.lazy(() => import("./pages/Result"));
 const Sidebar = React.lazy(() => import("./components/Sidebar/Sidebar"));
 const PrivateRoute = React.lazy(() => import("./components/PrivateRoute"));
+const DashboardAdmin = React.lazy(() => import("./pages/DashboardAdmin"));
+const UserList = React.lazy(() => import("./pages/UserList"));
+const TaskList = React.lazy(() => import("./pages/TaskList"));
+const ProfileAdmin = React.lazy(() => import("./pages/ProfileAdmin"));
 
 function App() {
   return (
@@ -81,7 +85,7 @@ function App() {
             }
           />
           <Route
-            path="/writing/problems/:id"
+            path="/writing"
             element={
               <PrivateRoute>
                 <WritingPage />
@@ -101,6 +105,38 @@ function App() {
             element={
               <PrivateRoute>
                 <Result />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin_dashboard"
+            element={
+              <PrivateRoute>
+                <DashboardAdmin />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <PrivateRoute>
+                <UserList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/tasks"
+            element={
+              <PrivateRoute>
+                <TaskList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile_admin"
+            element={
+              <PrivateRoute>
+                <ProfileAdmin />
               </PrivateRoute>
             }
           />
