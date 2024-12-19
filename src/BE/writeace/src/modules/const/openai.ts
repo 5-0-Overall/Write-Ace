@@ -175,8 +175,9 @@ Not all people are qualified to go to university, especially who is in developin
 When all youngsters pursue tertiary education also brings some disadvantages. Everyone going to university want to get a distinction degree . Then take it to apply for a job in the company and just do clerical work . As a consequence of this thinking, it is deficient in manual workers , such as drivers or construction workers will lack employees. Besides, society is more and more developing , and more machines have replaced humans in working. This makes the unemployment rate on the rise and imbalances the labor market.
 In conclusion, it is impossible and unuseful  to study higher after high school for a majority of youngsters. I think university is not the only way to succeed. There are many other ways to bring value and benefits to our life. Therefore, there is no need to follow the trend of college, but choose the path that suits you best.
 
-And you will send me a only JSON like this :
+Always respond with a valid JSON object as plain text. Do not include any additional text, explanations, or markdown formatting. The response must strictly conform to JSON syntax.
 
+And you will send me a only JSON like this:
 json: 
 {
   "feedback": {

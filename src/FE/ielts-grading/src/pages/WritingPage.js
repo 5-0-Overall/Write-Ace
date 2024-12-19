@@ -16,7 +16,6 @@ import AuthService from "../services/AuthService";
 const WritingPage = () => {
   const [timeLeft, setTimeLeft] = useState(1800);
   const [text, setText] = useState("");
-  const [feedback, setFeedback] = useState("");
   const [problem, setProblem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -120,16 +119,38 @@ const WritingPage = () => {
 
     try {
       setSubmitLoading(true);
+      
+      // Show loading state with Swal
+      Swal.fire({
+        title: 'Submitting your essay...',
+        html: 'This may take a minute while we analyze your writing.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
       const response = await api.post('/submissions', {
         problem: id,
         user: currentUser.id,
         essay: text
       });
 
-      if (response.data) {
-        console.log(response.data);
-        // TODO: Integrate with grading API
-        // navigate(`/result/${response.data.id}`);
+      if (response.data && response.data.id) {
+        // Close loading dialog
+        await Swal.close();
+        
+        // Show success message
+        await Swal.fire({
+          title: 'Success!',
+          text: 'Your essay has been submitted successfully.',
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false
+        });
+
+        // Navigate to result page
+        navigate(`/result/${response.data.id}`);
       }
     } catch (err) {
       console.error("Error submitting essay:", err);
