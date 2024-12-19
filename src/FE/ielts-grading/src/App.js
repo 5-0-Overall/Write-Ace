@@ -4,7 +4,7 @@ import "./App.css";
 import "./styles/Landing.css";
 import "./styles/Loading.css";
 
-// Import component Loading 
+// Import component Loading
 const Loading = () => (
   <div className="loading-container">
     <div className="loading-spinner"></div>
@@ -13,7 +13,7 @@ const Loading = () => (
 
 // Lazy load các components
 const LoginForm = React.lazy(() => import("./pages/LoginForm"));
-const ResetPassword = React.lazy(() => import("./pages/ResetPassword")); 
+const ResetPassword = React.lazy(() => import("./pages/ResetPassword"));
 const Registration = React.lazy(() => import("./pages/Registration"));
 const LandingPage = React.lazy(() => import("./pages/LandingPage"));
 const Contact = React.lazy(() => import("./pages/Contact"));
@@ -97,7 +97,7 @@ function App() {
             }
           />
           <Route
-            path="/result"
+            path="/result/:id"
             element={
               <PrivateRoute>
                 <Result />
