@@ -87,12 +87,17 @@ export class SubmissionService {
     const status = updatedSubmission.status;
     updatedSubmission.status =
       status === STATUS.PENDING
-        ? STATUS.REVIEWED_BY_AI
-        : status === STATUS.REVIEWED_BY_TEACHER
-          ? STATUS.REVIEWED_BY_TEACHER_AND_AI
-          : status;
+        ? STATUS.REVIEWED
+        : status;
 
-    return await this.submissionRepository.save(updatedSubmission);
+    const savedSubmission = await this.submissionRepository.save(updatedSubmission);
+    
+    return await this.submissionRepository.findOne({
+        where: { id: savedSubmission.id },
+        relations: {
+            problem: true,
+        }
+    });
   }
 
   async deleteSubmission(id: number): Promise<void> {
