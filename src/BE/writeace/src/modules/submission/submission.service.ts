@@ -33,12 +33,17 @@ export class SubmissionService {
   async updateSubmission(
     openaiUpdateSubmissionDTO: OpenAIUpdateSubmissionDTO,
   ): Promise<SubmissionEntity> {
-    const submission = await this.submissionRepository.findOneBy({ id: openaiUpdateSubmissionDTO.submissionId });
+    const submission = await this.submissionRepository.findOneBy({
+      id: openaiUpdateSubmissionDTO.submissionId,
+    });
     if (!submission) {
       throw new NotFoundException('Submission not found');
     }
-    
-    return this.submissionRepository.save({ ...submission, ...openaiUpdateSubmissionDTO });
+
+    return this.submissionRepository.save({
+      ...submission,
+      ...openaiUpdateSubmissionDTO,
+    });
   }
   async createSubmission(
     submission: SubmissionCreateDTO,
@@ -59,7 +64,10 @@ export class SubmissionService {
     });
 
     await this.submissionRepository.save(newSubmission);
-    const aiReview = await this.openaiService.generateText(problem.description, essay);
+    const aiReview = await this.openaiService.generateText(
+      problem.description,
+      essay,
+    );
     const scoreTA = this.openaiService.getScoreTA(aiReview);
     const scoreCC = this.openaiService.getScoreCC(aiReview);
     const scoreLR = this.openaiService.getScoreLR(aiReview);
@@ -77,16 +85,15 @@ export class SubmissionService {
     });
 
     const status = updatedSubmission.status;
-    updatedSubmission.status = status === STATUS.PENDING 
-      ? STATUS.REVIEWED_BY_AI 
-      : status === STATUS.REVIEWED_BY_TEACHER 
-        ? STATUS.REVIEWED_BY_TEACHER_AND_AI 
-        : status;
+    updatedSubmission.status =
+      status === STATUS.PENDING
+        ? STATUS.REVIEWED_BY_AI
+        : status === STATUS.REVIEWED_BY_TEACHER
+          ? STATUS.REVIEWED_BY_TEACHER_AND_AI
+          : status;
 
     return await this.submissionRepository.save(updatedSubmission);
-   }
-
-
+  }
 
   async deleteSubmission(id: number): Promise<void> {
     await this.submissionRepository.delete(id);
@@ -99,7 +106,15 @@ export class SubmissionService {
     }
 
     const submissions = await this.submissionRepository.find({
-      where: { user },
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+      relations: {
+        problem: true,
+        user: true,
+      },
     });
     const totalSubmission = submissions.length;
     const problem = submissions.map((submission) => submission.problem);
