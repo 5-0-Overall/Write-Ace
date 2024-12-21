@@ -208,13 +208,13 @@ const SampleArticle = () => {
           <div className="footer-social">
             <span>Follow us:</span>
             <div className="social-links">
-              <a href="#" className="social-link">
+              <a href="https://www.facebook.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="social-link">
+              <a href="https://twitter.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="social-link">
+              <a href="https://www.instagram.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
                 <Instagram size={20} />
               </a>
             </div>

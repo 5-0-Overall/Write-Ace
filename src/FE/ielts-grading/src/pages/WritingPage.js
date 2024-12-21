@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   ArrowLeft,
-  MessageSquare,
-  ThumbsUp,
   Facebook,
   Twitter,
   Instagram,
@@ -12,6 +10,7 @@ import "../styles/Article.css";
 import api from '../services/ApiService';
 import Swal from 'sweetalert2';
 import AuthService from "../services/AuthService";
+import { useProblem } from '../contexts/ProblemContext';
 
 const WritingPage = () => {
   const [timeLeft, setTimeLeft] = useState(1800);
@@ -22,6 +21,7 @@ const WritingPage = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [textError, setTextError] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
+  const { setCurrentProblem } = useProblem();
   
   const navigate = useNavigate();
   const { id } = useParams();
@@ -52,6 +52,7 @@ const WritingPage = () => {
         setLoading(true);
         const response = await api.get(`/problems/${id}`);
         setProblem(response.data);
+        setCurrentProblem(response.data);
       } catch (err) {
         console.error("Error fetching problem:", err);
         setError(err.response?.data?.message || err.message);
@@ -63,7 +64,7 @@ const WritingPage = () => {
     if (id) {
       fetchProblem();
     }
-  }, [id]);
+  }, [id, setCurrentProblem]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -101,7 +102,7 @@ const WritingPage = () => {
     if (!validateSubmission()) {
       return;
     }
-
+    
     const result = await Swal.fire({
       title: 'Submit Essay',
       text: "Are you sure you want to submit your essay?",
@@ -268,13 +269,13 @@ const WritingPage = () => {
           <div className="footer-social">
             <span>Follow us:</span>
             <div className="social-links">
-              <a href="#" className="social-link">
+              <a href="https://www.facebook.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="social-link">
+              <a href="https://twitter.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="social-link">
+              <a href="https://www.instagram.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
                 <Instagram size={20} />
               </a>
             </div>

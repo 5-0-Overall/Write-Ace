@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar/Sidebar.js";
-import { Bell, ArrowUpRight, TrendingUp, Users, Book } from "lucide-react";
-import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar/Navbar";
+import { ArrowUpRight, TrendingUp, Book } from "lucide-react";
 import "../styles/Common.css";
 import "../styles/Dashboard.css";
 import ContributionChart from '../components/ContributionChart';
@@ -9,7 +8,6 @@ import api from '../services/ApiService.js';
 import AuthService from '../services/AuthService.js';
 
 function Dashboard() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [contributionData, setContributionData] = useState({ total: 0, contributions: {} });
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({
@@ -19,16 +17,6 @@ function Dashboard() {
     average_score: null,
     highest_score: null
   });
-
-  const handleResize = () => {
-    setIsSidebarExpanded(window.innerWidth > 768);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   useEffect(() => {
     const fetchContributions = async () => {
@@ -61,42 +49,10 @@ function Dashboard() {
     fetchStats();
   }, []);
 
-  const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
-
   return (
     <div className="dashboard-container">
-      <Sidebar
-        isSidebarExpanded={isSidebarExpanded}
-        toggleSidebar={toggleSidebar}
-      />
-
+      <Navbar />
       <main className="main-content">
-        <div className="main-header">
-          <div>
-            <h2 className="main-title">Dashboard</h2>
-            <p className="welcome-text">
-              Welcome back, {user?.username || 'User'}
-            </p>
-          </div>
-          <div className="header-controls">
-            <select className="time-selector">
-              <option>Last Week</option>
-              <option>Last Month</option>
-              <option>Last Year</option>
-            </select>
-            <button className="icon-button">
-              <Bell size={20} />
-            </button>
-            <Link to="/profile" className="icon-button">
-              <img
-                src={`https://avatar.iran.liara.run/public/${user?.id || 1}`}
-                alt="Profile"
-                className="profile-image"
-              />
-            </Link>
-          </div>
-        </div>
-
         <div className="content-grid">
           <div className="content-card">
             <div className="card-header">
