@@ -85,7 +85,7 @@ function App() {
             }
           />
           <Route
-            path="/writing"
+            path="/writing/problems/:id"
             element={
               <PrivateRoute>
                 <WritingPage />
@@ -109,7 +109,7 @@ function App() {
             }
           />
           <Route
-            path="/admin_dashboard"
+            path="/admin-dashboard"
             element={
               <PrivateRoute>
                 <DashboardAdmin />
