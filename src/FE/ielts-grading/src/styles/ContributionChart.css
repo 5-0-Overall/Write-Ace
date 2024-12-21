@@ -1,9 +1,17 @@
+.contribution-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 .contribution-wrapper {
   background: var(--color-bg-overlay);
   border: 1px solid var(--color-border-primary);
   border-radius: 6px;
   padding: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .contribution-header {
@@ -33,6 +41,7 @@
   position: relative;
   padding-left: 36px;
   padding-top: 24px;
+  min-width: 700px;
 }
 
 .weekdays {
@@ -41,28 +50,31 @@
   top: 48px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px;
 }
 
 .weekdays span {
   font-size: 12px;
   color: var(--color-text-secondary);
-  height: 15px;
-  line-height: 15px;
+  height: 11px;
+  line-height: 11px;
 }
 
 .months {
   position: absolute;
   top: 0;
   left: 36px;
-  right: 0;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  right: 16px;
+  height: 20px;
+  margin-bottom: 10px;
 }
 
-.months span {
+.month-label {
+  position: absolute;
   font-size: 12px;
   color: var(--color-text-secondary);
+  white-space: nowrap;
+  min-width: 30px;
 }
 
 .graph {
@@ -71,17 +83,24 @@
 }
 
 .week {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
+.week:hover {
+  z-index: 2;
+}
+
 .day {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 2px;
   transition: transform 0.1s ease-in-out;
   position: relative;
+  cursor: pointer;
 }
 
 .day:hover {
@@ -93,15 +112,29 @@
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%);
-  padding: 5px 10px;
-  background: rgba(0, 0, 0, 0.8);
+  transform: translateX(-50%) translateY(-5px);
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.85);
   color: white;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 12px;
   white-space: nowrap;
-  z-index: 10;
-  margin-bottom: 5px;
+  z-index: 1000;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  pointer-events: none;
+}
+
+.day[data-tooltip]:hover:before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
+  z-index: 1000;
+  pointer-events: none;
 }
 
 .day.outside-year {
@@ -139,17 +172,133 @@
   --color-text-secondary: #586069;
 }
 
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-calendar-graph-day-bg: #161b22;
-    --color-calendar-graph-day-L1-bg: #0e4429;
-    --color-calendar-graph-day-L2-bg: #006d32;
-    --color-calendar-graph-day-L3-bg: #26a641;
-    --color-calendar-graph-day-L4-bg: #39d353;
-    --color-bg-overlay: #0d1117;
-    --color-border-primary: #30363d;
-    --color-text-primary: #c9d1d9;
-    --color-text-secondary: #8b949e;
+@media screen and (max-width: 1200px) {
+  .day {
+    width: 12px;
+    height: 12px;
   }
-} 
+  
+  .graph {
+    gap: 3px;
+  }
+  
+  .week {
+    gap: 3px;
+  }
+  
+  .weekdays {
+    gap: 15px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .contribution-container {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+  
+  .contribution-wrapper {
+    padding: 12px;
+  }
+  
+  .contribution-graph {
+    min-width: 650px;
+  }
+  
+  .day {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .graph {
+    gap: 2px;
+  }
+  
+  .week {
+    gap: 2px;
+  }
+  
+  .weekdays {
+    gap: 12px;
+  }
+  
+  .months span {
+    margin-right: 16px;
+    font-size: 11px;
+  }
+  
+  .weekdays span {
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .contribution-container {
+    padding: 0 12px;
+  }
+  
+  .contribution-wrapper {
+    padding: 10px;
+    margin: 0 -12px;
+    width: calc(100% + 24px);
+  }
+  
+  .contribution-graph {
+    min-width: 600px;
+    padding-left: 30px;
+  }
+  
+  .contribution-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .year-selector {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .contribution-container {
+    padding: 0 8px;
+  }
+  
+  .contribution-wrapper {
+    padding: 8px;
+    margin: 0 -8px;
+    width: calc(100% + 16px);
+  }
+  
+  .contribution-graph {
+    min-width: 550px;
+    padding-left: 24px;
+  }
+  
+  .weekdays span {
+    font-size: 10px;
+  }
+  
+  .months span {
+    margin-right: 12px;
+    font-size: 10px;
+  }
+  
+  .weekdays span:nth-child(2),
+  .weekdays span:nth-child(4),
+  .weekdays span:nth-child(6) {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .month-label {
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .month-label {
+    font-size: 10px;
+  }
+}
