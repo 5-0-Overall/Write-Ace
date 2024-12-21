@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/Sidebar.js";
 import { Bell, ArrowUpRight, TrendingUp, Users, Book } from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { Link } from "react-router-dom";
 import "../styles/Common.css";
 import "../styles/Dashboard.css";
@@ -20,6 +12,13 @@ function Dashboard() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [contributionData, setContributionData] = useState({ total: 0, contributions: {} });
   const [user, setUser] = useState(null);
+  const [stats, setStats] = useState({
+    total_submission: 0,
+    total_essay: 0,
+    total_word: 0,
+    average_score: null,
+    highest_score: null
+  });
 
   const handleResize = () => {
     setIsSidebarExpanded(window.innerWidth > 768);
@@ -49,30 +48,20 @@ function Dashboard() {
     setUser(currentUser);
   }, []);
 
-  const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const { data } = await api.get('/analystic/user');
+        setStats(data);
+      } catch (error) {
+        console.error('Error fetching user statistics:', error);
+      }
+    };
+    
+    fetchStats();
+  }, []);
 
-  const topTopicsData = [
-    { topic: 'Education', count: 10 },
-    { topic: 'Technology', count: 9 },
-    { topic: 'Environment', count: 8 },
-    { topic: 'Health', count: 8 },
-    { topic: 'Society', count: 7 },
-    { topic: 'Economy', count: 6 },
-    { topic: 'Culture', count: 6 },
-    { topic: 'Politics', count: 5 },
-    { topic: 'Sports', count: 5 },
-    { topic: 'Science', count: 4 },
-    { topic: 'Transportation', count: 4 },
-    { topic: 'Tourism', count: 3 },
-    { topic: 'Agriculture', count: 3 },
-    { topic: 'Energy', count: 2 },
-    { topic: 'Art', count: 2 },
-    { topic: 'Business', count: 2 },
-    { topic: 'Communications', count: 1 },
-    { topic: 'Food', count: 1 },
-    { topic: 'History', count: 1 },
-    { topic: 'Law', count: 1 }
-  ];  
+  const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
 
   return (
     <div className="dashboard-container">
@@ -100,7 +89,7 @@ function Dashboard() {
             </button>
             <Link to="/profile" className="icon-button">
               <img
-                src="https://avatar.iran.liara.run/public/4"
+                src={`https://avatar.iran.liara.run/public/${user?.id || 1}`}
                 alt="Profile"
                 className="profile-image"
               />
@@ -115,7 +104,7 @@ function Dashboard() {
               <ArrowUpRight size={16} className="card-icon" />
             </div>
             <div className="card-content">
-              <span className="card-value">36</span>
+              <span className="card-value">{stats.total_essay}</span>
               <span className="card-label">essays</span>
             </div>
           </div>
@@ -126,7 +115,18 @@ function Dashboard() {
               <TrendingUp size={16} className="card-icon" />
             </div>
             <div className="card-content">
-              <span className="card-value">6.0</span>
+              <span className="card-value">{stats.average_score || 0}</span>
+              <span className="card-label">/9.0</span>
+            </div>
+          </div>
+
+          <div className="content-card">
+            <div className="card-header">
+              <h3 className="card-title">Highest band</h3>
+              <TrendingUp size={16} className="card-icon" />
+            </div>
+            <div className="card-content">
+              <span className="card-value">{stats.highest_score || 0}</span>
               <span className="card-label">/9.0</span>
             </div>
           </div>
@@ -137,19 +137,19 @@ function Dashboard() {
               <Book size={16} className="card-icon" />
             </div>
             <div className="card-content">
-              <span className="card-value">15,000</span>
+              <span className="card-value">{stats.total_word}</span>
               <span className="card-label">words</span>
             </div>
           </div>
 
           <div className="content-card">
             <div className="card-header">
-              <h3 className="card-title">Peer reviews</h3>
-              <Users size={16} className="card-icon" />
+              <h3 className="card-title">Submissions</h3>
+              <ArrowUpRight size={16} className="card-icon" />
             </div>
             <div className="card-content">
-              <span className="card-value">12</span>
-              <span className="card-label">reviews</span>
+              <span className="card-value">{stats.total_submission}</span>
+              <span className="card-label">total</span>
             </div>
           </div>
         </div>
