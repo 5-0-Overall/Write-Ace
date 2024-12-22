@@ -13,9 +13,17 @@ services:
       - DATABASE_NAME=write_ace
       - DATABASE_RETRY_ATTEMPTS=10
       - DATABASE_RETRY_DELAY=3000
-      - OPEN_API_KEY=OPENAI_API_KEY
+
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
+      
       - JWT_SECRET=WR1T3_@C3
       - JWT_EXPIRES_IN=1d
+      
     depends_on:
       db:
         condition: service_healthy

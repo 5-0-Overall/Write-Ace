@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { TagModule } from './modules/tag/tag.module';
 import { SubmissionModule } from './modules/submission/submission.module';
-import { ProfileModule } from './modules/profile/profile.module';
 import { ProblemModule } from './modules/problem/problem.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BaseModule } from './modules/base/base.module';
@@ -25,7 +24,6 @@ import { AuthModule } from './modules/auth/auth.module';
     UserModule,
     TagModule,
     SubmissionModule,
-    ProfileModule,
     ProblemModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
