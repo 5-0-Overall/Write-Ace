@@ -6,13 +6,7 @@ import api from '../services/ApiService';
 import Swal from 'sweetalert2';
 import "../styles/Result.css";
 import "../styles/Article.css";
-
-// Helper function để get cookie value
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-};
+import { useProblem } from "../contexts/ProblemContext";
 
 const Result = () => {
   const [highlightedText, setHighlightedText] = useState("");
@@ -20,75 +14,30 @@ const Result = () => {
   const [submission, setSubmission] = useState(null);
   const [aiReview, setAiReview] = useState(null);
   const writingRef = useRef(null);
-  const navigate = useNavigate();
   const { id } = useParams();
-  const [problem, setProblem] = useState(null);
-
-  const renderTaskContent = () => {
-    if (!problem) return null;
-
-    return (
-      <div className="content-section">
-        <div className="task-section">
-          <div className="task-content">
-            <h4 className="task-title">Task {problem.task_id}</h4>
-            <p className="task-description">
-              {problem.description}
-            </p>
-            <p className="task-instruction">
-              {problem.task_id === 1 
-                ? "Summarise the information by selecting and reporting the main features, and make comparisons where relevant."
-                : "Write at least 250 words about the given topic."}
-            </p>
-            <p className="time-note">
-              You should spend about {problem.task_id === 1 ? "20" : "40"} minutes on this task.
-            </p>
-          </div>
-          {problem.task_id === 1 && (
-            <div className="chart-section">
-              <img
-                src={problem.image}
-                alt={problem.title}
-                className="task-chart"
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="action-section">
-          <div className="button-group">
-            <button className="btn task-btn">Task {problem.task_id}</button>
-            <button className="btn topic-btn">{problem.title}</button>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  const { currentProblem, setCurrentProblem } = useProblem();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        console.log('Fetching submission data...');
         
         const submissionResponse = await api.get(`/submissions/${id}`);
+        console.log('Submission data:', submissionResponse.data);
         setSubmission(submissionResponse.data);
         
-        /**
-         * TODO:
-         * Fetch problem using problemId from submission (response doesn't have yet)
-         * or using reuse component to avoid fetch problem again (*recommend*)
-         * **/ 
-        const problemId = submissionResponse.data.problemId;
-
-        if (problemId) {
-          const problemResponse = await api.get(`/problems/${problemId}`);
-          setProblem(problemResponse.data);
+        if (!currentProblem) {
+          console.log('Fetching problem data...');
+          const problemResponse = await api.get(`/problems/1`); // Hardcode id=1. waiting for backend
+          console.log('Problem data:', problemResponse.data);
+          setCurrentProblem(problemResponse.data);
         }
         
         const formattedReview = JSONFormatter.formatAIReview(submissionResponse.data.aiReview);
         setAiReview(formattedReview);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error in fetchData:', error);
         Swal.fire({
           title: 'Error!',
           text: 'Failed to load submission details',
@@ -100,10 +49,49 @@ const Result = () => {
       }
     };
 
-    if (id) {
-      fetchData();
-    }
+    fetchData();
   }, [id]);
+
+  const renderTaskContent = () => {
+    if (!currentProblem) return null;
+
+    return (
+      <div className="content-section">
+        <div className="task-section">
+          <div className="task-content">
+            <h4 className="task-title">Task {currentProblem.task_id}</h4>
+            <p className="task-description">
+              {currentProblem.description}
+            </p>
+            <p className="task-instruction">
+              {currentProblem.task_id === 1 
+                ? "Summarise the information by selecting and reporting the main features, and make comparisons where relevant."
+                : "Write at least 250 words about the given topic."}
+            </p>
+            <p className="time-note">
+              You should spend about {currentProblem.task_id === 1 ? "20" : "40"} minutes on this task.
+            </p>
+          </div>
+          {currentProblem.task_id === 1 && (
+            <div className="chart-section">
+              <img
+                src={currentProblem.image}
+                alt={currentProblem.title}
+                className="task-chart"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="action-section">
+          <div className="button-group">
+            <button className="btn task-btn">Task {currentProblem.task_id}</button>
+            <button className="btn topic-btn">{currentProblem.title}</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const handleHighlight = (text) => {
     if (!text) return;
@@ -333,16 +321,16 @@ const Result = () => {
             <h2 className="recommended-title">Let's see your result</h2>
           </div>
           <div className="header-right">
-            <Link to="/dashboard" className="dashboard-link">
+            <Link to="/problems" className="dashboard-link">
               <ArrowLeft className="back-icon" />
-              Dashboard
+              Problems
             </Link>
           </div>
         </header>
 
         <div className="writing-card">
           <div className="card-header">
-            <h3>{submission.problem?.title || 'Writing Task'}</h3>
+            <h3>{currentProblem?.title || 'Writing Task'}</h3>
           </div>
 
           {renderTaskContent()}
@@ -399,13 +387,13 @@ const Result = () => {
           <div className="footer-social">
             <span>Follow us:</span>
             <div className="social-links">
-              <a href="#" className="social-link">
+              <a href="https://www.facebook.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="social-link">
+              <a href="https://twitter.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="social-link">
+              <a href="https://www.instagram.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
                 <Instagram size={20} />
               </a>
             </div>

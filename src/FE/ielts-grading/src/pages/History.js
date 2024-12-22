@@ -1,29 +1,10 @@
-import React, { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar/Sidebar";
+import React, { useState } from "react";
+import Navbar from "../components/Navbar/Navbar";
 import { Eye } from "lucide-react";
 import "../styles/Common.css";
 import "../styles/History.css";
-import DataManipulator from "../components/common/DataManipulator";
 
 function History() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
-
-  const handleResize = () => {
-    if (window.innerWidth <= 768) {
-      setIsSidebarExpanded(false);
-    } else {
-      setIsSidebarExpanded(true);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
-
   const [historyData, setHistoryData] = useState([
     {
       exam: "Writing 1",
@@ -111,26 +92,10 @@ function History() {
     }
   ]);  
 
-  const handleDataChange = (newData) => {
-    setHistoryData(newData);
-  };
-
   return (
     <div className="dashboard-container">
-      <Sidebar
-        isSidebarExpanded={isSidebarExpanded}
-        toggleSidebar={toggleSidebar}
-      />
-
+      <Navbar />
       <main className="main-content">
-        <div className="main-header">
-          <h2 className="main-title">Writing History</h2>
-          {/* <DataManipulator
-            data={historyData}
-            handleDataChange={handleDataChange}
-          /> */}
-        </div>
-
         <div className="table-container">
           <table>
             <thead>

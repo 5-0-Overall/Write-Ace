@@ -1,13 +1,16 @@
 .dashboard-container {
-  display: flex;
   min-height: 100vh;
   background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-content {
   flex: 1;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
   padding: 2rem;
-  overflow-y: auto;
 }
 
 .main-header {
@@ -22,11 +25,6 @@
   font-weight: 600;
   color: #1e293b;
   margin: 0;
-}
-
-.welcome-text {
-  color: #64748b;
-  margin-top: 0.5rem;
 }
 
 .header-controls {

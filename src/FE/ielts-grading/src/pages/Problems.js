@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar/Sidebar";
+import Navbar from "../components/Navbar/Navbar";
 import "../styles/Common.css";
 import "../styles/Problems.css";
 import DataManipulator from "../components/common/DataManipulator";
@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import api from "../services/ApiService";
 
 function Problems() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [problemData, setProblemData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -117,20 +116,14 @@ function Problems() {
 
   return (
     <div className="dashboard-container">
-      <Sidebar
-        isSidebarExpanded={isSidebarExpanded}
-        toggleSidebar={() => setIsSidebarExpanded(!isSidebarExpanded)}
-      />
-
+      <Navbar />
       <main className="main-content">
         <div className="main-header">
-          <h2 className="main-title">Writing Problems</h2>
           <DataManipulator
             onDataChange={handleDataManipulation}
             onFilterChange={handleFilterChange}
           />
         </div>
-
         <div className="table-container">
           <table className="problems-table">
             <thead>
