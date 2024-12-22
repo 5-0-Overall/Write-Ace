@@ -24,7 +24,7 @@ export class SubmissionEntity extends BaseEntity {
   @ManyToOne(() => UserEntity, (user) => user.submissions)
   @JoinColumn({ name: 'user_id' })
   //ignore
-  @Exclude()
+  // @Exclude()
   user: UserEntity;
 
   @Column({ name: 'ai_review', type: 'text', nullable: true }) // Thêm type và nullable

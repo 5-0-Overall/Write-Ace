@@ -7,13 +7,20 @@ import * as bcrypt from 'bcrypt';
 import { SignInUserDto } from './dto/request/signin-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { roleMap } from '../const/enum/roles.enum';
+import { ProfileEntity } from './entity/profile.entity';
+import { UpdateProfileDto } from './dto/request/update-user.dto';
+import { S3Service } from '../s3/s3.service';
+import { GetCurrentUserDto } from './dto/response/get-current-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    private readonly jwtService: JwtService
+    @InjectRepository(ProfileEntity)
+    private readonly profileRepository: Repository<ProfileEntity>,
+    private readonly jwtService: JwtService,
+    private readonly s3Service: S3Service,
   ) {}
   async findAll(): Promise<UserEntity[]> {
     return await this.userRepository.find();
@@ -30,15 +37,90 @@ export class UserService {
     if (!user) {
       throw new UnauthorizedException('Invalid username or password');
     }
-    const isPasswordValid = await bcrypt.compare(loginData.password, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      loginData.password,
+      user.password,
+    );
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid username or password');
     }
-    const role=roleMap.get(user.role_id)
-    const payload = { username: user.username, sub: user.id,  role: role };
+    const role = roleMap.get(user.role_id);
+    const payload = { username: user.username, sub: user.id, role: role };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
-}
 
+  async updateProfile(
+    userId: number,
+    profile: UpdateProfileDto,
+    avatarFile?: any,
+  ): Promise<ProfileEntity> {
+    let profileUser = await this.profileRepository.findOne({
+      where: { user_id: userId },
+    });
+
+    if (!profileUser) {
+      profileUser = new ProfileEntity();
+      profileUser.user_id = userId;
+    }
+
+    if (avatarFile) {
+      const avatarUrl = await this.s3Service.uploadFile(avatarFile, 'avatars');
+      profileUser.avatar = avatarUrl;
+    } else if (profile.avatar) {
+      profileUser.avatar = profile.avatar;
+    }
+
+    if (profile.description) {
+      profileUser.description = profile.description;
+    }
+
+    return await this.profileRepository.save(profileUser);
+  }
+
+  async updateUser(
+    userId: number,
+    updateData: UpdateProfileDto,
+  ): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+
+    if (updateData.email) {
+      user.email = updateData.email;
+    }
+    if (updateData.password) {
+      user.password = await bcrypt.hash(updateData.password, 10);
+    }
+
+    return await this.userRepository.save(user);
+  }
+
+  async getCurrentUser(userId: number): Promise<GetCurrentUserDto> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+    let profile = await this.profileRepository.findOne({
+      where: { user_id: userId },
+    });
+    if(!profile){
+      profile = new ProfileEntity();
+      profile.user_id = userId;
+    }
+
+    const currentUser: GetCurrentUserDto = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      avatar:
+        profile.avatar ||
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqgGApOABX6L1KTXg0XzCOQgvFzieFvdK3rw&s',
+      description: profile.description || 'Try hard to be a good writer',
+      is_gmail: profile.is_gmail || false,
+    };
+
+    return currentUser;
+  }
+}

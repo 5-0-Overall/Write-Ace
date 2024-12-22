@@ -3,19 +3,73 @@ import Navbar from "../components/Navbar/Navbar";
 import { Upload } from "lucide-react";
 import "../styles/Common.css";
 import "../styles/Profile.css";
+import { UserApi } from "../services/ApiService";
+import { ToastContainer } from "react-toastify";
 
 function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    password: "********",
-    dateJoined: "2023-01-15",
-    about: "Stay hungry, stay foolish!",
+    username: "",
+    email: "",
+    password: "",
+    description: "",
   });
-  const [avatar, setAvatar] = useState("https://avatar.iran.liara.run/public/4");
+  const [avatar, setAvatar] = useState("");
+  const [avatarFile, setAvatarFile] = useState(null);
 
-  const handleEdit = () => {
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const response = await UserApi.getCurrentUser();
+      const userData = response.data;
+      setProfileData({
+        username: userData.username,
+        email: userData.email,
+        password: "",
+        description: userData.description || "",
+      });
+      setAvatar(userData.avatar || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqgGApOABX6L1KTXg0XzCOQgvFzieFvdK3rw&s' );
+    } catch (error) {
+      console.error("Error loading profile:", error);
+    }
+  };
+
+  const handleResize = () => {
+    setIsSidebarExpanded(window.innerWidth > 768);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
+
+  const handleEdit = async () => {
+    if (isEditing) {
+      try {
+        const formData = new FormData();
+        formData.append('email', profileData.email);
+        formData.append('description', profileData.description);
+        if (profileData.password) {
+          formData.append('password', profileData.password);
+        }
+        if (avatarFile) {
+          formData.append('avatarFile', avatarFile);
+        }
+
+        await UserApi.updateProfile(formData);
+        await loadUserProfile();
+        setProfileData(prev => ({...prev, password: ""}));
+        setAvatarFile(null);
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
+    }
     setIsEditing(!isEditing);
   };
 
@@ -27,6 +81,7 @@ function Profile() {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setAvatarFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatar(reader.result);
@@ -35,43 +90,77 @@ function Profile() {
     }
   };
 
+  const handleCancelAvatarChange = () => {
+    setAvatarFile(null);
+    loadUserProfile();
+  };
+
   return (
     <div className="dashboard-container">
-      <Navbar />
+      <ToastContainer />
+      <Sidebar
+        isSidebarExpanded={isSidebarExpanded}
+        toggleSidebar={toggleSidebar}
+      />
+
       <main className="main-content">
         <div className="profile-container">
           <div className="profile-content">
             <div className="profile-avatar-section">
-              <div className="avatar-wrapper">
+              <div 
+                className="avatar-wrapper"
+                style={{ 
+                  opacity: isEditing ? 1 : 0.7,
+                  cursor: isEditing ? 'pointer' : 'default'
+                }}
+              >
                 <img
                   src={avatar}
                   alt="Profile"
                   className="profile-avatar"
                 />
               </div>
-              <input
-                type="file"
-                id="avatar-upload"
-                accept="image/*"
-                onChange={handleAvatarChange}
-                style={{ display: 'none' }}
-              />
-              <label htmlFor="avatar-upload" className="change-avatar-button">
-                <Upload size={16} />
-                Change avatar
-              </label>
+              {isEditing && (
+                <>
+                  <input
+                    type="file"
+                    id="avatar-upload"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    style={{ display: 'none' }}
+                  />
+                  <div className="avatar-controls">
+                    <label 
+                      htmlFor="avatar-upload" 
+                      className="change-avatar-button"
+                    >
+                      <Upload size={16} />
+                      Change avatar
+                    </label>
+                    {avatarFile && (
+                      <button 
+                        type="button" 
+                        className="cancel-avatar-button"
+                        onClick={handleCancelAvatarChange}
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
 
             <form className="profile-form">
               <div className="form-group">
-                <label htmlFor="name">Name</label>
+                <label htmlFor="username">Username</label>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
-                  value={profileData.name}
-                  onChange={handleInputChange}
-                  readOnly={!isEditing}
+                  id="username"
+                  name="username"
+                  value={profileData.username}
+                  readOnly={true}
+                  className="readonly-input"
                 />
               </div>
               <div className="form-group">
@@ -94,25 +183,17 @@ function Profile() {
                   value={profileData.password}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
+                  placeholder={isEditing ? "Enter new password" : "********"}
+                  className={!isEditing ? "readonly-input" : ""}
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="dateJoined">Date joined</label>
-                <input
-                  type="text"
-                  id="dateJoined"
-                  name="dateJoined"
-                  value={profileData.dateJoined}
-                  readOnly
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="about">About</label>
+                <label htmlFor="description">Description</label>
                 <textarea
-                  id="about"
-                  name="about"
+                  id="description"
+                  name="description"
                   rows="4"
-                  value={profileData.about}
+                  value={profileData.description}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
                 ></textarea>

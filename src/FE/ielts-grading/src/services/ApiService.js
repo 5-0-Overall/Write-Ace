@@ -34,4 +34,17 @@ api.interceptors.response.use(
   }
 );
 
+const UserApi = {
+  getCurrentUser: () => api.get('/users/me'),
+  
+  updateProfile: (formData) => {
+    return api.put('/users/me', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  }
+};
+
+export { UserApi };
 export default api; 
