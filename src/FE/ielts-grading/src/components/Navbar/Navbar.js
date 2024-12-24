@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from "react-router-dom";
 import {
   Home,
@@ -8,9 +8,8 @@ import {
   User,
   Settings,
   LogOut,
-  Menu,
   Bell,
-  X
+  PenLine,
 } from "lucide-react";
 import AuthService from '../../services/AuthService';
 import "./Navbar.css";
@@ -18,8 +17,8 @@ import favicon from '../../assets/images/logo.svg';
 
 function Navbar() {
   const location = useLocation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const user = AuthService.getCurrentUser();
+  const isTeacher = AuthService.isTeacher();
 
   const isActive = (path) => location.pathname === path;
 
@@ -31,12 +30,18 @@ function Navbar() {
     }
   };
 
-  const navItems = [
+  // Tạo mảng navItems cơ bản cho tất cả users
+  const baseNavItems = [
     { path: "/dashboard", icon: <Home size={20} />, label: "Dashboard" },
     { path: "/problems", icon: <BookOpen size={20} />, label: "Problems" },
     { path: "/history", icon: <History size={20} />, label: "History" },
     { path: "/recommend", icon: <BarChart2 size={20} />, label: "Recommended" },
   ];
+
+  // Thêm Grading option nếu user là teacher
+  const navItems = isTeacher 
+    ? [...baseNavItems, { path: "/teacher/grading", icon: <PenLine size={20} />, label: "Grading" }]
+    : baseNavItems;
 
   return (
     <nav className="navbar">
@@ -46,14 +51,15 @@ function Navbar() {
             <img src={favicon} alt="WriteAce" className="navbar-logo" />
           </Link>
           
-          <div className="navbar-links desktop-links">
+          <div className="navbar-links">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 className={`nav-link ${isActive(item.path) ? "active" : ""}`}
               >
-                {item.label}
+                <span className="nav-icon">{item.icon}</span>
+                <span className="nav-label">{item.label}</span>
               </Link>
             ))}
           </div>
@@ -87,46 +93,8 @@ function Navbar() {
               </button>
             </div>
           </div>
-
-          <button 
-            className="mobile-menu-btn"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="mobile-menu">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`mobile-nav-link ${isActive(item.path) ? "active" : ""}`}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </Link>
-          ))}
-          <div className="mobile-menu-footer">
-            <Link to="/profile" className="mobile-nav-link">
-              <User size={20} />
-              <span>Profile</span>
-            </Link>
-            <Link to="/settings" className="mobile-nav-link">
-              <Settings size={20} />
-              <span>Settings</span>
-            </Link>
-            <button onClick={handleSignOut} className="mobile-nav-link">
-              <LogOut size={20} />
-              <span>Sign out</span>
-            </button>
-          </div>
-        </div>
-      )}
     </nav>
   );
 }
