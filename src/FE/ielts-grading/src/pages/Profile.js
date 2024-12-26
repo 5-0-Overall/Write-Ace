@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import Navbar from "../components/Navbar/Navbar";
-import { Upload } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import Sidebar from "../components/Sidebar/Sidebar.js";
+import { Bell, Upload } from "lucide-react";
 import "../styles/Common.css";
 import "../styles/Profile.css";
 import { UserApi } from "../services/ApiService";
 import { ToastContainer } from "react-toastify";
 
 function Profile() {
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
     username: "",
@@ -104,6 +105,17 @@ function Profile() {
       />
 
       <main className="main-content">
+        <div className="main-header">
+          <div className="header-title">
+            <h2 className="main-title">Profile Settings</h2>
+          </div>
+          <div className="header-controls">
+            <button className="icon-button">
+              <Bell size={20} />
+            </button>
+          </div>
+        </div>
+
         <div className="profile-container">
           <div className="profile-content">
             <div className="profile-avatar-section">

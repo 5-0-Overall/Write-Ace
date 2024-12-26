@@ -36,11 +36,14 @@
 }
 
 .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   color: #64748b;
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 500;
-  padding: 0.5rem 0;
+  padding: 0.5rem;
   transition: color 0.2s;
 }
 
@@ -76,6 +79,7 @@
 
 .profile-dropdown {
   position: relative;
+  padding-bottom: 8px;
 }
 
 .profile-btn {
@@ -94,17 +98,24 @@
 .dropdown-menu {
   position: absolute;
   right: 0;
-  top: 120%;
+  top: calc(100% - 8px);
   background: white;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   min-width: 200px;
   padding: 0.5rem;
-  display: none;
+  z-index: 50;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  transform: translateY(-10px);
+  display: block;
 }
 
 .profile-dropdown:hover .dropdown-menu {
-  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .dropdown-item {
@@ -128,16 +139,7 @@
   color: #1e293b;
 }
 
-.mobile-menu-btn {
-  display: none;
-  padding: 0.5rem;
-  border: none;
-  background: transparent;
-  color: #64748b;
-  cursor: pointer;
-}
-
-.mobile-menu {
+.nav-icon {
   display: none;
 }
 
@@ -146,49 +148,22 @@
     padding: 0.75rem 1rem;
   }
 
-  .desktop-links {
+  .nav-label {
     display: none;
   }
 
-  .mobile-menu-btn {
+  .nav-icon {
     display: block;
   }
 
-  .mobile-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: white;
-    border-top: 1px solid #e2e8f0;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  .navbar-links {
+    gap: 0.5rem;
   }
 
-  .mobile-nav-link {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
-    color: #64748b;
-    text-decoration: none;
-    border-radius: 0.375rem;
-    transition: all 0.2s;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    width: 100%;
-    font-size: 0.875rem;
-  }
-
-  .mobile-nav-link:hover,
-  .mobile-nav-link.active {
-    background-color: #f1f5f9;
-    color: #1e293b;
-  }
-
+  .mobile-menu,
+  .mobile-menu-btn,
+  .mobile-nav-link,
   .mobile-menu-footer {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #e2e8f0;
+    display: none;
   }
 } 

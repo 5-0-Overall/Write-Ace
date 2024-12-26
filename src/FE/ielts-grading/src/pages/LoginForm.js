@@ -60,8 +60,8 @@ function LoginForm() {
     try {
       const response = await AuthService.login(username, password);
       if (response.access_token) {
-        // navigate("/dashboard");
-        navigate("/admin_dashboard");
+        const dashboardRoute = AuthService.getDashboardRoute();
+        navigate(dashboardRoute);
       }
     } catch (error) {
       let errorMsg = "Login failed";
