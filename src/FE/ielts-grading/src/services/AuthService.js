@@ -1,20 +1,20 @@
-import api from './ApiService';
-import { jwtDecode } from 'jwt-decode';
+import api from "./ApiService";
+import { jwtDecode } from "jwt-decode";
 
 const AuthService = {
   async login(username, password) {
-    const response = await api.post('/users/login', { username, password });
+    const response = await api.post("/users/login", { username, password });
     if (response.data.access_token) {
-      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem("token", response.data.access_token);
       const decodedToken = jwtDecode(response.data.access_token);
-      localStorage.setItem('user', JSON.stringify(decodedToken));
+      localStorage.setItem("user", JSON.stringify(decodedToken));
     }
     return response.data;
   },
 
   getCurrentUser() {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (token) {
         const decodedToken = jwtDecode(token);
         if (decodedToken.exp * 1000 < Date.now()) {
@@ -30,12 +30,12 @@ const AuthService = {
   },
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   },
 
   getToken() {
-    return localStorage.getItem('token');
+    return localStorage.getItem("token");
   },
 
   hasRole(role) {
@@ -44,24 +44,24 @@ const AuthService = {
   },
 
   isTeacher() {
-    return this.hasRole('teacher');
+    return this.hasRole("teacher");
   },
 
   isAdmin() {
-    return this.hasRole('admin');
+    return this.hasRole("admin");
   },
 
   getDashboardRoute() {
     const user = this.getCurrentUser();
     switch (user?.role) {
-      case 'admin':
-        return '/admin/dashboard';
-      case 'teacher':
-        return '/teacher/dashboard';
+      case "admin":
+        return "/admin/dashboard";
+      case "teacher":
+        return "/teacher/dashboard";
       default:
-        return '/dashboard';
+        return "/dashboard";
     }
-  }
+  },
 };
 
 export default AuthService;

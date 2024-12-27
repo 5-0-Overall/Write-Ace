@@ -1,0 +1,31 @@
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.edit-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+  color: #2196f3;
+}
+
+.delete-btn {
+  color: #f44336;
+}
+
+.edit-btn:hover {
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+.delete-btn:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+}

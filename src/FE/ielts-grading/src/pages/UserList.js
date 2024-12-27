@@ -2,23 +2,18 @@ import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../components/Sidebar/SidebarAdmin.js";
 import {
   Bell,
-  ArrowUpRight,
-  TrendingUp,
   Users,
-  File,
-  Book,
+  Search,
+  Plus,
+  Filter,
+  Edit,
+  Trash2,
+  Ban,
 } from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { Link } from "react-router-dom";
 import "../styles/Common.css";
 import "../styles/Dashboard.css";
+import "../styles/UserList.css";
 import ContributionChart from "../components/ContributionChart";
 import api from "../services/ApiService.js";
 import AuthService from "../services/AuthService.js";
@@ -26,6 +21,7 @@ import AuthService from "../services/AuthService.js";
 function UserList() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [user, setUser] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleResize = () => {
     setIsSidebarExpanded(window.innerWidth > 768);
@@ -52,14 +48,36 @@ function UserList() {
     { id: 5, username: "user5", email: "user5@example.com", role: "User " },
   ];
 
+  const handleBanUser = (userId) => {
+    // Xử lý logic ban user
+    console.log(`Banning user ${userId}`);
+  };
+
+  const handleEditUser = (user) => {
+    // Xử lý logic chỉnh sửa user
+    console.log(`Editing user`, user);
+  };
+
+  const filteredUsers = mockUsers.filter(
+    (user) =>
+      user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="dashboard-container">
-      <SidebarAdmin
-        isSidebarExpanded={isSidebarExpanded}
-        toggleSidebar={toggleSidebar}
-      />
+      <div className={`sidebar-admin ${isSidebarExpanded ? "expanded" : ""}`}>
+        <SidebarAdmin
+          isSidebarExpanded={isSidebarExpanded}
+          toggleSidebar={toggleSidebar}
+        />
+      </div>
 
-      <main className="main-content">
+      <main
+        className={`main-content ${
+          isSidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"
+        }`}
+      >
         <div className="main-header">
           <div>
             <h2 className="main-title">Admin Dashboard</h2>
@@ -99,6 +117,27 @@ function UserList() {
           </div>
         </div>
 
+        <div className="users-header">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search users by username or email"
+              className="search-input"
+            />
+            <button className="search-button">
+              <Search size={18} />
+            </button>
+          </div>
+          <div className="user-actions">
+            <button className="btn-primary">
+              <Plus size={16} /> Add User
+            </button>
+            <button className="btn-secondary">
+              <Filter size={16} /> Filter
+            </button>
+          </div>
+        </div>
+
         <div className="table-container">
           <table>
             <thead>
@@ -107,6 +146,7 @@ function UserList() {
                 <th>Username</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -116,6 +156,22 @@ function UserList() {
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>{user.role}</td>
+                  <td>
+                    <div className="action-buttons">
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleEditUser(user)}
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button
+                        className="ban-btn"
+                        onClick={() => handleBanUser(user.id)}
+                      >
+                        <Ban size={16} />
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

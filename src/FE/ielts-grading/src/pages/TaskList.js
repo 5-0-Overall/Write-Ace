@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SidebarAdmin from "../components/Sidebar/SidebarAdmin.js";
-import {
-  Bell,
-  ArrowUpRight,
-  TrendingUp,
-  Users,
-  File,
-  Book,
-} from "lucide-react";
+import { Bell, Users, Search, Edit, Trash2, Plus, Filter } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -19,6 +12,7 @@ import {
 import { Link } from "react-router-dom";
 import "../styles/Common.css";
 import "../styles/Dashboard.css";
+import "../styles/TaskList.css";
 import ContributionChart from "../components/ContributionChart.js";
 import api from "../services/ApiService.js";
 import AuthService from "../services/AuthService.js";
@@ -26,6 +20,7 @@ import AuthService from "../services/AuthService.js";
 function TaskList() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [user, setUser] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleResize = () => {
     setIsSidebarExpanded(window.innerWidth > 768);
@@ -92,14 +87,35 @@ function TaskList() {
     },
   ];
 
+  const handleDelete = (taskId) => {
+    // Xử lý logic xóa task
+    console.log(`Deleting task ${taskId}`);
+  };
+
+  const handleEdit = (task) => {
+    // Xử lý logic chỉnh sửa task
+    console.log(`Editing task`, task);
+  };
+
+  const filteredTasks = mockTasks.filter(
+    (task) =>
+      task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
     <div className="dashboard-container">
-      <SidebarAdmin
-        isSidebarExpanded={isSidebarExpanded}
-        toggleSidebar={toggleSidebar}
-      />
+      <div className={`sidebar-admin ${isSidebarExpanded ? "expanded" : ""}`}>
+        <SidebarAdmin
+          isSidebarExpanded={isSidebarExpanded}
+          toggleSidebar={toggleSidebar}
+        />
+      </div>
 
-      <main className="main-content">
+      <main
+        className={`main-content ${
+          isSidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"
+        }`}
+      >
         <div className="main-header">
           <div>
             <h2 className="main-title">Admin Dashboard</h2>
@@ -139,6 +155,29 @@ function TaskList() {
           </div>
         </div>
 
+        <div className="users-header">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search tasks by title or description"
+              className="search-input"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button className="search-button">
+              <Search size={18} />
+            </button>
+          </div>
+          <div className="user-actions">
+            <button className="btn-primary">
+              <Plus size={16} /> Add Task
+            </button>
+            <button className="btn-secondary">
+              <Filter size={16} /> Filter
+            </button>
+          </div>
+        </div>
+
         <div className="table-container">
           <table>
             <thead>
@@ -150,6 +189,7 @@ function TaskList() {
                 <th>Tag Id</th>
                 <th>Created At</th>
                 <th>Image</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -162,6 +202,22 @@ function TaskList() {
                   <td>{task.tag_id}</td>
                   <td>{task.created_at}</td>
                   <td>{task.image}</td>
+                  <td>
+                    <div className="action-buttons">
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleEdit(task)}
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDelete(task.id)}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

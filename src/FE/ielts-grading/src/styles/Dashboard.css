@@ -135,6 +135,36 @@
   margin: 0 0 1.5rem 0;
 }
 
+.dashboard-container {
+  display: flex;
+  width: 100%;
+}
+
+.sidebar-admin {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1000;
+  transition: width 0.3s ease;
+}
+
+.main-content {
+  width: 100%;
+  padding-left: 80px; /* Chiều rộng sidebar thu gọn */
+  transition: padding-left 0.3s ease;
+}
+
+.main-content.sidebar-expanded {
+  padding-left: 250px; /* Chiều rộng sidebar mở rộng */
+}
+
+@media (max-width: 1024px) {
+  .main-content {
+    padding-left: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .main-content {
     padding: 1rem;

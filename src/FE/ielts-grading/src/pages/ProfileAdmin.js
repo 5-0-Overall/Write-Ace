@@ -52,12 +52,18 @@ function ProfileAdmin() {
 
   return (
     <div className="dashboard-container">
-      <SidebarAdmin
-        isSidebarExpanded={isSidebarExpanded}
-        toggleSidebar={toggleSidebar}
-      />
+      <div className={`sidebar-admin ${isSidebarExpanded ? "expanded" : ""}`}>
+        <SidebarAdmin
+          isSidebarExpanded={isSidebarExpanded}
+          toggleSidebar={toggleSidebar}
+        />
+      </div>
 
-      <main className="main-content">
+      <main
+        className={`main-content ${
+          isSidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"
+        }`}
+      >
         <div className="main-header">
           <div className="header-title">
             <h2 className="main-title">Profile Settings</h2>
