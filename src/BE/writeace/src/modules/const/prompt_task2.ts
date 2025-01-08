@@ -1,4 +1,4 @@
-export const ExamplePrompt =
+export const ExamplePromptTask2 =
 `
 Act as an IELTS Examiner. Evaluate this Writing Task 2, highlighting sentence mistakes and providing correct versions of the incorrect sentences.
 

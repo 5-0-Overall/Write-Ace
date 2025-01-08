@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 @Injectable()
 export class S3Service {
@@ -28,5 +29,23 @@ export class S3Service {
         
         await this.s3Client.send(command);
         return `https://${this.bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+    }
+
+    async getSignedUrl(key: string): Promise<string> {
+        try {
+            const command = new GetObjectCommand({
+                Bucket: this.bucketName,
+                Key: key,
+                ResponseContentType: 'image/jpeg',
+                ResponseCacheControl: 'no-cache',
+            });
+
+            return await getSignedUrl(this.s3Client, command, { 
+                expiresIn: 3600,
+            });
+        } catch (error) {
+            console.error('Error generating signed URL:', error);
+            throw error;
+        }
     }
 }

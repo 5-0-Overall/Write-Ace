@@ -44,7 +44,6 @@ export class AuthGuard implements CanActivate {
         secret: env.JWT_SECRET,
       });
       
-      // Lấy thông tin user từ database
       const user = await this.userRepository.findOne({
         where: { id: payload.sub }
       });
@@ -52,8 +51,10 @@ export class AuthGuard implements CanActivate {
       if (!user) {
         throw new UnauthorizedException();
       }
-
-      request['user'] = user;
+      request['user'] = {
+        ...payload,
+        ...user
+      };
     } catch {
       throw new UnauthorizedException();
     }

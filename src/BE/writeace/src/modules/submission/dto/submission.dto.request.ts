@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class SubmissionCreateDTO {
   @ApiProperty({ description: 'ID of the problem', example: 1 })
@@ -13,4 +13,8 @@ export class SubmissionCreateDTO {
   @ApiProperty({ description: 'Essay content', example: 'This is a sample essay' })
   @IsNotEmpty()
   essay: string;
+
+  @ApiProperty({ description: 'Base64 image for task 1', required: false })
+  @IsOptional()
+  imageBase64?: string;
 }

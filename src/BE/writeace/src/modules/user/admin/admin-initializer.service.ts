@@ -40,13 +40,14 @@ export class AdminInitializerService implements OnModuleInit {
 
   private async initializeAdminUser() {
     try {
-      // Kiểm tra kết nối database
       await this.userRepository.query('SELECT 1');
+      
+      await this.initializeTeacherUser();
       
       const adminUser = await this.userRepository.findOne({
         where: { username: 'admin' }
       });
-
+      
       if (!adminUser) {
         console.log('[AdminInitializer] Admin user not found. Creating...');
         const newAdmin = await this.userService.create({
@@ -70,4 +71,24 @@ export class AdminInitializerService implements OnModuleInit {
       throw error;
     }
   }
+
+  private async initializeTeacherUser() {
+    const teacherUser = await this.userRepository.findOne({
+      where: { username: 'teacher' }
+    });
+
+    if (!teacherUser) {
+      console.log('[AdminInitializer] Teacher user not found. Creating...');
+      const newTeacher = await this.userService.create({
+        username: 'teacher',
+        email: 'teacher@gmail.com',
+        password: 'teacher123456',
+      });
+      await this.userRepository.update(newTeacher.id, { role_id: 2 });
+      console.log('[AdminInitializer] Teacher user created successfully with ID:', newTeacher.id);
+    } else {
+      console.log('[AdminInitializer] Teacher user already exists with ID:', teacherUser.id);
+    }
+  }
+
 }
