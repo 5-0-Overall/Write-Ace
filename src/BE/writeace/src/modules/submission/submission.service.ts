@@ -27,7 +27,10 @@ export class SubmissionService {
   }
 
   async getSubmissionById(id: number): Promise<SubmissionEntity> {
-    return this.submissionRepository.findOneBy({ id });
+    return this.submissionRepository.findOne({ 
+        where: { id },
+        relations: ['problem', 'user']
+    });
   }
 
   async updateSubmission(
@@ -53,6 +56,7 @@ export class SubmissionService {
     });
     const user = await this.userRepository.findOneBy({ id: submission.user });
     const essay = submission.essay;
+    
     if (!problem || !user) {
       throw new NotFoundException('Problem or user not found');
     }
@@ -64,10 +68,21 @@ export class SubmissionService {
     });
 
     await this.submissionRepository.save(newSubmission);
-    const aiReview = await this.openaiService.generateText(
-      problem.description,
-      essay,
-    );
+
+    let aiReview: string;
+    if (submission.imageBase64) {
+      aiReview = await this.openaiService.generateTextWithImage(
+        problem.description,
+        essay,
+        submission.imageBase64
+      );
+    } else {
+      aiReview = await this.openaiService.generateText(
+        problem.description,
+        essay,
+      );
+    }
+
     const scoreTA = this.openaiService.getScoreTA(aiReview);
     const scoreCC = this.openaiService.getScoreCC(aiReview);
     const scoreLR = this.openaiService.getScoreLR(aiReview);
@@ -145,5 +160,8 @@ export class SubmissionService {
 
   async getSubmissionByUserId(userId: number): Promise<SubmissionEntity[]> {
     return this.submissionRepository.find({ where: { user: { id: userId } } });
+  }
+  async save(submit : SubmissionEntity){
+    return this.submissionRepository.save(submit);
   }
 }

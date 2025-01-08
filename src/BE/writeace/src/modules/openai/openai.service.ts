@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { OpenAI } from 'openai';
-import { ExamplePrompt } from '../const/openai';
+import { ExamplePromptTask2 } from '../const/prompt_task2';
+import { ExamplePromptTask1 } from '../const/prompt_task1';
 
 @Injectable()
 export class OpenAIService {
@@ -17,7 +18,7 @@ export class OpenAIService {
     const response = await this.openai.chat.completions.create({
       model: 'gpt-4o-mini', // or 'gpt-4-turbo' or another chat model
       messages: [
-        { role: 'system', content: ExamplePrompt },
+        { role: 'system', content: ExamplePromptTask2 },
         { role: 'user', content: `Question: ${question} \n Essay: ${essay}` },
       ],
       max_tokens: 4096,
@@ -65,7 +66,7 @@ export class OpenAIService {
       const stream = await this.openai.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [
-          { role: 'system', content: ExamplePrompt },
+          { role: 'system', content: ExamplePromptTask2 },
           { role: 'user', content: `Question: ${question}\nEssay: ${essay}` },
         ],
         max_tokens: 4096,
@@ -100,5 +101,37 @@ export class OpenAIService {
       console.error('Error during streaming:', error);
       throw error;
     }
+  }
+
+  async generateTextWithImage(question: string, essay: string, imageBase64: string): Promise<string> {
+    const response = await this.openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        { 
+          role: 'system', 
+          content: ExamplePromptTask1 
+        },
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'text',
+              text: `Question: ${question}\nEssay: ${essay}`
+            },
+            {
+              type: 'image_url',
+              image_url: {
+                url: imageBase64,
+                detail: 'high'
+              }
+            }
+          ]
+        }
+      ],
+      max_tokens: 4096,
+      temperature: 0.5,
+    });
+
+    return response.choices[0]?.message?.content.trim() ?? '';
   }
 }

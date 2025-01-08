@@ -133,7 +133,7 @@ const WritingPage = () => {
 
       const response = await api.post('/submissions', {
         problem: id,
-        user: currentUser.id,
+        user: currentUser.sub,
         essay: text
       });
 
