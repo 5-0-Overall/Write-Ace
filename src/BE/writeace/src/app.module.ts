@@ -18,6 +18,8 @@ import { AuthGuard } from './modules/guard/auth.guard';
 import { RolesGuard } from './modules/guard/role.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from './modules/auth/auth.module';
+import { NotificationModule } from './modules/notification/notification.module';
+import { GradingModule } from './modules/grading/grading.module';
 
 @Module({
   imports: [
@@ -49,6 +51,9 @@ import { AuthModule } from './modules/auth/auth.module';
     ContributionModule,
     AnalysticModule,
     AuthModule,
+    NotificationModule,
+    GradingModule
+    
   ],
   controllers: [AppController],
   providers: [
