@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProblemEntity } from './entity/problem.entity';
 import { In, IsNull, Repository } from 'typeorm';
 import { GetProblemsQuery } from './dto/problem.query';
 import { TagService } from '../tag/tag.service';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateProblemDto } from './dto/create-problem.dto';
 
 @Injectable()
 export class ProblemService {
@@ -46,5 +47,18 @@ export class ProblemService {
   }
   async getProblemById(id: number) {
     return this.problemRepository.findOne({ where: { id } });
+  }
+
+  async createProblem(createProblemDto: CreateProblemDto) {
+    // return this.problemRepository.save(createProblemDto);
+    const newProblem = this.problemRepository.create(createProblemDto); // Tạo entity từ DTO
+    return this.problemRepository.save(newProblem);
+  }
+
+  async deleteProblem(id: number): Promise<void> {
+    const result = await this.problemRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Problem with ID ${id} not found`);
+    }
   }
 }

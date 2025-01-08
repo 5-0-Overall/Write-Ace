@@ -23,8 +23,8 @@ import DashboardAdmin from "./pages/DashboardAdmin";
 import UserList from "./pages/UserList";
 import TaskList from "./pages/TaskList";
 import ProfileAdmin from "./pages/ProfileAdmin";
-import TeacherDashboard from './pages/TeacherDashboard';
-import TeacherGrading from './pages/TeacherGrading';
+import TeacherDashboard from "./pages/TeacherDashboard";
+import TeacherGrading from "./pages/TeacherGrading";
 
 function App() {
   return (

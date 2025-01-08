@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
@@ -87,7 +91,6 @@ export class UserService {
       where: { id: userId },
     });
 
-
     if (updateData.email) {
       user.email = updateData.email;
     }
@@ -105,7 +108,7 @@ export class UserService {
     let profile = await this.profileRepository.findOne({
       where: { user_id: userId },
     });
-    if(!profile){
+    if (!profile) {
       profile = new ProfileEntity();
       profile.user_id = userId;
     }
@@ -122,5 +125,29 @@ export class UserService {
     };
 
     return currentUser;
+  }
+
+  async toggleUserEnabled(userId: number): Promise<UserEntity> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!user) {
+      throw new Error('User  not found');
+    }
+
+    user.is_enabled = !user.is_enabled; // Toggle trạng thái
+    return await this.userRepository.save(user); // Lưu thay đổi
+  }
+
+  async updateUserRole(userId: number, roleId: number): Promise<UserEntity> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!user) {
+      throw new NotFoundException('User  not found');
+    }
+
+    if (![0, 1, 2].includes(roleId)) {
+      throw new Error('Invalid role ID. Must be 0, 1, or 2.');
+    }
+
+    user.role_id = roleId;
+    return await this.userRepository.save(user);
   }
 }

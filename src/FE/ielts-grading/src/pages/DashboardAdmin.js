@@ -51,12 +51,18 @@ function DashboardAdmin() {
 
   return (
     <div className="dashboard-container">
-      <SidebarAdmin
-        isSidebarExpanded={isSidebarExpanded}
-        toggleSidebar={toggleSidebar}
-      />
+      <div className={`sidebar-admin ${isSidebarExpanded ? "expanded" : ""}`}>
+        <SidebarAdmin
+          isSidebarExpanded={isSidebarExpanded}
+          toggleSidebar={toggleSidebar}
+        />
+      </div>
 
-      <main className="main-content">
+      <main
+        className={`main-content ${
+          isSidebarExpanded ? "sidebar-expanded" : ""
+        }`}
+      >
         <div className="main-header">
           <div>
             <h2 className="main-title">Admin Dashboard</h2>

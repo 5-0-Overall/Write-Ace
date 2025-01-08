@@ -57,9 +57,9 @@ function Sidebar() {
       </div>
       <nav className="sidebar-nav">
         <Link
-          to="/admin_dashboard"
+          to="/admin/dashboard"
           className={`nav-button ${
-            isActive("/admin_dashboard") ? "active" : ""
+            isActive("/admin/dashboard") ? "active" : ""
           }`}
         >
           <Home size={20} className="nav-icon" />
