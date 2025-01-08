@@ -66,9 +66,6 @@ function Navbar() {
         </div>
 
         <div className="navbar-right">
-          <button className="nav-icon-btn">
-            <Bell size={20} />
-          </button>
           
           <div className="profile-dropdown">
             <button className="profile-btn">

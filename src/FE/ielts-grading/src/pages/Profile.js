@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar/Sidebar.js";
+import Navbar from "../components/Navbar/Navbar";
 import { Bell, Upload } from "lucide-react";
 import "../styles/Common.css";
 import "../styles/Profile.css";
@@ -7,7 +7,6 @@ import { UserApi } from "../services/ApiService";
 import { ToastContainer } from "react-toastify";
 
 function Profile() {
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
     username: "",
@@ -37,18 +36,6 @@ function Profile() {
       console.error("Error loading profile:", error);
     }
   };
-
-  const handleResize = () => {
-    setIsSidebarExpanded(window.innerWidth > 768);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded);
 
   const handleEdit = async () => {
     if (isEditing) {
@@ -99,21 +86,14 @@ function Profile() {
   return (
     <div className="dashboard-container">
       <ToastContainer />
-      <Sidebar
-        isSidebarExpanded={isSidebarExpanded}
-        toggleSidebar={toggleSidebar}
-      />
+      <Navbar />
 
       <main className="main-content">
         <div className="main-header">
           <div className="header-title">
             <h2 className="main-title">Profile Settings</h2>
           </div>
-          <div className="header-controls">
-            <button className="icon-button">
-              <Bell size={20} />
-            </button>
-          </div>
+
         </div>
 
         <div className="profile-container">

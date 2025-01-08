@@ -49,6 +49,11 @@ function Dashboard() {
     fetchStats();
   }, []);
 
+  const formatNumber = (number) => {
+    if (number === null || number === undefined) return 'N/A';
+    return Number(parseFloat(number).toFixed(1)).toString();
+  };
+
   return (
     <div className="dashboard-container">
       <Navbar />
@@ -71,7 +76,7 @@ function Dashboard() {
               <TrendingUp size={16} className="card-icon" />
             </div>
             <div className="card-content">
-              <span className="card-value">{stats.average_score || 0}</span>
+              <span className="card-value">{formatNumber(stats.average_score)}</span>
               <span className="card-label">/9.0</span>
             </div>
           </div>
@@ -82,7 +87,7 @@ function Dashboard() {
               <TrendingUp size={16} className="card-icon" />
             </div>
             <div className="card-content">
-              <span className="card-value">{stats.highest_score || 0}</span>
+              <span className="card-value">{formatNumber(stats.highest_score)}</span>
               <span className="card-label">/9.0</span>
             </div>
           </div>
