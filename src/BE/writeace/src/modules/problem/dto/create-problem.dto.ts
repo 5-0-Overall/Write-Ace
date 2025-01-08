@@ -1,19 +1,20 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsEnum } from 'class-validator';
 import { Task } from 'src/modules/const/enum/task.enum';
 
-export class ProblemGetAllDto {
-  id: number;
-
+export class CreateProblemDto {
+  @IsNotEmpty()
   @IsEnum(Task)
   task_id: Task;
 
+  @IsNotEmpty()
   @IsString()
   title: string;
 
+  @IsNotEmpty()
   @IsString()
   description: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
-  image?: string;
+  image: string;
 }

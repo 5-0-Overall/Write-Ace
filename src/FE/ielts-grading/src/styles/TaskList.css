@@ -29,3 +29,43 @@
 .delete-btn:hover {
   background-color: rgba(244, 67, 54, 0.1);
 }
+
+/* Cập nhật kích thước cho select */
+.select-task {
+  width: 100%; /* Chiếm toàn bộ chiều rộng */
+  padding: 10px; /* Thêm khoảng cách bên trong */
+  font-size: 16px; /* Tăng kích thước chữ */
+  border: 1px solid #ccc; /* Đường viền */
+  border-radius: 4px; /* Bo góc */
+  margin-bottom: 10px; /* Khoảng cách dưới */
+}
+
+/* Cập nhật kiểu dáng cho nút */
+.btn-submit {
+  background-color: #4caf50; /* Màu nền */
+  color: white; /* Màu chữ */
+  padding: 10px 20px; /* Khoảng cách bên trong */
+  border: none; /* Không có đường viền */
+  border-radius: 4px; /* Bo góc */
+  cursor: pointer; /* Con trỏ khi hover */
+  font-size: 16px; /* Kích thước chữ */
+  margin-right: 10px; /* Khoảng cách bên phải */
+}
+
+.btn-submit:hover {
+  background-color: #45a049; /* Màu nền khi hover */
+}
+
+.btn-cancel {
+  background-color: #f44336; /* Màu nền */
+  color: white; /* Màu chữ */
+  padding: 10px 20px; /* Khoảng cách bên trong */
+  border: none; /* Không có đường viền */
+  border-radius: 4px; /* Bo góc */
+  cursor: pointer; /* Con trỏ khi hover */
+  font-size: 16px; /* Kích thước chữ */
+}
+
+.btn-cancel:hover {
+  background-color: #e53935; /* Màu nền khi hover */
+}
