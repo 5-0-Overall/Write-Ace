@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Navbar from "../components/Navbar/Navbar";
 import "../styles/Common.css";
 import "../styles/Problems.css";
@@ -12,27 +12,19 @@ function Problems() {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [filterParams, setFilterParams] = useState({});
   const navigate = useNavigate();
 
-  // Fetch problems with updated params structure
-  const fetchProblems = async (params = {}) => {
+  // Sử dụng useCallback để tránh tạo function mới mỗi lần render
+  const fetchProblems = useCallback(async (params = {}) => {
     try {
       setLoading(true);
       const queryParams = new URLSearchParams();
 
       // Only add params if they have values
-      if (params.task) {
-        queryParams.append("task", params.task);
-      }
-      if (params.tagName) {
-        queryParams.append("tagName", params.tagName);
-      }
-      if (params.limit) {
-        queryParams.append("limit", params.limit);
-      }
-      if (params.offset) {
-        queryParams.append("offset", params.offset);
-      }
+      Object.entries(params).forEach(([key, value]) => {
+        if (value) queryParams.append(key, value);
+      });
 
       const response = await api.get(`/problems?${queryParams.toString()}`);
 
@@ -46,20 +38,32 @@ function Problems() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Empty dependencies array since it doesn't depend on any props or state
 
+  // Sử dụng useMemo để memorize filterParams object
+  const memoizedFilterParams = useMemo(() => filterParams, [filterParams]);
+
+  // Chỉ gọi API khi filterParams thực sự thay đổi
   useEffect(() => {
-    fetchProblems();
+    fetchProblems(memoizedFilterParams);
+  }, [fetchProblems, memoizedFilterParams]);
+
+  // Debounce handleFilterChange để tránh gọi API quá nhiều
+  const handleFilterChange = useCallback((criteria) => {
+    setFilterParams({
+      task: criteria.task || undefined,
+      tagName: criteria.topic || undefined,
+    });
   }, []);
 
-  const handleDataManipulation = ({
+  const handleDataManipulation = useCallback(({
     searchQuery,
     sortOrder,
     filterCriteria,
   }) => {
     let newData = [...problemData];
 
-    // Apply search
+    // Apply search locally
     if (searchQuery) {
       newData = newData.filter(
         (item) =>
@@ -68,14 +72,7 @@ function Problems() {
       );
     }
 
-    // Apply filters
-    if (filterCriteria.task) {
-      newData = newData.filter(
-        (item) => item.task_id?.toString() === filterCriteria.task
-      );
-    }
-
-    // Apply sorting
+    // Apply sorting locally
     if (sortOrder) {
       newData.sort((a, b) => {
         const titleA = a.title || "";
@@ -89,19 +86,7 @@ function Problems() {
     }
 
     setFilteredData(newData);
-  };
-
-  // Refresh data when filter/search applied
-  const handleFilterChange = async (criteria) => {
-    try {
-      await fetchProblems({
-        task: criteria.task || undefined,
-        tagName: criteria.topic || undefined,
-      });
-    } catch (error) {
-      console.error("Error applying filters:", error);
-    }
-  };
+  }, [problemData]); // Chỉ phụ thuộc vào problemData
 
   const getTaskName = (taskId) => {
     const taskTypes = {

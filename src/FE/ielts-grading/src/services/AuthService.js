@@ -12,7 +12,12 @@ const AuthService = {
     return response.data;
   },
 
-  getCurrentUser() {
+  async getCurrentUser() {
+    const response = await api.get('/users/me');
+    return response.data;
+  },
+
+  getCurrentUserRole() {
     try {
       const token = localStorage.getItem('token');
       if (token) {
@@ -39,7 +44,7 @@ const AuthService = {
   },
 
   hasRole(role) {
-    const user = this.getCurrentUser();
+    const user = this.getCurrentUserRole();
     return user?.role === role;
   },
 
@@ -52,7 +57,7 @@ const AuthService = {
   },
 
   getDashboardRoute() {
-    const user = this.getCurrentUser();
+    const user = this.getCurrentUserRole();
     switch (user?.role) {
       case 'admin':
         return '/admin/dashboard';
