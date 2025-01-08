@@ -15,12 +15,33 @@ import "../styles/Dashboard.css";
 import "../styles/TaskList.css";
 import ContributionChart from "../components/ContributionChart.js";
 import api from "../services/ApiService.js";
+import axios from "axios";
 import AuthService from "../services/AuthService.js";
 
 function TaskList() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [tasks, setTasks] = useState([]); // State để lưu trữ dữ liệu từ API
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        console.log(AuthService.getToken());
+        const response = await axios.get("http://localhost:3000/problems", {
+          headers: {
+            Authorization: `Bearer ${AuthService.getToken()}`, // Nếu cần token
+          },
+        });
+        console.log(response.data);
+        setTasks(response.data); // Lưu dữ liệu vào state
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchTasks(); // Gọi hàm fetchTasks khi component được mount
+  }, []);
 
   const handleResize = () => {
     setIsSidebarExpanded(window.innerWidth > 768);
@@ -87,9 +108,19 @@ function TaskList() {
     },
   ];
 
-  const handleDelete = (taskId) => {
-    // Xử lý logic xóa task
-    console.log(`Deleting task ${taskId}`);
+  const handleDelete = async (taskId) => {
+    try {
+      await axios.delete(`http://localhost:3000/problems/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${AuthService.getToken()}`, // Nếu cần token
+        },
+      });
+      // Cập nhật lại state sau khi xóa
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+      console.log(`Task ${taskId} deleted successfully.`);
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
   };
 
   const handleEdit = (task) => {
@@ -186,20 +217,18 @@ function TaskList() {
                 <th>Task</th>
                 <th>Title</th>
                 <th>Description</th>
-                <th>Tag Id</th>
                 <th>Created At</th>
                 <th>Image</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {mockTasks.map((task) => (
+              {tasks.map((task) => (
                 <tr key={task.id}>
                   <td>{task.id}</td>
-                  <td>{task.task}</td>
+                  <td>{task.task_id}</td>
                   <td>{task.title}</td>
                   <td>{task.description}</td>
-                  <td>{task.tag_id}</td>
                   <td>{task.created_at}</td>
                   <td>{task.image}</td>
                   <td>

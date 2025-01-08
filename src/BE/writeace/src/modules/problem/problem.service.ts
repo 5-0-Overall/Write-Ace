@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProblemEntity } from './entity/problem.entity';
 import { In, IsNull, Repository } from 'typeorm';
 import { GetProblemsQuery } from './dto/problem.query';
@@ -46,5 +46,12 @@ export class ProblemService {
   }
   async getProblemById(id: number) {
     return this.problemRepository.findOne({ where: { id } });
+  }
+
+  async deleteProblem(id: number): Promise<void> {
+    const result = await this.problemRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Problem with ID ${id} not found`);
+    }
   }
 }
