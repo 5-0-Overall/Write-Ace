@@ -85,7 +85,7 @@ function TaskList() {
       );
       setTasks([...tasks, response.data]);
       setShowAddTaskForm(false);
-      setNewTask({ task: null, title: "", description: "", image: "" });
+      setNewTask({ task_id: null, title: "", description: "", image: "" });
     } catch (error) {
       console.error("Error adding task:", error);
     }
