@@ -167,41 +167,6 @@ function TeacherDashboard() {
           <h3 className="chart-title">Your Contributions</h3>
           <ContributionChart data={contributionData} />
         </div>
-
-        <div className="stats-grid">
-          <div className="stat-card">
-            <h3>Total Submissions</h3>
-            <p>{stats.total_submission || 0}</p>
-          </div>
-          <div className="stat-card">
-            <h3>Total Essays</h3>
-            <p>{stats.total_essay || 0}</p>
-          </div>
-          <div className="stat-card">
-            <h3>Average Score</h3>
-            <p>{formatNumber(stats.average_score)}</p>
-          </div>
-          <div className="stat-card">
-            <h3>Highest Score</h3>
-            <p>{formatNumber(stats.highest_score)}</p>
-          </div>
-          <div className="stat-card">
-            <h3>Essays Graded</h3>
-            <p>{stats.essays_graded || 0}</p>
-          </div>
-          <div className="stat-card">
-            <h3>Students Taught</h3>
-            <p>{stats.students_taught || 0}</p>
-          </div>
-          <div className="stat-card">
-            <h3>Average Response Time</h3>
-            <p>{formatNumber(stats.average_response_time)} mins</p>
-          </div>
-          <div className="stat-card">
-            <h3>Total Feedback</h3>
-            <p>{stats.total_feedback_given || 0}</p>
-          </div>
-        </div>
       </main>
     </div>
   );

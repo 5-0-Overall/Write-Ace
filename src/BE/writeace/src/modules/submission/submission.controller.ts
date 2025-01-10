@@ -16,6 +16,11 @@ import { AuthGuard } from "../guard/auth.guard";
 @UseInterceptors(ClassSerializerInterceptor)  
 export class SubmissionController {
   constructor(private submissionService: SubmissionService,private contributionService: ContributionService) {}
+  @Get('pending')
+  @ApiOperation({ summary: 'Get all pending submissions' })
+  async getPendingSubmissions(): Promise<SubmissionEntity[]> {
+    return this.submissionService.getPendingSubmissions();
+  }
   @Get('me')
   @ApiOperation({ summary: 'Get my submissions' })
   async getMySubmission(@Req() req: RequestWithUser): Promise<SubmissionEntity[]> {
@@ -53,6 +58,4 @@ export class SubmissionController {
   async deleteSubmission(@Param('id') id: number): Promise<void> {
     return this.submissionService.deleteSubmission(id);
   }
-
-
 }

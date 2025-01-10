@@ -25,6 +25,7 @@ import TaskList from "./pages/TaskList";
 import ProfileAdmin from "./pages/ProfileAdmin";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import TeacherGrading from "./pages/TeacherGrading";
+import PendingList from "./pages/PendingList";
 
 function App() {
   return (
@@ -135,7 +136,8 @@ function App() {
             }
           />
           <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-          <Route path="/teacher/grading" element={<TeacherGrading />} />
+          <Route path="/teacher/pending" element={<PendingList />} />
+          <Route path="/teacher/grading/:id" element={<TeacherGrading />} />
         </Routes>
       </Router>
     </ProblemProvider>

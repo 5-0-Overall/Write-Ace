@@ -40,7 +40,7 @@ function Navbar() {
 
   // Thêm Grading option nếu user là teacher
   const navItems = isTeacher 
-    ? [...baseNavItems, { path: "/teacher/grading", icon: <PenLine size={20} />, label: "Grading" }]
+    ? [...baseNavItems, { path: "/teacher/pending", icon: <PenLine size={20} />, label: "Pending List" }]
     : baseNavItems;
 
   return (

@@ -23,13 +23,15 @@ export class SubmissionService {
   ) {}
 
   async getAllSubmissions(): Promise<SubmissionEntity[]> {
-    return this.submissionRepository.find();
+    return this.submissionRepository.find({
+      relations: ['problem']
+    });
   }
 
   async getSubmissionById(id: number): Promise<SubmissionEntity> {
     return this.submissionRepository.findOne({ 
         where: { id },
-        relations: ['problem', 'user']
+        relations: ['problem']
     });
   }
 
@@ -159,8 +161,19 @@ export class SubmissionService {
   }
 
   async getSubmissionByUserId(userId: number): Promise<SubmissionEntity[]> {
-    return this.submissionRepository.find({ where: { user: { id: userId } } });
+    return this.submissionRepository.find({
+      where: { user: { id: userId } },
+      relations: ['problem']
+    });
   }
+
+  async getPendingSubmissions(): Promise<SubmissionEntity[]> {
+    return this.submissionRepository.find({
+      where: { status: STATUS.PENDING },
+      relations: ['problem']
+    });
+  }
+
   async save(submit : SubmissionEntity){
     return this.submissionRepository.save(submit);
   }
