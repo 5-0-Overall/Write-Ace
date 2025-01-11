@@ -1,3 +1,4 @@
+import { Test, TestingModule } from '@nestjs/testing';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SubmissionEntity } from './entity/submission.entity';
@@ -27,9 +28,9 @@ export class SubmissionService {
   }
 
   async getSubmissionById(id: number): Promise<SubmissionEntity> {
-    return this.submissionRepository.findOne({ 
-        where: { id },
-        relations: ['problem', 'user']
+    return this.submissionRepository.findOne({
+      where: { id },
+      relations: ['problem', 'user'],
     });
   }
 
@@ -56,7 +57,7 @@ export class SubmissionService {
     });
     const user = await this.userRepository.findOneBy({ id: submission.user });
     const essay = submission.essay;
-    
+
     if (!problem || !user) {
       throw new NotFoundException('Problem or user not found');
     }
@@ -74,7 +75,7 @@ export class SubmissionService {
       aiReview = await this.openaiService.generateTextWithImage(
         problem.description,
         essay,
-        submission.imageBase64
+        submission.imageBase64,
       );
     } else {
       aiReview = await this.openaiService.generateText(
@@ -101,17 +102,16 @@ export class SubmissionService {
 
     const status = updatedSubmission.status;
     updatedSubmission.status =
-      status === STATUS.PENDING
-        ? STATUS.REVIEWED
-        : status;
+      status === STATUS.PENDING ? STATUS.REVIEWED : status;
 
-    const savedSubmission = await this.submissionRepository.save(updatedSubmission);
-    
+    const savedSubmission =
+      await this.submissionRepository.save(updatedSubmission);
+
     return await this.submissionRepository.findOne({
-        where: { id: savedSubmission.id },
-        relations: {
-            problem: true,
-        }
+      where: { id: savedSubmission.id },
+      relations: {
+        problem: true,
+      },
     });
   }
 
@@ -161,7 +161,7 @@ export class SubmissionService {
   async getSubmissionByUserId(userId: number): Promise<SubmissionEntity[]> {
     return this.submissionRepository.find({ where: { user: { id: userId } } });
   }
-  async save(submit : SubmissionEntity){
+  async save(submit: SubmissionEntity) {
     return this.submissionRepository.save(submit);
   }
 }
