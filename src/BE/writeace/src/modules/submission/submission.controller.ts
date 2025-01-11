@@ -6,6 +6,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam, ApiBearerAuth } 
 import { ContributionService } from "../contribution/contribution.service";
 import { OpenAIUpdateSubmissionDTO } from "./dto/openai.update.submission.dto";
 import { AuthGuard } from "../guard/auth.guard";
+import { UpdateSubmissionDto } from "./dto/update-submission.dto";
 
 
 
@@ -57,5 +58,16 @@ export class SubmissionController {
   @ApiOperation({ summary: 'Delete submission' })
   async deleteSubmission(@Param('id') id: number): Promise<void> {
     return this.submissionService.deleteSubmission(id);
+  }
+
+  @Put(':id/teacher-review')
+  @ApiOperation({ summary: 'Update submission with teacher review' })
+  @ApiResponse({ status: 200, description: 'Teacher review updated successfully' })
+  @ApiResponse({ status: 404, description: 'Submission not found' })
+  async updateTeacherReview(
+    @Param('id') id: number,
+    @Body() updateSubmissionDto: UpdateSubmissionDto
+  ): Promise<SubmissionEntity> {
+    return this.submissionService.updateTeacherReview(id, updateSubmissionDto);
   }
 }

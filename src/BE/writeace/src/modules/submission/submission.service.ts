@@ -9,6 +9,7 @@ import { AnalysticUserDTO } from '../analystic/dto/analystic-user.dto';
 import { OpenAIUpdateSubmissionDTO } from './dto/openai.update.submission.dto';
 import { OpenAIService } from '../openai/openai.service';
 import { STATUS } from '../const/enum/status.enum';
+import { UpdateSubmissionDto } from './dto/update-submission.dto';
 
 @Injectable()
 export class SubmissionService {
@@ -176,5 +177,48 @@ export class SubmissionService {
 
   async save(submit : SubmissionEntity){
     return this.submissionRepository.save(submit);
+  }
+
+  async updateTeacherReview(
+    id: number,
+    updateSubmissionDto: UpdateSubmissionDto,
+  ): Promise<SubmissionEntity> {
+    const submission = await this.submissionRepository.findOne({
+      where: { id },
+      relations: ['problem'],
+    });
+
+    if (!submission) {
+      throw new NotFoundException(`Submission with ID ${id} not found`);
+    }
+
+    if (updateSubmissionDto.teacherReview !== undefined) {
+      submission.teacherReview = updateSubmissionDto.teacherReview;
+    }
+    if (updateSubmissionDto.scoreTA !== undefined) {
+      submission.scoreTA = updateSubmissionDto.scoreTA;
+    }
+    if (updateSubmissionDto.scoreCC !== undefined) {
+      submission.scoreCC = updateSubmissionDto.scoreCC;
+    }
+    if (updateSubmissionDto.scoreLR !== undefined) {
+      submission.scoreLR = updateSubmissionDto.scoreLR;
+    }
+    if (updateSubmissionDto.scoreGRA !== undefined) {
+      submission.scoreGRA = updateSubmissionDto.scoreGRA;
+    }
+    if (updateSubmissionDto.scoreOVR !== undefined) {
+      submission.scoreOVR = updateSubmissionDto.scoreOVR;
+    }
+    if (updateSubmissionDto.status !== undefined) {
+      submission.status = updateSubmissionDto.status;
+    }
+
+    const savedSubmission = await this.submissionRepository.save(submission);
+    
+    return await this.submissionRepository.findOne({
+      where: { id: savedSubmission.id },
+      relations: ['problem'],
+    });
   }
 }

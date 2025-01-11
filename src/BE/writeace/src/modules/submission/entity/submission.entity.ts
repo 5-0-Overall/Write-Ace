@@ -7,7 +7,6 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -25,7 +24,7 @@ export class SubmissionEntity extends BaseEntity {
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  @Column({ name: 'ai_review', type: 'text', nullable: true }) // Thêm type và nullable
+  @Column({ name: 'ai_review', type: 'text', nullable: true })
   aiReview: string;
 
   @Column({ name: 'teacher_review', type: 'text', nullable: true })
@@ -41,18 +40,18 @@ export class SubmissionEntity extends BaseEntity {
   })
   status: STATUS;
 
-  @Column({ name: 'scoreta', type: 'int', default: 0 }) // Thêm type và sửa tên column
+  @Column({ name: 'scoreta', type: 'decimal', precision: 2, scale: 1, nullable: true, default: 0 })
   scoreTA: number;
 
-  @Column({ name: 'scorecc', type: 'int', default: 0 })
+  @Column({ name: 'scorecc', type: 'decimal', precision: 2, scale: 1, nullable: true, default: 0 })
   scoreCC: number;
 
-  @Column({ name: 'scorelr', type: 'int', default: 0 })
+  @Column({ name: 'scorelr', type: 'decimal', precision: 2, scale: 1, nullable: true, default: 0 })
   scoreLR: number;
 
-  @Column({ name: 'scoregra', type: 'int', default: 0 })
+  @Column({ name: 'scoregra', type: 'decimal', precision: 2, scale: 1, nullable: true, default: 0 })
   scoreGRA: number;
 
-  @Column({ name: 'scoreovr', type: 'int', default: 0 })
+  @Column({ name: 'scoreovr', type: 'decimal', precision: 2, scale: 1, nullable: true, default: 0 })
   scoreOVR: number;
 }
