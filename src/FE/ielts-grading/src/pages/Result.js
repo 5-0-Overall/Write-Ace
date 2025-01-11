@@ -27,15 +27,19 @@ const Result = () => {
         console.log('Submission data:', submissionResponse.data);
         setSubmission(submissionResponse.data);
         
-        if (!currentProblem) {
-          console.log('Fetching problem data...');
-          const problemResponse = await api.get(`/problems/1`); // Hardcode id=1. waiting for backend
-          console.log('Problem data:', problemResponse.data);
-          setCurrentProblem(problemResponse.data);
+        setCurrentProblem(submissionResponse.data.problem);
+        
+        let reviewToUse;
+        if (submissionResponse.data.teacherReview) {
+          reviewToUse = submissionResponse.data.teacherReview;
+        } else if (submissionResponse.data.aiReview) {
+          reviewToUse = submissionResponse.data.aiReview;
         }
         
-        const formattedReview = JSONFormatter.formatAIReview(submissionResponse.data.aiReview);
-        setAiReview(formattedReview);
+        if (reviewToUse) {
+          const formattedReview = JSONFormatter.formatAIReview(reviewToUse);
+          setAiReview(formattedReview);
+        }
       } catch (error) {
         console.error('Error in fetchData:', error);
         Swal.fire({
@@ -338,32 +342,32 @@ const Result = () => {
           <div className="detail-band">
             <div className="band-item">
               <span className="band-label">Task Achievement</span>
-              <div className={`band-score ${getBandScoreClass(submission.scoreTA)}`}>
-                {submission.scoreTA.toFixed(1)}
+              <div className={`band-score ${getBandScoreClass(Number(submission.scoreTA))}`}>
+                {Number(submission.scoreTA).toFixed(1)}
               </div>
             </div>
             <div className="band-item">
               <span className="band-label">Coherence & Cohesion</span>
-              <div className={`band-score ${getBandScoreClass(submission.scoreCC)}`}>
-                {submission.scoreCC.toFixed(1)}
+              <div className={`band-score ${getBandScoreClass(Number(submission.scoreCC))}`}>
+                {Number(submission.scoreCC).toFixed(1)}
               </div>
             </div>
             <div className="band-item">
               <span className="band-label">Lexical Resource</span>
-              <div className={`band-score ${getBandScoreClass(submission.scoreLR)}`}>
-                {submission.scoreLR.toFixed(1)}
+              <div className={`band-score ${getBandScoreClass(Number(submission.scoreLR))}`}>
+                {Number(submission.scoreLR).toFixed(1)}
               </div>
             </div>
             <div className="band-item">
               <span className="band-label">Grammatical Range & Accuracy</span>
-              <div className={`band-score ${getBandScoreClass(submission.scoreGRA)}`}>
-                {submission.scoreGRA.toFixed(1)}
+              <div className={`band-score ${getBandScoreClass(Number(submission.scoreGRA))}`}>
+                {Number(submission.scoreGRA).toFixed(1)}
               </div>
             </div>
             <div className="band-item">
               <span className="band-label">Overall Band</span>
-              <div className={`band-score ${getBandScoreClass(submission.scoreOVR)}`}>
-                {submission.scoreOVR.toFixed(1)}
+              <div className={`band-score ${getBandScoreClass(Number(submission.scoreOVR))}`}>
+                {Number(submission.scoreOVR).toFixed(1)}
               </div>
             </div>
           </div>
