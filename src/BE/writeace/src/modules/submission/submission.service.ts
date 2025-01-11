@@ -9,6 +9,7 @@ import { AnalysticUserDTO } from '../analystic/dto/analystic-user.dto';
 import { OpenAIUpdateSubmissionDTO } from './dto/openai.update.submission.dto';
 import { OpenAIService } from '../openai/openai.service';
 import { STATUS } from '../const/enum/status.enum';
+import { UpdateSubmissionDto } from './dto/update-submission.dto';
 
 @Injectable()
 export class SubmissionService {
@@ -23,13 +24,15 @@ export class SubmissionService {
   ) {}
 
   async getAllSubmissions(): Promise<SubmissionEntity[]> {
-    return this.submissionRepository.find();
+    return this.submissionRepository.find({
+      relations: ['problem']
+    });
   }
 
   async getSubmissionById(id: number): Promise<SubmissionEntity> {
     return this.submissionRepository.findOne({ 
         where: { id },
-        relations: ['problem', 'user']
+        relations: ['problem']
     });
   }
 
@@ -159,9 +162,90 @@ export class SubmissionService {
   }
 
   async getSubmissionByUserId(userId: number): Promise<SubmissionEntity[]> {
-    return this.submissionRepository.find({ where: { user: { id: userId } } });
+    return this.submissionRepository.find({
+      where: { user: { id: userId } },
+      relations: ['problem']
+    });
   }
+
+  async getPendingSubmissions(): Promise<SubmissionEntity[]> {
+    return this.submissionRepository.find({
+      where: { status: STATUS.PENDING },
+      relations: ['problem']
+    });
+  }
+
   async save(submit : SubmissionEntity){
     return this.submissionRepository.save(submit);
+  }
+
+  async updateTeacherReview(
+    id: number,
+    updateSubmissionDto: UpdateSubmissionDto,
+  ): Promise<SubmissionEntity> {
+    const submission = await this.submissionRepository.findOne({
+      where: { id },
+      relations: ['problem'],
+    });
+
+    if (!submission) {
+      throw new NotFoundException(`Submission with ID ${id} not found`);
+    }
+
+    if (updateSubmissionDto.teacherReview !== undefined) {
+      submission.teacherReview = updateSubmissionDto.teacherReview;
+    }
+    if (updateSubmissionDto.scoreTA !== undefined) {
+      submission.scoreTA = updateSubmissionDto.scoreTA;
+    }
+    if (updateSubmissionDto.scoreCC !== undefined) {
+      submission.scoreCC = updateSubmissionDto.scoreCC;
+    }
+    if (updateSubmissionDto.scoreLR !== undefined) {
+      submission.scoreLR = updateSubmissionDto.scoreLR;
+    }
+    if (updateSubmissionDto.scoreGRA !== undefined) {
+      submission.scoreGRA = updateSubmissionDto.scoreGRA;
+    }
+    if (updateSubmissionDto.scoreOVR !== undefined) {
+      submission.scoreOVR = updateSubmissionDto.scoreOVR;
+    }
+    if (updateSubmissionDto.status !== undefined) {
+      submission.status = updateSubmissionDto.status;
+    }
+
+    const savedSubmission = await this.submissionRepository.save(submission);
+    
+    return await this.submissionRepository.findOne({
+      where: { id: savedSubmission.id },
+      relations: ['problem'],
+    });
+  }
+
+
+  async manualRequestSubmission(submission: SubmissionCreateDTO): Promise<SubmissionEntity> {
+    const problem = await this.problemRepository.findOneBy({
+      id: submission.problem,
+    });
+    const user = await this.userRepository.findOneBy({ id: submission.user });
+    const essay = submission.essay;
+
+    const submissionEntity : SubmissionEntity = {
+      id: null,
+      problem: problem,
+      user: user,
+      essay: essay,
+      status: STATUS.PENDING,
+      aiReview: null,
+      teacherReview: null,
+      scoreTA: 0,
+      scoreCC: 0,
+      scoreLR: 0,
+      scoreGRA: 0,
+      scoreOVR: 0,
+      created_at: new Date(),
+      updated_at: new Date(),
+    } 
+    return this.submissionRepository.save(submissionEntity);
   }
 }

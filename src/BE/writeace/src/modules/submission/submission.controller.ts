@@ -6,6 +6,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam, ApiBearerAuth } 
 import { ContributionService } from "../contribution/contribution.service";
 import { OpenAIUpdateSubmissionDTO } from "./dto/openai.update.submission.dto";
 import { AuthGuard } from "../guard/auth.guard";
+import { UpdateSubmissionDto } from "./dto/update-submission.dto";
 
 
 
@@ -16,6 +17,11 @@ import { AuthGuard } from "../guard/auth.guard";
 @UseInterceptors(ClassSerializerInterceptor)  
 export class SubmissionController {
   constructor(private submissionService: SubmissionService,private contributionService: ContributionService) {}
+  @Get('pending')
+  @ApiOperation({ summary: 'Get all pending submissions' })
+  async getPendingSubmissions(): Promise<SubmissionEntity[]> {
+    return this.submissionService.getPendingSubmissions();
+  }
   @Get('me')
   @ApiOperation({ summary: 'Get my submissions' })
   async getMySubmission(@Req() req: RequestWithUser): Promise<SubmissionEntity[]> {
@@ -54,5 +60,21 @@ export class SubmissionController {
     return this.submissionService.deleteSubmission(id);
   }
 
+  @Put(':id/teacher-review')
+  @ApiOperation({ summary: 'Update submission with teacher review' })
+  @ApiResponse({ status: 200, description: 'Teacher review updated successfully' })
+  @ApiResponse({ status: 404, description: 'Submission not found' })
+  async updateTeacherReview(
+    @Param('id') id: number,
+    @Body() updateSubmissionDto: UpdateSubmissionDto
+  ): Promise<SubmissionEntity> {
+    return this.submissionService.updateTeacherReview(id, updateSubmissionDto);
+  }
 
+
+  @Post('manual-request')
+  @ApiOperation({ summary: 'Manual request for submission' })
+  async manualRequestSubmission(@Body() submission: SubmissionCreateDTO): Promise<SubmissionEntity> {
+    return this.submissionService.manualRequestSubmission(submission);
+  }
 }

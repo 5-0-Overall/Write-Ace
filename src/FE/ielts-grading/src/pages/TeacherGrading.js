@@ -1,282 +1,508 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowLeft, Facebook, Twitter, Instagram } from "lucide-react";
-import Swal from 'sweetalert2';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import api from '../services/ApiService';
 import "../styles/Result.css";
 import "../styles/Article.css";
-import "../styles/Grading.css";
-
-const MOCK_SUBMISSION = {
-  id: 1,
-  essay: `The impact of technology on modern society is a topic of intense debate. While some argue that technological advancements have revolutionized our lives positively, others contend that they have led to significant social problems. This essay will examine both perspectives before reaching a balanced conclusion.
-
-On the positive side, technology has undeniably improved many aspects of our daily lives. In healthcare, for instance, modern medical equipment and techniques have significantly increased life expectancy and treatment success rates. Additionally, communication technology has made it possible for people to connect instantly across the globe, fostering international collaboration and understanding. In education, digital tools have expanded access to learning resources, making quality education available to more people than ever before.
-
-However, critics argue that technology has also brought notable drawbacks. One major concern is the increasing social isolation, as many people, especially younger generations, prefer virtual interactions over face-to-face communication. Furthermore, the rise of social media has been linked to mental health issues such as anxiety and depression. There are also valid concerns about privacy and data security in our increasingly connected world.
-
-In my opinion, while technology does present certain challenges, its benefits substantially outweigh its drawbacks. The key lies in how we choose to implement and regulate technological developments. By establishing proper guidelines and promoting responsible use of technology, we can maximize its benefits while minimizing potential negative impacts.
-
-In conclusion, technology's influence on society is complex and multifaceted. Rather than viewing it as entirely good or bad, we should focus on harnessing its potential while actively addressing its challenges. This balanced approach will help ensure that technological progress continues to serve humanity's best interests.`,
-  problemId: 1,
-  userId: "user123",
-  status: "submitted",
-  submittedAt: "2024-03-20T10:30:00Z"
-};
-
-const MOCK_PROBLEM = {
-  id: 1,
-  title: "Technology's Impact on Society",
-  type: "Writing Task 2",
-  question: "Some people believe that technological developments bring greater benefits, others believe it will lead to a negative impact on society. Discuss both views and give your opinion.",
-  description: "In this essay, you should:\n- Discuss the positive impacts of technology\n- Discuss the negative impacts of technology\n- Give your personal opinion with supporting reasons",
-  timeLimit: 40,
-  wordLimit: 250
-};
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const TeacherGrading = () => {
-  const [scores, setScores] = useState({
-    scoreTA: 0,
-    scoreCC: 0,
-    scoreLR: 0,
-    scoreGRA: 0,
-    scoreOVR: 0
-  });
-
+  const [submission, setSubmission] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState({
-    task_response: {
-      band_score: 0,
-      feedback: {
-        main_ideas: { detailed_explanation: '', how_to_improve: '' },
-        development: { detailed_explanation: '', how_to_improve: '' },
-        relevance: { detailed_explanation: '', how_to_improve: '' }
-      }
-    },
-    coherence_cohesion: {
-      band_score: 0,
-      feedback: {
-        organization: { detailed_explanation: '', how_to_improve: '' },
-        cohesion: { detailed_explanation: '', how_to_improve: '' },
-        progression: { detailed_explanation: '', how_to_improve: '' }
-      }
-    },
-    lexical_resource: {
-      band_score: 0,
-      feedback: {
-        vocabulary_range: { detailed_explanation: '', how_to_improve: '' },
-        word_choice: { detailed_explanation: '', how_to_improve: '' },
-        spelling: { detailed_explanation: '', how_to_improve: '' }
-      }
-    },
-    grammatical_range_accuracy: {
-      band_score: 0,
-      feedback: {
-        sentence_structure: { detailed_explanation: '', how_to_improve: '' },
-        grammar_accuracy: { detailed_explanation: '', how_to_improve: '' },
-        punctuation: { detailed_explanation: '', how_to_improve: '' }
-      }
-    },
+    upgrade_vocabulary_and_grammar: [],
     introduction: {
       clear_position: '',
       relevance: '',
+      brief_overview: '',
       improved_introduction: ''
     },
-    conclusion: {
+    main_points: [],
+    task_response: {
+      band_score: null,
       feedback: {
-        summary_strength: '',
-        suggestions: ''
+        answer_all_parts_of_question: { detailed_explanation: '', how_to_improve: '' },
+        present_clear_position_throughout: { detailed_explanation: '', how_to_improve: '' },
+        present_extend_support_ideas: { detailed_explanation: '', how_to_improve: '' },
+        stay_on_topic: { detailed_explanation: '', how_to_improve: '' }
       }
     },
-    upgrade_vocabulary_and_grammar: []
-  });
-
-  const handleScoreChange = (criterion, value) => {
-    setScores(prev => ({
-      ...prev,
-      [criterion]: parseFloat(value)
-    }));
-
-    // Automatically calculate overall score
-    const newScores = { ...scores, [criterion]: parseFloat(value) };
-    const overall = (
-      newScores.scoreTA + 
-      newScores.scoreCC + 
-      newScores.scoreLR + 
-      newScores.scoreGRA
-    ) / 4;
-    
-    setScores(prev => ({
-      ...prev,
-      scoreOVR: parseFloat(overall.toFixed(1))
-    }));
-  };
-
-  const handleFeedbackChange = (section, subsection, field, value) => {
-    setFeedback(prev => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        feedback: {
-          ...prev[section].feedback,
-          [subsection]: {
-            ...prev[section].feedback[subsection],
-            [field]: value
-          }
-        }
+    coherence_cohesion: {
+      band_score: null,
+      feedback: {
+        organize_information_logically: { detailed_explanation: '', how_to_improve: '' },
+        use_paragraphs: { detailed_explanation: '', how_to_improve: '' },
+        use_cohesive_devices: { detailed_explanation: '', how_to_improve: '' }
       }
-    }));
+    },
+    lexical_resource: {
+      band_score: null,
+      feedback: {
+        wide_range_vocabulary: { detailed_explanation: '', how_to_improve: '' },
+        use_precise_vocabulary: { detailed_explanation: '', how_to_improve: '' },
+        correct_spelling: { detailed_explanation: '', how_to_improve: '' }
+      }
+    },
+    grammatical_range_accuracy: {
+      band_score: null,
+      feedback: {
+        wide_range_structures: { detailed_explanation: '', how_to_improve: '' },
+        grammar_punctuation_accuracy: { detailed_explanation: '', how_to_improve: '' }
+      }
+    }
+  });
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get(`/submissions/${id}`);
+        setSubmission(response.data);
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [id]);
+
+  const handleSubmit = async () => {
+    try {
+      const scoreTA = parseFloat(document.querySelector('input[name="scoreTA"]').value);
+      const scoreCC = parseFloat(document.querySelector('input[name="scoreCC"]').value);
+      const scoreLR = parseFloat(document.querySelector('input[name="scoreLR"]').value);
+      const scoreGRA = parseFloat(document.querySelector('input[name="scoreGRA"]').value);
+      const scoreOVR = parseFloat(document.querySelector('input[name="scoreOVR"]').value);
+      
+      if (!scoreTA || !scoreCC || !scoreLR || !scoreGRA || !scoreOVR) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Please enter all scores',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+        return;
+      }
+
+      const requestBody = {
+        teacherReview: JSON.stringify({ feedback }),
+        scoreTA,
+        scoreCC,
+        scoreLR,
+        scoreGRA,
+        scoreOVR,
+        status: "REVIEWED"
+      };
+
+      console.log('Request body as plain text:', JSON.stringify(requestBody, null, 2));
+
+      const response = await api.put(`/submissions/${id}/teacher-review`, requestBody);
+
+      if (response.status === 200) {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Review submitted successfully!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      }
+    } catch (error) {
+      console.error('Error details:', error.response?.data);
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to submit review. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
   };
 
-  const handleSubmitGrading = () => {
-    Swal.fire({
-      title: 'Success!',
-      text: 'Grading submitted successfully',
-      icon: 'success',
-      confirmButtonText: 'OK'
-    });
-    console.log('Submitted scores:', scores);
-    console.log('Submitted feedback:', feedback);
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  const renderFeedbackInput = (section, subsection, field, label) => (
-    <div className="feedback-input-group">
-      <label>{label}</label>
-      <textarea
-        value={feedback[section].feedback[subsection][field]}
-        onChange={(e) => handleFeedbackChange(section, subsection, field, e.target.value)}
-        placeholder={`Enter ${label.toLowerCase()}...`}
-        className="feedback-textarea"
-      />
-    </div>
-  );
-
-  const renderScoreInput = (criterion, label) => (
-    <div className="score-input-group">
-      <label>{label}</label>
-      <input
-        type="number"
-        min="0"
-        max="9"
-        step="0.5"
-        value={scores[criterion]}
-        onChange={(e) => handleScoreChange(criterion, e.target.value)}
-        className="score-input"
-      />
-    </div>
-  );
+  if (!submission) {
+    return <div>No submission found</div>;
+  }
 
   return (
-    <div className="grading-container">
-      <header className="article-header">
-        <div className="header-left">
-          <Link to="/dashboard" className="back-link">
-            <ArrowLeft className="back-icon" />
-            Back to Dashboard
-          </Link>
-          <h2 className="article-title">Grade Student Submission</h2>
-        </div>
-      </header>
+    <div>
+      <div className="article-container">
+        <header className="article-header">
+          <div className="header-left">
+            <h2 className="recommended-title">Review Essay</h2>
+          </div>
+          <div className="header-right">
+            <Link to="/teacher/pending" className="dashboard-link">
+              <ArrowLeft className="back-icon" />
+              Pending List
+            </Link>
+          </div>
+        </header>
 
-      <div className="article-content">
-        <div className="content-left">
-          <div className="writing-section">
-            <div className="writing-header">
-              <h3>Writing Task 2</h3>
-              <div className="writing-meta">
-                <span>Word count: {MOCK_SUBMISSION.essay.split(' ').length}</span>
-                <span>Time limit: {MOCK_PROBLEM.timeLimit} minutes</span>
+        <div className="writing-card">
+          <div className="card-header">
+            <h3>{submission.problem.title}</h3>
+          </div>
+
+          <div className="content-section">
+            <div className="task-section">
+              <div className="task-content">
+                <h4 className="task-title">Task {submission.problem.task_id}</h4>
+                <p className="task-description">
+                  {submission.problem.description}
+                </p>
               </div>
             </div>
+          </div>
 
-            <div className="question-box">
-              <h4>Question:</h4>
-              <p>{MOCK_PROBLEM.question}</p>
-              <div className="task-description">
-                {MOCK_PROBLEM.description.split('\n').map((line, index) => (
-                  <p key={index}>{line}</p>
-                ))}
-              </div>
+          <div className="detail-band">
+            <div className="band-item">
+              <span className="band-label">Task Achievement</span>
+              <input 
+                type="number" 
+                name="scoreTA"
+                className="band-score" 
+                min="0"
+                max="9"
+                step="0.5"
+              />
             </div>
-
-            <div className="essay-box">
-              <h4>Student's Essay:</h4>
-              <div className="writing-content">
-                {MOCK_SUBMISSION.essay.split('\n\n').map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
-              </div>
+            <div className="band-item">
+              <span className="band-label">Coherence & Cohesion</span>
+              <input 
+                type="number" 
+                name="scoreCC"
+                className="band-score" 
+                min="0"
+                max="9"
+                step="0.5"
+              />
+            </div>
+            <div className="band-item">
+              <span className="band-label">Lexical Resource</span>
+              <input 
+                type="number" 
+                name="scoreLR"
+                className="band-score" 
+                min="0"
+                max="9"
+                step="0.5"
+              />
+            </div>
+            <div className="band-item">
+              <span className="band-label">Grammatical Range & Accuracy</span>
+              <input 
+                type="number" 
+                name="scoreGRA"
+                className="band-score" 
+                min="0"
+                max="9"
+                step="0.5"
+              />
+            </div>
+            <div className="band-item">
+              <span className="band-label">Overall Band</span>
+              <input 
+                type="number" 
+                name="scoreOVR"
+                className="band-score"
+                min="0"
+                max="9"
+                step="0.5"
+              />
             </div>
           </div>
         </div>
 
-        <div className="content-right">
-          <div className="grading-section">
-            <div className="scores-box">
-              <h3>Band Scores</h3>
-              <div className="score-grid">
-                {renderScoreInput('scoreTA', 'Task Achievement')}
-                {renderScoreInput('scoreCC', 'Coherence & Cohesion')}
-                {renderScoreInput('scoreLR', 'Lexical Resource')}
-                {renderScoreInput('scoreGRA', 'Grammatical Range & Accuracy')}
-              </div>
-              <div className="overall-score">
-                <span>Overall Band Score</span>
-                <span className="score-value">{scores.scoreOVR.toFixed(1)}</span>
+        <div className="feedback-section">
+          <h4 className="feedback-title">Student Essay</h4>
+          <div className="columns-container">
+            <div className="writing-column">
+              <div className="writing-content">
+                {submission.essay}
               </div>
             </div>
-
-            <div className="feedback-sections">
-              {Object.entries(feedback).map(([section, content]) => (
-                <div key={section} className="feedback-box">
-                  <h3>{section.split('_').map(word => 
-                    word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                  </h3>
-                  {Object.entries(content.feedback || {}).map(([subsection, fields]) => (
-                    <div key={subsection} className="feedback-category">
-                      <h4>{subsection.split('_').map(word => 
-                        word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                      </h4>
-                      <div className="feedback-inputs">
-                        {Object.entries(fields).map(([field, _]) => (
-                          renderFeedbackInput(section, subsection, field, 
-                            field.split('_').map(word => 
-                              word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
-                        ))}
+            <div className="improvement-column">
+              {/* Vocabulary Upgrade Section */}
+              <div className="feedback-block section-vocabulary-upgrade">
+                <h4 className="section-title">Vocabulary and Grammar Upgrades</h4>
+                <div className="vocabulary-upgrades">
+                  {feedback.upgrade_vocabulary_and_grammar.map((item, index) => (
+                    <div key={index} className="upgrade-item">
+                      <div className="feedback-field">
+                        <label>Original Text:</label>
+                        <textarea
+                          value={item.your_words}
+                          onChange={(e) => {
+                            const newUpgrades = [...feedback.upgrade_vocabulary_and_grammar];
+                            newUpgrades[index].your_words = e.target.value;
+                            setFeedback(prev => ({...prev, upgrade_vocabulary_and_grammar: newUpgrades}));
+                          }}
+                          rows="2"
+                          style={{ width: '100%', resize: 'vertical' }}
+                        />
                       </div>
+                      <div className="feedback-field">
+                        <label>Recommended Upgrade:</label>
+                        <textarea
+                          value={item.recommend_upgrade_words}
+                          onChange={(e) => {
+                            const newUpgrades = [...feedback.upgrade_vocabulary_and_grammar];
+                            newUpgrades[index].recommend_upgrade_words = e.target.value;
+                            setFeedback(prev => ({...prev, upgrade_vocabulary_and_grammar: newUpgrades}));
+                          }}
+                          rows="2"
+                          style={{ width: '100%', resize: 'vertical' }}
+                        />
+                      </div>
+                      <div className="feedback-field">
+                        <label>Explanation:</label>
+                        <textarea
+                          value={item.explanation}
+                          onChange={(e) => {
+                            const newUpgrades = [...feedback.upgrade_vocabulary_and_grammar];
+                            newUpgrades[index].explanation = e.target.value;
+                            setFeedback(prev => ({...prev, upgrade_vocabulary_and_grammar: newUpgrades}));
+                          }}
+                          rows="3"
+                          style={{ width: '100%', resize: 'vertical' }}
+                        />
+                      </div>
+                      <button 
+                        className="delete-button"
+                        onClick={() => {
+                          const newUpgrades = feedback.upgrade_vocabulary_and_grammar.filter((_, i) => i !== index);
+                          setFeedback(prev => ({...prev, upgrade_vocabulary_and_grammar: newUpgrades}));
+                        }}
+                      >
+                        Delete
+                      </button>
                     </div>
                   ))}
+                  <button 
+                    className="add-vocabulary-button"
+                    onClick={() => {
+                      const newComment = {
+                        comment_id: feedback.upgrade_vocabulary_and_grammar.length + 1,
+                        your_words: '',
+                        recommend_upgrade_words: '',
+                        explanation: ''
+                      };
+                      setFeedback(prev => ({
+                        ...prev, 
+                        upgrade_vocabulary_and_grammar: [...prev.upgrade_vocabulary_and_grammar, newComment]
+                      }));
+                    }}
+                  >
+                    Add Vocabulary Upgrade
+                  </button>
                 </div>
-              ))}
-            </div>
+              </div>
 
-            <button 
-              className="submit-grading-btn"
-              onClick={handleSubmitGrading}
-            >
-              Submit Grading
-            </button>
+              {/* Introduction Section */}
+              <div className="feedback-block section-introduction">
+                <h4 className="section-title">Introduction Analysis</h4>
+                <div className="feedback-field">
+                  <label>Clear Position:</label>
+                  <textarea
+                    value={feedback.introduction.clear_position}
+                    onChange={(e) => setFeedback(prev => ({
+                      ...prev,
+                      introduction: {...prev.introduction, clear_position: e.target.value}
+                    }))}
+                    rows="3"
+                    style={{ width: '100%', resize: 'vertical' }}
+                  />
+                </div>
+                <div className="feedback-field">
+                  <label>Relevance:</label>
+                  <textarea
+                    value={feedback.introduction.relevance}
+                    onChange={(e) => setFeedback(prev => ({
+                      ...prev,
+                      introduction: {...prev.introduction, relevance: e.target.value}
+                    }))}
+                    rows="3"
+                    style={{ width: '100%', resize: 'vertical' }}
+                  />
+                </div>
+                <div className="feedback-field">
+                  <label>Brief Overview:</label>
+                  <textarea
+                    value={feedback.introduction.brief_overview}
+                    onChange={(e) => setFeedback(prev => ({
+                      ...prev,
+                      introduction: {...prev.introduction, brief_overview: e.target.value}
+                    }))}
+                    rows="3"
+                    style={{ width: '100%', resize: 'vertical' }}
+                  />
+                </div>
+                <div className="feedback-field">
+                  <label>Improved Introduction:</label>
+                  <textarea
+                    value={feedback.introduction.improved_introduction}
+                    onChange={(e) => setFeedback(prev => ({
+                      ...prev,
+                      introduction: {...prev.introduction, improved_introduction: e.target.value}
+                    }))}
+                    rows="3"
+                    style={{ width: '100%', resize: 'vertical' }}
+                  />
+                </div>
+              </div>
+
+              {/* Main Points Section */}
+              <div className="feedback-block section-main-points">
+                <h4 className="section-title">Paragraph Analysis</h4>
+                <div className="paragraphs-container">
+                  {feedback.main_points.map((point, index) => (
+                    <div key={index} className="paragraph-item">
+                      <div className="feedback-field">
+                        <label>Argumentative Logic:</label>
+                        <textarea
+                          value={point.feedback.argumentative_logic}
+                          onChange={(e) => {
+                            const newPoints = [...feedback.main_points];
+                            newPoints[index].feedback.argumentative_logic = e.target.value;
+                            setFeedback(prev => ({...prev, main_points: newPoints}));
+                          }}
+                          rows="3"
+                          style={{ width: '100%', resize: 'vertical' }}
+                        />
+                      </div>
+                      <div className="feedback-field">
+                        <label>Suggestions for Improvement:</label>
+                        <textarea
+                          value={point.feedback.suggestions_for_improvement?.examples_of_success || ''}
+                          onChange={(e) => {
+                            const newPoints = [...feedback.main_points];
+                            newPoints[index].feedback.suggestions_for_improvement = {
+                              examples_of_success: e.target.value
+                            };
+                            setFeedback(prev => ({...prev, main_points: newPoints}));
+                          }}
+                          rows="3"
+                          style={{ width: '100%', resize: 'vertical' }}
+                        />
+                      </div>
+                      <button 
+                        className="delete-button"
+                        onClick={() => {
+                          const newPoints = feedback.main_points.filter((_, i) => i !== index);
+                          setFeedback(prev => ({...prev, main_points: newPoints}));
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  ))}
+                  <button 
+                    className="add-paragraph-button"
+                    onClick={() => {
+                      const newParagraph = {
+                        paragraph: feedback.main_points.length + 1,
+                        feedback: {
+                          argumentative_logic: '',
+                          suggestions_for_improvement: {
+                            examples_of_success: ''
+                          }
+                        }
+                      };
+                      setFeedback(prev => ({
+                        ...prev, 
+                        main_points: [...prev.main_points, newParagraph]
+                      }));
+                    }}
+                  >
+                    Add Paragraph Analysis
+                  </button>
+                </div>
+              </div>
+
+              {/* Original feedback sections (Task Response, Coherence & Cohesion, etc.) */}
+              {Object.entries(feedback).map(([category, data]) => {
+                if (['task_response', 'coherence_cohesion', 'lexical_resource', 'grammatical_range_accuracy'].includes(category)) {
+                  return (
+                    <div key={category} className={`feedback-block section-${category}`}>
+                      <h4 className="section-title">
+                        {category.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                      </h4>
+                      {Object.entries(data.feedback).map(([criterion, content]) => (
+                        <div key={criterion} className="feedback-item">
+                          <h5>{criterion.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</h5>
+                          <div className="feedback-content">
+                            <div className="feedback-field">
+                              <label>Detailed Explanation:</label>
+                              <textarea
+                                value={content.detailed_explanation}
+                                onChange={(e) => {
+                                  setFeedback(prev => ({
+                                    ...prev,
+                                    [category]: {
+                                      ...prev[category],
+                                      feedback: {
+                                        ...prev[category].feedback,
+                                        [criterion]: {
+                                          ...prev[category].feedback[criterion],
+                                          detailed_explanation: e.target.value
+                                        }
+                                      }
+                                    }
+                                  }));
+                                }}
+                                rows="3"
+                                style={{ width: '100%', resize: 'vertical' }}
+                              />
+                            </div>
+                            <div className="feedback-field">
+                              <label>How to Improve:</label>
+                              <textarea
+                                value={content.how_to_improve}
+                                onChange={(e) => {
+                                  setFeedback(prev => ({
+                                    ...prev,
+                                    [category]: {
+                                      ...prev[category],
+                                      feedback: {
+                                        ...prev[category].feedback,
+                                        [criterion]: {
+                                          ...prev[category].feedback[criterion],
+                                          how_to_improve: e.target.value
+                                        }
+                                      }
+                                    }
+                                  }));
+                                }}
+                                rows="3"
+                                style={{ width: '100%', resize: 'vertical' }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
+                return null;
+              })}
+
+              {/* Submit button at the bottom of improvement column */}
+              <div className="submit-section">
+                <button 
+                  className="submit-button"
+                  onClick={handleSubmit}
+                >
+                  Submit Review
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <footer className="site-footer">
-        <div className="footer-content">
-          <div className="footer-copyright">© WriteAce 2024</div>
-          <div className="footer-social">
-            <span>Follow us:</span>
-            <div className="social-links">
-              <a href="https://www.facebook.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
-                <Facebook size={20} />
-              </a>
-              <a href="https://twitter.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
-                <Twitter size={20} />
-              </a>
-              <a href="https://www.instagram.com/writeace" target="_blank" rel="noopener noreferrer" className="social-link">
-                <Instagram size={20} />
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

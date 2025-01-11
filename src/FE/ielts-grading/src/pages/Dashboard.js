@@ -50,7 +50,7 @@ function Dashboard() {
   }, []);
 
   const formatNumber = (number) => {
-    if (number === null || number === undefined) return 'N/A';
+    if (number === null || number === undefined) return '0';
     return Number(parseFloat(number).toFixed(1)).toString();
   };
 

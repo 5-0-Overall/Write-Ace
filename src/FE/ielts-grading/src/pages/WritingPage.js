@@ -166,6 +166,57 @@ const WritingPage = () => {
     }
   };
 
+  const handleTeacherReviewRequest = async () => {
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setSubmitLoading(true);
+
+      // Show loading state with Swal
+      Swal.fire({
+        title: 'Requesting Teacher Review...',
+        html: 'Please wait while we process your request.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      const response = await api.post('/submissions/manual-request', {
+        problem: id,
+        user: currentUser.id,
+        essay: text
+      });
+
+      if (response.data && response.data.id) {
+        // Close loading dialog
+        await Swal.close();
+        
+        // Show success message
+        await Swal.fire({
+          title: 'Success!',
+          text: 'Your request for teacher review has been submitted successfully.',
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false
+        });
+      }
+    } catch (err) {
+      console.error("Error requesting teacher review:", err);
+      await Swal.fire({
+        title: 'Error!',
+        text: err.response?.data?.message || "Failed to request teacher review. Please try again.",
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
   const renderTaskContent = () => {
     if (!problem) return null;
 
@@ -259,6 +310,13 @@ const WritingPage = () => {
               disabled={submitLoading}
             >
               {submitLoading ? 'Submitting...' : 'Submit Essay'}
+            </button>
+            <button 
+              className={`btn review-btn ${submitLoading ? 'loading' : ''}`}
+              onClick={handleTeacherReviewRequest}
+              disabled={submitLoading}
+            >
+              {submitLoading ? 'Requesting...' : 'Request Teacher Review'}
             </button>
           </div>
         </div>

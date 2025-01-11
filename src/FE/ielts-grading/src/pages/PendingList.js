@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-import { Eye } from "lucide-react";
+import { PenLine } from "lucide-react";
 import "../styles/Common.css";
 import "../styles/History.css";
 import api from '../services/ApiService';
 
-function History() {
+function PendingList() {
   const [historyData, setHistoryData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
-        const { data } = await api.get('/submissions/me');
+        const { data } = await api.get('/submissions/pending');
         setHistoryData(data);
       } catch (error) {
         console.error('Error fetching submissions:', error);
@@ -24,7 +24,7 @@ function History() {
   }, []);
 
   const handleViewResult = (id) => {
-    navigate(`/result/${id}`);
+    navigate(`/teacher/grading/${id}`);
   };
 
   const truncateEssay = (essay, maxLength = 100) => {
@@ -63,8 +63,8 @@ function History() {
                       className="view-button" 
                       onClick={() => handleViewResult(item.id)}
                     >
-                      <Eye size={16} />
-                      <span>View</span>
+                      <PenLine size={16} />
+                      <span>Review</span>
                     </button>
                   </td>
                 </tr>
@@ -77,4 +77,4 @@ function History() {
   );
 }
 
-export default History;
+export default PendingList;
