@@ -70,4 +70,11 @@ export class SubmissionController {
   ): Promise<SubmissionEntity> {
     return this.submissionService.updateTeacherReview(id, updateSubmissionDto);
   }
+
+
+  @Post('manual-request')
+  @ApiOperation({ summary: 'Manual request for submission' })
+  async manualRequestSubmission(@Body() submission: SubmissionCreateDTO): Promise<SubmissionEntity> {
+    return this.submissionService.manualRequestSubmission(submission);
+  }
 }

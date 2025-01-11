@@ -221,4 +221,31 @@ export class SubmissionService {
       relations: ['problem'],
     });
   }
+
+
+  async manualRequestSubmission(submission: SubmissionCreateDTO): Promise<SubmissionEntity> {
+    const problem = await this.problemRepository.findOneBy({
+      id: submission.problem,
+    });
+    const user = await this.userRepository.findOneBy({ id: submission.user });
+    const essay = submission.essay;
+
+    const submissionEntity : SubmissionEntity = {
+      id: null,
+      problem: problem,
+      user: user,
+      essay: essay,
+      status: STATUS.PENDING,
+      aiReview: null,
+      teacherReview: null,
+      scoreTA: 0,
+      scoreCC: 0,
+      scoreLR: 0,
+      scoreGRA: 0,
+      scoreOVR: 0,
+      created_at: new Date(),
+      updated_at: new Date(),
+    } 
+    return this.submissionRepository.save(submissionEntity);
+  }
 }
